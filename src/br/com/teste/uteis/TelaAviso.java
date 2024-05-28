@@ -5,7 +5,7 @@
  */
 package br.com.teste.uteis;
 
-import br.com.teste.telas.TelaLoginAntiga;
+import br.com.teste.telas.TelaLogin;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dialog.ModalExclusionType;

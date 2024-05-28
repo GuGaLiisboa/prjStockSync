@@ -32,9 +32,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
         initComponents();
         conn = Conexao.getConexao();
         //Estiliza os botões com imagens do menu cadastro
-        estilizarBotao(btnCadFornecedor, "FORNECEDOR", "..\\prjTeste\\src\\br\\com\\teste\\icones\\iconeCaminhao.png");
-        estilizarBotao(btnCadCategoria, "CATEGORIA", "..\\prjTeste\\src\\br\\com\\teste\\icones\\iconeCategoria.png");
-        estilizarBotao(btnCadMaterial, "MATERIAL", "..\\prjTeste\\src\\br\\com\\teste\\icones\\iconeMaterial.png");
+        estilizarBotao(btnCadFornecedor, "FORNECEDOR", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeCaminhao.png");
+        estilizarBotao(btnCadCategoria, "CATEGORIA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeCategoria.png");
+        estilizarBotao(btnCadMaterial, "MATERIAL", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeMaterial.png");
 
         pesquisar_fornecedor();
     }
@@ -1009,7 +1009,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
             .addGroup(telaCadMaterialLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(jLabel9)
-                .addContainerGap(929, Short.MAX_VALUE))
+                .addContainerGap(934, Short.MAX_VALUE))
         );
         telaCadMaterialLayout.setVerticalGroup(
             telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1018,7 +1018,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addComponent(btnFechar3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel9)
-                .addContainerGap(643, Short.MAX_VALUE))
+                .addContainerGap(636, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("tab2", telaCadMaterial);
