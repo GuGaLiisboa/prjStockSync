@@ -24,7 +24,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     Connection conn = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
-    
+
     /**
      * Creates new form testeMenuNovo
      */
@@ -36,9 +36,20 @@ public class testeMenuNovo extends javax.swing.JFrame {
         estilizarBotao(btnCadCategoria, "CATEGORIA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeCategoria.png");
         estilizarBotao(btnCadMaterial, "MATERIAL", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeMaterial.png");
 
-        pesquisar_fornecedor();
+        pesquisar_fornecedor(); //Atualizar as tabelas
+        definirIconeJanela();
+        btnEdit();
+
     }
-    
+
+    //setar o icone mão nos botões
+    private void btnEdit() {
+        btnAdicionar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAlterar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExcluir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCadastros.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+    }
+
     //metodo para adicionar fornecedores
     private void adicionar() {
         conn = Conexao.getConexao();
@@ -71,7 +82,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    
+
     //metodo para buscar fornecedores
     private void pesquisar_fornecedor() {
         //String sql = "select * from fornecedor where nome_fornecedor like ?";
@@ -90,7 +101,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    
+
     //metodo para setar os campos do formulário com o conteúdo da tabela que foi clicada
     public void setar_campos() {
         int setar = tblFornecedores.getSelectedRow();
@@ -104,8 +115,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         //a linha abaixo irá desabilitar o botão de adicionar, para evitar dados duplicados.
         btnAdicionar.setEnabled(false);
+        btnAdicionar.setkBackGroundColor(new Color(128, 128, 128));
+        btnAdicionar.setkHoverColor(new Color(128, 128, 128));
     }
-    
+
     //metodo para alterar dados dos fornecedores
     private void alterar() {
         conn = Conexao.getConexao();
@@ -131,17 +144,27 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Dados do Fornecedor Alterados com Sucesso.");
 
                     limpar(); //chamando a função de limpar os campos
+                    pesquisar_fornecedor(); //atualizar a tabela
                     btnAdicionar.setEnabled(true);
+                    btnAdicionar.setkBackGroundColor(new Color(26, 131, 43));
+                    btnAdicionar.setkHoverColor(new Color(52, 153, 68));
                 }
             }
         } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    
+
     //metodo para excluir cadastro dos fornecedores
     private void remover() {
         conn = Conexao.getConexao();
+
+        // Verifica se os campos obrigatórios estão vazios
+        if (txtFornNome.getText().isEmpty() || txtFornEmail.getText().isEmpty() || txtFornFone.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Preencha todos os Campos Obrigatórios.");
+            return; // Encerra a execução da função se algum campo estiver vazio
+        }
+
         int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover este Fornecedor?", "Atenção", JOptionPane.YES_NO_OPTION);
         if (confirma == JOptionPane.YES_OPTION) {
             String sql = "DELETE FROM fornecedor WHERE id_fornecedor=?";
@@ -152,14 +175,17 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 if (apagado > 0) {
                     JOptionPane.showMessageDialog(null, "Fornecedor Removido com Sucesso!");
                     limpar(); //chamando a função de limpar os campos
-                    pesquisar_fornecedor();
+                    pesquisar_fornecedor(); //atualizar a tabela
                     btnAdicionar.setEnabled(true);
+                    btnAdicionar.setkBackGroundColor(new Color(26, 131, 43));
+                    btnAdicionar.setkHoverColor(new Color(52, 153, 68));
                 }
             } catch (HeadlessException | SQLException e) {
+                // Lidar com a exceção aqui
             }
         }
     }
-    
+
     //método para limpar os campos do formulário
     private void limpar() {
         txtFornId.setText(null);
@@ -229,6 +255,14 @@ public class testeMenuNovo extends javax.swing.JFrame {
         });
     }
 
+    private void definirIconeJanela() {
+        // Carrega o ícone da sua aplicação
+        ImageIcon icon = new ImageIcon(getClass().getResource("/br/com/teste/icones/icone.png"));
+
+        // Define o ícone da janela
+        setIconImage(icon.getImage());
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -284,6 +318,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         txtFornId = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
+        btnLimpar = new javax.swing.JButton();
         telaCadCategoria = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         btnFechar2 = new javax.swing.JButton();
@@ -770,6 +805,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
+        tblFornecedores = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         tblFornecedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -781,6 +821,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblFornecedores.getTableHeader().setReorderingAllowed(false);
         tblFornecedores.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblFornecedoresMouseClicked(evt);
@@ -811,6 +852,17 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel16.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(26, 131, 43));
         jLabel16.setText("ID Fornecedor");
+
+        btnLimpar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnLimpar.setForeground(new java.awt.Color(26, 131, 43));
+        btnLimpar.setText("Limpar");
+        btnLimpar.setContentAreaFilled(false);
+        btnLimpar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout telaCadFornecedorLayout = new javax.swing.GroupLayout(telaCadFornecedor);
         telaCadFornecedor.setLayout(telaCadFornecedorLayout);
@@ -860,7 +912,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel15)
-                            .addComponent(txtFornPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(telaCadFornecedorLayout.createSequentialGroup()
+                                .addComponent(txtFornPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnLimpar))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1050, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7))
                         .addContainerGap(37, Short.MAX_VALUE))
@@ -913,7 +968,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                         .addComponent(jLabel15)
                         .addGap(0, 3, Short.MAX_VALUE)
-                        .addComponent(txtFornPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtFornPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnLimpar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(22, 22, 22))
@@ -1120,6 +1177,15 @@ public class testeMenuNovo extends javax.swing.JFrame {
         remover();
     }//GEN-LAST:event_btnExcluirActionPerformed
 
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+        // TODO add your handling code here:
+        limpar();
+        btnAdicionar.setEnabled(true);
+        btnAdicionar.setkBackGroundColor(new Color(26, 131, 43));
+        btnAdicionar.setkHoverColor(new Color(52, 153, 68));
+        pesquisar_fornecedor();
+    }//GEN-LAST:event_btnLimparActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1168,6 +1234,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JButton btnFechar1;
     private javax.swing.JButton btnFechar2;
     private javax.swing.JButton btnFechar3;
+    private javax.swing.JButton btnLimpar;
     private com.k33ptoo.components.KButton btnMovimentacoes;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
