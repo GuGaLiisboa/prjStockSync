@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.MaskFormatter;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -38,9 +37,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         estilizarBotao(btnCadMaterial, "MATERIAL", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeMaterial.png");
 
         //atualizar as tabelas
-        pesquisar_fornecedor();
-        pesquisar_material();
-        pesquisar_categoriaEmMat();
+        atualizarTabelas();
 
         //outros etilos
         definirIconeJanela();
@@ -49,7 +46,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     }
 
     //=============================================================================================
-    
     //metodo para adicionar fornecedores
     private void adicionar() {
         conn = Conexao.getConexao();
@@ -75,7 +71,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Fornecedor Cadastrado com Sucesso.");
 
                     limpar(); //chamando a função de limpar os campos
-                    pesquisar_fornecedor();
+                    atualizarTabelas();
                 }
             }
         } catch (HeadlessException | SQLException e) {
@@ -144,7 +140,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Dados do Fornecedor Alterados com Sucesso.");
 
                     limpar(); //chamando a função de limpar os campos
-                    pesquisar_fornecedor(); //atualizar a tabela
+                    atualizarTabelas();
                     btnAdicionar.setEnabled(true);
                     btnAdicionar.setkBackGroundColor(new Color(26, 131, 43));
                     btnAdicionar.setkHoverColor(new Color(52, 153, 68));
@@ -175,7 +171,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 if (apagado > 0) {
                     JOptionPane.showMessageDialog(null, "Fornecedor Removido com Sucesso!");
                     limpar(); //chamando a função de limpar os campos
-                    pesquisar_fornecedor(); //atualizar a tabela
+                    atualizarTabelas();
                     btnAdicionar.setEnabled(true);
                     btnAdicionar.setkBackGroundColor(new Color(26, 131, 43));
                     btnAdicionar.setkHoverColor(new Color(52, 153, 68));
@@ -187,7 +183,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     }
 
     //=============================================================================================
-    
     //metodos para materiais
     //metodo para adicionar um material
     private void cadastrarMaterial() {
@@ -218,8 +213,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
                     limpar(); // chamando a função de limpar os campos
                     //atualizar as tabelas
-                    pesquisar_material();
-                    pesquisar_categoriaEmMat();
+                    atualizarTabelas();
                 }
             }
         } catch (Exception e) {
@@ -317,8 +311,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
                     limpar(); //chamando a função de limpar os campos
                     //atualizar as tabelas
-                    pesquisar_material();
-                    pesquisar_categoriaEmMat();
+                    atualizarTabelas();
                     btnCadastrarMat.setEnabled(true);
                     btnCadastrarMat.setkBackGroundColor(new Color(26, 131, 43));
                     btnCadastrarMat.setkHoverColor(new Color(52, 153, 68));
@@ -350,8 +343,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Material Removido com Sucesso!");
                     limpar(); //chamando a função de limpar os campos
                     //atualizar as tabelas
-                    pesquisar_material();
-                    pesquisar_categoriaEmMat();
+                    atualizarTabelas();
                     btnCadastrarMat.setEnabled(true);
                     btnCadastrarMat.setkBackGroundColor(new Color(26, 131, 43));
                     btnCadastrarMat.setkHoverColor(new Color(52, 153, 68));
@@ -363,7 +355,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     }
 
     //=============================================================================================
-    
     //metodos para Categorias
     //metodo para adicionar uma Categoria
     private void cadastrarCategoria() {
@@ -385,7 +376,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Categoria Criada com Sucesso.");
 
                     limpar(); //chamando a função de limpar os campos
-                    //pesquisar_categoriaEmCat();
+                    atualizarTabelas();
                 }
             }
         } catch (HeadlessException | SQLException e) {
@@ -393,9 +384,112 @@ public class testeMenuNovo extends javax.swing.JFrame {
         }
     }
 
+    //metodo para alterar dados dos fornecedores
+    private void alterarCategoria() {
+        conn = Conexao.getConexao();
+        String sql = "UPDATE categoria SET nome_categoria=? WHERE id_categoria=?";
+
+        try {
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, txtNomeCat.getText());
+            pst.setString(2, txtIdCatEmCat.getText());
+
+            if ((txtNomeCat.getText().isEmpty())) {
+                JOptionPane.showMessageDialog(null, "Preencha o Campo com o Nome da Categoria.");
+            } else {
+
+                int adicionado = pst.executeUpdate();
+
+                if (adicionado > 0) {
+                    JOptionPane.showMessageDialog(null, "Categoria Alterada com Sucesso.");
+
+                    limpar(); //chamando a função de limpar os campos
+                    atualizarTabelas(); //atualizar a tabela
+                    btnCadastrarCat.setEnabled(true);
+                    btnCadastrarCat.setkBackGroundColor(new Color(26, 131, 43));
+                    btnCadastrarCat.setkHoverColor(new Color(52, 153, 68));
+                }
+            }
+        } catch (HeadlessException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    //metodo para setar os campos do formulário com o conteúdo da tabela categoria
+    public void setar_camposCategoria() {
+        int setar = tblCategoria2.getSelectedRow();
+        txtIdCatEmCat.setText(tblCategoria2.getModel().getValueAt(setar, 0).toString());
+        txtNomeCat.setText(tblCategoria2.getModel().getValueAt(setar, 1).toString());
+
+        //a linha abaixo irá desabilitar o botão de adicionar, para evitar dados duplicados.
+        btnCadastrarCat.setEnabled(false);
+        btnCadastrarCat.setkBackGroundColor(new Color(128, 128, 128));
+        btnCadastrarCat.setkHoverColor(new Color(128, 128, 128));
+    }
+
+    //metodo para buscar uma categoria no menu Categorias
+    private void pesquisar_categoriaEmCat() {
+        conn = Conexao.getConexao();
+        String sql = "select id_categoria AS 'ID Categoria', nome_categoria AS 'Nome da Categoria' FROM categoria where nome_categoria like ?";
+        try {
+            pst = conn.prepareStatement(sql);
+            //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
+            pst.setString(1, txtBuscarCatEmCat.getText() + "%");
+            rs = pst.executeQuery();
+            //a linha abaixo usa a biblioteca rs2xml.jar
+            tblCategoria2.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    //metodo para buscar uma fornecedor no menu Categorias
+    private void pesquisar_fornecedorEmCat() {
+        conn = Conexao.getConexao();
+        String sql = "select id_fornecedor AS ID, nome_fornecedor AS 'Nome do Fornecedor' FROM fornecedor where nome_fornecedor like ?";
+        try {
+            pst = conn.prepareStatement(sql);
+            //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
+            pst.setString(1, txtBuscarFornEmCat.getText() + "%");
+            rs = pst.executeQuery();
+            //a linha abaixo usa a biblioteca rs2xml.jar
+            tblFornecedorEmCat.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    //metodo para buscar um material no menu Categorias
+    private void pesquisar_materialEmCat() {
+        conn = Conexao.getConexao();
+        String sql = "select id_material AS ID, nome_material AS 'Nome do Material' FROM material where nome_material like ?";
+        try {
+            pst = conn.prepareStatement(sql);
+            //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
+            pst.setString(1, txtBuscarMatEmCat.getText() + "%");
+            rs = pst.executeQuery();
+            //a linha abaixo usa a biblioteca rs2xml.jar
+            tblMaterialEmCat.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
     //=============================================================================================
-    
     //outros métodos
+    //Método para atualizar tabelas
+    private void atualizarTabelas() {
+        pesquisar_fornecedor();
+        pesquisar_material();
+        pesquisar_categoriaEmMat();
+        pesquisar_categoriaEmCat();
+        pesquisar_fornecedorEmCat();
+        pesquisar_materialEmCat();
+    }
+
     //setar o icone mão nos botões
     private void btnEdit() {
         btnAdicionar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -430,6 +524,16 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtBuscarMat.setText(null);
         ((DefaultTableModel) tblMaterial.getModel()).setRowCount(0);
         ((DefaultTableModel) tblCategoria.getModel()).setRowCount(0);
+
+        //tela categoria
+        txtIdCatEmCat.setText(null);
+        txtNomeCat.setText(null);
+        txtBuscarCatEmCat.setText(null);
+        txtBuscarFornEmCat.setText(null);
+        txtBuscarMatEmCat.setText(null);
+        ((DefaultTableModel) tblCategoria2.getModel()).setRowCount(0);
+        ((DefaultTableModel) tblFornecedorEmCat.getModel()).setRowCount(0);
+        ((DefaultTableModel) tblMaterialEmCat.getModel()).setRowCount(0);
     }
 
     // Método para estilizar um botão com um nome e uma imagem específicos
@@ -583,6 +687,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtBuscarFornEmCat = new javax.swing.JTextField();
         txtBuscarMatEmCat = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
+        btnLimparEmCat = new com.k33ptoo.components.KButton();
         telaCadMaterial = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         btnFechar3 = new javax.swing.JButton();
@@ -1317,13 +1422,13 @@ public class testeMenuNovo extends javax.swing.JFrame {
         };
         tblMaterialEmCat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nome do Material"
             }
         ));
         tblMaterialEmCat.getTableHeader().setReorderingAllowed(false);
@@ -1336,16 +1441,21 @@ public class testeMenuNovo extends javax.swing.JFrame {
         };
         tblCategoria2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nome da Categoria"
             }
         ));
         tblCategoria2.getTableHeader().setReorderingAllowed(false);
+        tblCategoria2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCategoria2MouseClicked(evt);
+            }
+        });
         jScrollPane5.setViewportView(tblCategoria2);
 
         tblFornecedorEmCat = new javax.swing.JTable(){
@@ -1355,13 +1465,13 @@ public class testeMenuNovo extends javax.swing.JFrame {
         };
         tblFornecedorEmCat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nome do Fornecedor"
             }
         ));
         tblFornecedorEmCat.getTableHeader().setReorderingAllowed(false);
@@ -1478,6 +1588,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtBuscarCatEmCat.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
         txtBuscarCatEmCat.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
         txtBuscarCatEmCat.setSelectionColor(new java.awt.Color(26, 131, 43));
+        txtBuscarCatEmCat.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarCatEmCatKeyReleased(evt);
+            }
+        });
 
         jLabel30.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel30.setForeground(new java.awt.Color(26, 131, 43));
@@ -1487,15 +1602,38 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtBuscarFornEmCat.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
         txtBuscarFornEmCat.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
         txtBuscarFornEmCat.setSelectionColor(new java.awt.Color(26, 131, 43));
+        txtBuscarFornEmCat.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarFornEmCatKeyReleased(evt);
+            }
+        });
 
         txtBuscarMatEmCat.setBackground(new java.awt.Color(223, 223, 223));
         txtBuscarMatEmCat.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
         txtBuscarMatEmCat.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
         txtBuscarMatEmCat.setSelectionColor(new java.awt.Color(26, 131, 43));
+        txtBuscarMatEmCat.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarMatEmCatKeyReleased(evt);
+            }
+        });
 
         jLabel31.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel31.setForeground(new java.awt.Color(26, 131, 43));
         jLabel31.setText("Buscar Material");
+
+        btnLimparEmCat.setText("Limpar");
+        btnLimparEmCat.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnLimparEmCat.setkAllowGradient(false);
+        btnLimparEmCat.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnLimparEmCat.setkBorderRadius(20);
+        btnLimparEmCat.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnLimparEmCat.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnLimparEmCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparEmCatActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout telaCadCategoriaLayout = new javax.swing.GroupLayout(telaCadCategoria);
         telaCadCategoria.setLayout(telaCadCategoriaLayout);
@@ -1567,8 +1705,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                         .addComponent(jLabel30)
                                         .addGap(270, 270, 270)))
                                 .addGroup(telaCadCategoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel31)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                                    .addGroup(telaCadCategoriaLayout.createSequentialGroup()
+                                        .addComponent(jLabel31)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 190, Short.MAX_VALUE)
+                                        .addComponent(btnLimparEmCat, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                     .addComponent(txtBuscarMatEmCat))))))
                 .addGap(31, 31, 31))
         );
@@ -1579,27 +1720,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addComponent(btnFechar2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(telaCadCategoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(telaCadCategoriaLayout.createSequentialGroup()
-                        .addGroup(telaCadCategoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(telaCadCategoriaLayout.createSequentialGroup()
-                                .addGap(61, 61, 61)
-                                .addGroup(telaCadCategoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(telaCadCategoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(telaCadCategoriaLayout.createSequentialGroup()
-                                            .addComponent(jLabel26)
-                                            .addGap(0, 0, 0)
-                                            .addComponent(txtIdVincVM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, telaCadCategoriaLayout.createSequentialGroup()
-                                            .addComponent(jLabel27)
-                                            .addGap(0, 0, 0)
-                                            .addComponent(txtIdFornVM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(telaCadCategoriaLayout.createSequentialGroup()
-                                        .addComponent(jLabel28)
-                                        .addGap(0, 0, 0)
-                                        .addComponent(txtIdMatVM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(29, 29, 29)
-                                .addGroup(telaCadCategoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnVincularFM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnDesvincularFM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(telaCadCategoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(telaCadCategoriaLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel8)
@@ -1622,12 +1743,35 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                             .addComponent(btnExcluirCat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(telaCadCategoriaLayout.createSequentialGroup()
                                         .addGap(17, 17, 17)
-                                        .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(37, 37, 37)
-                        .addGroup(telaCadCategoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel30)
-                            .addComponent(jLabel31))
-                        .addGap(1, 1, 1)
+                                        .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(37, 37, 37)
+                                .addGroup(telaCadCategoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel30)
+                                    .addComponent(jLabel31))
+                                .addGap(1, 1, 1))
+                            .addGroup(telaCadCategoriaLayout.createSequentialGroup()
+                                .addGap(61, 61, 61)
+                                .addGroup(telaCadCategoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(telaCadCategoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(telaCadCategoriaLayout.createSequentialGroup()
+                                            .addComponent(jLabel26)
+                                            .addGap(0, 0, 0)
+                                            .addComponent(txtIdVincVM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, telaCadCategoriaLayout.createSequentialGroup()
+                                            .addComponent(jLabel27)
+                                            .addGap(0, 0, 0)
+                                            .addComponent(txtIdFornVM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(telaCadCategoriaLayout.createSequentialGroup()
+                                        .addComponent(jLabel28)
+                                        .addGap(0, 0, 0)
+                                        .addComponent(txtIdMatVM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(29, 29, 29)
+                                .addGroup(telaCadCategoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btnVincularFM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnDesvincularFM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnLimparEmCat, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(telaCadCategoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtBuscarFornEmCat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtBuscarMatEmCat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -2024,20 +2168,22 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private void btnCadCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadCategoriaActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaCadCategoria);
+        //atualizartabelas
+        atualizarTabelas();
     }//GEN-LAST:event_btnCadCategoriaActionPerformed
 
     private void btnCadFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadFornecedorActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaCadFornecedor);
-        pesquisar_fornecedor();
+        //atualizartabelas
+        atualizarTabelas();
     }//GEN-LAST:event_btnCadFornecedorActionPerformed
 
     private void btnCadMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadMaterialActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaCadMaterial);
         //atualizar as tabelas
-        pesquisar_material();
-        pesquisar_categoriaEmMat();
+        atualizarTabelas();
     }//GEN-LAST:event_btnCadMaterialActionPerformed
 
     private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
@@ -2054,6 +2200,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private void btnFechar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechar2ActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaCadastros);
+        limpar();
     }//GEN-LAST:event_btnFechar2ActionPerformed
 
     private void btnFechar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechar3ActionPerformed
@@ -2146,8 +2293,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnCadastrarMat.setkBackGroundColor(new Color(26, 131, 43));
         btnCadastrarMat.setkHoverColor(new Color(52, 153, 68));
         //atualizar as tabelas
-        pesquisar_material();
-        pesquisar_categoriaEmMat();
+        atualizarTabelas();
     }//GEN-LAST:event_btnLimparMatActionPerformed
 
     private void txtBuscarMatKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarMatKeyReleased
@@ -2172,6 +2318,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void btnAlterarCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarCatActionPerformed
         // TODO add your handling code here:
+        alterarCategoria();
     }//GEN-LAST:event_btnAlterarCatActionPerformed
 
     private void btnExcluirCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirCatActionPerformed
@@ -2189,6 +2336,36 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private void txtIdMatVMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdMatVMActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdMatVMActionPerformed
+
+    private void txtBuscarCatEmCatKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarCatEmCatKeyReleased
+        // TODO add your handling code here:
+        pesquisar_categoriaEmCat();
+    }//GEN-LAST:event_txtBuscarCatEmCatKeyReleased
+
+    private void txtBuscarFornEmCatKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarFornEmCatKeyReleased
+        // TODO add your handling code here:
+        pesquisar_fornecedorEmCat();
+    }//GEN-LAST:event_txtBuscarFornEmCatKeyReleased
+
+    private void txtBuscarMatEmCatKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarMatEmCatKeyReleased
+        // TODO add your handling code here:
+        pesquisar_materialEmCat();
+    }//GEN-LAST:event_txtBuscarMatEmCatKeyReleased
+
+    private void tblCategoria2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCategoria2MouseClicked
+        // TODO add your handling code here:
+        setar_camposCategoria();
+    }//GEN-LAST:event_tblCategoria2MouseClicked
+
+    private void btnLimparEmCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparEmCatActionPerformed
+        // TODO add your handling code here:
+        limpar();
+        btnCadastrarCat.setEnabled(true);
+        btnCadastrarCat.setkBackGroundColor(new Color(26, 131, 43));
+        btnCadastrarCat.setkHoverColor(new Color(52, 153, 68));
+        //atualizar as tabelas
+        atualizarTabelas();
+    }//GEN-LAST:event_btnLimparEmCatActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2246,6 +2423,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JButton btnFechar2;
     private javax.swing.JButton btnFechar3;
     private javax.swing.JButton btnLimpar;
+    private com.k33ptoo.components.KButton btnLimparEmCat;
     private javax.swing.JButton btnLimparMat;
     private com.k33ptoo.components.KButton btnMovimentacoes;
     private com.k33ptoo.components.KButton btnVincularFM;
