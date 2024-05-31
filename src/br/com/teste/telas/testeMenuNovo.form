@@ -1419,9 +1419,17 @@
                                   </Group>
                               </Group>
                               <Component id="jSeparator5" min="-2" pref="2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
+                                      <Component id="btnVincularFM" min="-2" pref="120" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                                      <Component id="btnDesvincularFM" min="-2" pref="120" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                                      <Component id="btnVerTabelas" min="-2" pref="120" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="jLabel26" min="-2" max="-2" attributes="0"/>
                                           <Component id="txtIdVincVM" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
@@ -1437,47 +1445,24 @@
                                           <Component id="txtIdMatVM" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="123" max="-2" attributes="0"/>
-                                      <Component id="btnVincularFM" min="-2" pref="120" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                                      <Component id="btnDesvincularFM" min="-2" pref="120" max="-2" attributes="0"/>
-                                  </Group>
                               </Group>
-                              <EmptySpace min="0" pref="79" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="54" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jScrollPane5" pref="340" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel29" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtBuscarCatEmCat" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtBuscarCatEmCat" alignment="0" min="-2" pref="340" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane5" alignment="0" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Component id="btnFechar2" min="-2" pref="22" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                                  <Component id="jScrollPane6" pref="340" max="32767" attributes="0"/>
-                                                  <Component id="txtBuscarFornEmCat" max="32767" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel30" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="270" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Group type="102" attributes="0">
-                                              <Component id="jLabel31" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace pref="190" max="32767" attributes="0"/>
-                                              <Component id="btnLimparEmCat" min="-2" pref="60" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="jScrollPane4" pref="0" max="32767" attributes="0"/>
-                                          <Component id="txtBuscarMatEmCat" alignment="0" max="32767" attributes="0"/>
-                                      </Group>
+                                  <Component id="jLabel31" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane4" min="-2" pref="530" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="txtBuscarVM" min="-2" pref="340" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="btnLimparEmCat" min="-2" pref="60" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -1493,7 +1478,7 @@
                       <Component id="btnFechar2" min="-2" pref="23" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
@@ -1525,12 +1510,6 @@
                                               <Component id="jSeparator5" min="-2" pref="150" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jLabel30" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel31" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
@@ -1553,32 +1532,33 @@
                                               <Component id="txtIdMatVM" min="-2" pref="30" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="btnVincularFM" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                                           <Component id="btnDesvincularFM" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                          <Component id="btnVerTabelas" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="btnLimparEmCat" min="-2" pref="27" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="txtBuscarFornEmCat" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                  <Component id="txtBuscarMatEmCat" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                              </Group>
+                              <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabel29" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jLabel29" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel31" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                              <Component id="txtBuscarCatEmCat" min="-2" pref="30" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="txtBuscarCatEmCat" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="txtBuscarVM" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="btnLimparEmCat" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Component id="jScrollPane5" pref="350" max="32767" attributes="0"/>
-                          <Component id="jScrollPane6" alignment="1" pref="0" max="32767" attributes="0"/>
                           <Component id="jScrollPane4" alignment="1" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="27" max="32767" attributes="0"/>
@@ -1693,7 +1673,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="tblMaterialEmCat">
+                <Component class="javax.swing.JTable" name="tblVincularMaterial">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="2" rowCount="4">
@@ -1705,8 +1685,11 @@
                       <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblVincularMaterialMouseClicked"/>
+                  </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="tblMaterialEmCat = new javax.swing.JTable(){&#xa;    public boolean isCellEditable(int rowIndex, int colIndex){&#xa;        return false;&#xa;    }&#xa;};"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="tblVincularMaterial = new javax.swing.JTable(){&#xa;    public boolean isCellEditable(int rowIndex, int colIndex){&#xa;        return false;&#xa;    }&#xa;};"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
@@ -1735,31 +1718,6 @@
                   </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="tblCategoria2 = new javax.swing.JTable(){&#xa;    public boolean isCellEditable(int rowIndex, int colIndex){&#xa;        return false;&#xa;    }&#xa;};"/>
-                  </AuxValues>
-                </Component>
-              </SubComponents>
-            </Container>
-            <Container class="javax.swing.JScrollPane" name="jScrollPane6">
-              <AuxValues>
-                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-              </AuxValues>
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-              <SubComponents>
-                <Component class="javax.swing.JTable" name="tblFornecedorEmCat">
-                  <Properties>
-                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="2" rowCount="4">
-                        <Column editable="true" title="ID" type="java.lang.Object"/>
-                        <Column editable="true" title="Nome do Fornecedor" type="java.lang.Object"/>
-                      </Table>
-                    </Property>
-                    <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                      <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
-                    </Property>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="tblFornecedorEmCat = new javax.swing.JTable(){&#xa;    public boolean isCellEditable(int rowIndex, int colIndex){&#xa;        return false;&#xa;    }&#xa;};"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
@@ -2023,18 +1981,7 @@
                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtBuscarCatEmCatKeyReleased"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel30">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Calibri" size="14" style="0"/>
-                </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="2b" green="83" red="1a" type="rgb"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Buscar Fornecedor"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtBuscarFornEmCat">
+            <Component class="javax.swing.JTextField" name="txtBuscarVM">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="df" green="df" red="df" type="rgb"/>
@@ -2054,30 +2001,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtBuscarFornEmCatKeyReleased"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtBuscarMatEmCat">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="df" green="df" red="df" type="rgb"/>
-                </Property>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Calibri" size="16" style="0"/>
-                </Property>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                    <LineBorder roundedCorners="true">
-                      <Color PropertyName="color" blue="b0" green="b0" red="b0" type="rgb"/>
-                    </LineBorder>
-                  </Border>
-                </Property>
-                <Property name="selectionColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="2b" green="83" red="1a" type="rgb"/>
-                </Property>
-              </Properties>
-              <Events>
-                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtBuscarMatEmCatKeyReleased"/>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtBuscarVMKeyReleased"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel31">
@@ -2088,7 +2012,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="2b" green="83" red="1a" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Buscar Material"/>
+                <Property name="text" type="java.lang.String" value="Buscar Vincula&#xe7;&#xe3;o"/>
               </Properties>
             </Component>
             <Component class="com.k33ptoo.components.KButton" name="btnLimparEmCat">
@@ -2133,6 +2057,28 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSubstituirCatActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="com.k33ptoo.components.KButton" name="btnVerTabelas">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Ver Tabelas F/M"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="12" style="1"/>
+                </Property>
+                <Property name="kAllowGradient" type="boolean" value="false"/>
+                <Property name="kBackGroundColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="2b" green="83" red="1a" type="rgb"/>
+                </Property>
+                <Property name="kBorderRadius" type="int" value="20"/>
+                <Property name="kHoverColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="44" green="99" red="34" type="rgb"/>
+                </Property>
+                <Property name="kHoverForeGround" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVerTabelasActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
