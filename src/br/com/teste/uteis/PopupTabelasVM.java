@@ -39,7 +39,7 @@ public class PopupTabelasVM extends javax.swing.JFrame {
         try {
             pst = conn.prepareStatement(sql);
             //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
-            pst.setString(1, txtBuscarFornecedor.getText() + "%");
+            pst.setString(1,"%" + txtBuscarFornecedor.getText() + "%");
             rs = pst.executeQuery();
             //a linha abaixo usa a biblioteca rs2xml.jar
             tblFornecedorVM.setModel(DbUtils.resultSetToTableModel(rs));
@@ -56,7 +56,7 @@ public class PopupTabelasVM extends javax.swing.JFrame {
         try {
             pst = conn.prepareStatement(sql);
             //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
-            pst.setString(1, txtBuscarMaterial.getText() + "%");
+            pst.setString(1,"%" + txtBuscarMaterial.getText() + "%");
             rs = pst.executeQuery();
             //a linha abaixo usa a biblioteca rs2xml.jar
             tblMaterialVM.setModel(DbUtils.resultSetToTableModel(rs));
