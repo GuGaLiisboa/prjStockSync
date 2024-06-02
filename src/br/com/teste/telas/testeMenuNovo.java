@@ -92,7 +92,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         try {
             pst = conn.prepareStatement(sql);
             //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
-            pst.setString(1,"%" + txtFornPesquisar.getText() + "%");
+            pst.setString(1, "%" + txtFornPesquisar.getText() + "%");
             rs = pst.executeQuery();
             //a linha abaixo usa a biblioteca rs2xml.jar
             tblFornecedores.setModel(DbUtils.resultSetToTableModel(rs));
@@ -227,7 +227,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         try {
             pst = conn.prepareStatement(sql);
             //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
-            pst.setString(1,"%" + txtBuscarMat.getText() + "%");
+            pst.setString(1, "%" + txtBuscarMat.getText() + "%");
             rs = pst.executeQuery();
             //a linha abaixo usa a biblioteca rs2xml.jar
             tblMaterial.setModel(DbUtils.resultSetToTableModel(rs));
@@ -244,7 +244,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         try {
             pst = conn.prepareStatement(sql);
             //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
-            pst.setString(1,"%" + txtMatBuscarCat.getText() + "%");
+            pst.setString(1, "%" + txtMatBuscarCat.getText() + "%");
             rs = pst.executeQuery();
             //a linha abaixo usa a biblioteca rs2xml.jar
             tblCategoria.setModel(DbUtils.resultSetToTableModel(rs));
@@ -585,7 +585,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         try {
             pst = conn.prepareStatement(sql);
             //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
-            pst.setString(1,"%" + txtBuscarCatEmCat.getText() + "%");
+            pst.setString(1, "%" + txtBuscarCatEmCat.getText() + "%");
             rs = pst.executeQuery();
             //a linha abaixo usa a biblioteca rs2xml.jar
             tblCategoria2.setModel(DbUtils.resultSetToTableModel(rs));
@@ -599,11 +599,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private void pesquisar_FornecedorMaterial() {
         conn = Conexao.getConexao();
         String sql = "SELECT id_fornecedor_material AS ID, f.id_fornecedor AS 'ID Fornecedor', f.nome_fornecedor AS Nome, m.id_material AS 'ID Material', m.nome_material AS Nome "
-                + "FROM fornecedor_material AS fm INNER JOIN material AS m ON m.id_material = fm.id_material INNER JOIN fornecedor AS f ON f.id_fornecedor = fm.id_fornecedor WHERE id_fornecedor_material LIKE ?";
+                + "FROM fornecedor_material AS fm INNER JOIN material AS m ON m.id_material = fm.id_material INNER JOIN fornecedor AS f ON f.id_fornecedor = fm.id_fornecedor WHERE f.nome_fornecedor LIKE ?";
         try {
             pst = conn.prepareStatement(sql);
             //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
-            pst.setString(1,txtBuscarVM.getText() + "%");
+            pst.setString(1, txtBuscarVM.getText() + "%");
             rs = pst.executeQuery();
             //a linha abaixo usa a biblioteca rs2xml.jar
             tblVincularMaterial.setModel(DbUtils.resultSetToTableModel(rs));
@@ -618,7 +618,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     //Método para filtrar a busca(todas, entradas ou saídas)
     private void atualizarTabelaMovimentacoes(String filtro) {
         conn = Conexao.getConexao();
-        String sql = "SELECT id_movimentacao AS 'ID Movimentação', m.nome_material AS 'Nome Material', tipo_movimentacao AS Tipo, quantidade AS Quantidade, DATE_FORMAT(data_movimentacao, '%d/%m/%Y %H:%i:%s') AS 'Data e Hora' "
+        String sql = "SELECT id_movimentacao AS 'ID Movimentação', m.nome_material AS 'Nome Material', m.id_material AS 'ID Material', tipo_movimentacao AS Tipo, quantidade AS Quantidade, DATE_FORMAT(data_movimentacao, '%d/%m/%Y %H:%i:%s') AS 'Data e Hora' "
                 + "FROM movimentacao_estoque AS me "
                 + "INNER JOIN material AS m ON me.id_material = m.id_material ";
 
@@ -640,15 +640,29 @@ public class testeMenuNovo extends javax.swing.JFrame {
     }
 
     //metodo para buscar por movimentações no menu Movimentações
-    private void pesquisar_Movimentacao(String termoPesquisa) {
+    private void pesquisar_Movimentacao(String termoPesquisa, String filtro) {
         conn = Conexao.getConexao();
-        String sql = "SELECT id_movimentacao AS ID, m.nome_material AS 'Nome Material', tipo_movimentacao AS Tipo, quantidade AS Quantidade, DATE_FORMAT(data_movimentacao, '%d/%m/%Y %H:%i:%s') AS 'Data e Hora' "
+        String sql = "SELECT id_movimentacao AS 'ID Movimentação', m.nome_material AS 'Nome Material', m.id_material AS 'ID Material', tipo_movimentacao AS Tipo, quantidade AS Quantidade, DATE_FORMAT(data_movimentacao, '%d/%m/%Y %H:%i:%s') AS 'Data e Hora' "
                 + "FROM movimentacao_estoque AS me "
                 + "INNER JOIN material AS m ON me.id_material = m.id_material ";
 
         // Adiciona a condição de pesquisa se houver um termo de pesquisa
         if (!termoPesquisa.isEmpty()) {
             sql += "WHERE m.nome_material LIKE ? ";
+
+            // Se houver um filtro aplicado, adiciona à condição WHERE
+            if ("Entradas".equals(filtro)) {
+                sql += "AND tipo_movimentacao = 'Entrada'";
+            } else if ("Saídas".equals(filtro)) {
+                sql += "AND tipo_movimentacao = 'Saida'";
+            }
+        } else {
+            // Se não houver termo de pesquisa, apenas aplicar o filtro se houver
+            if ("Entradas".equals(filtro)) {
+                sql += "WHERE tipo_movimentacao = 'Entrada'";
+            } else if ("Saídas".equals(filtro)) {
+                sql += "WHERE tipo_movimentacao = 'Saida'";
+            }
         }
 
         try {
@@ -725,6 +739,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtIdMatVM.setText(null);
         ((DefaultTableModel) tblCategoria2.getModel()).setRowCount(0);
         ((DefaultTableModel) tblVincularMaterial.getModel()).setRowCount(0);
+        
+        //tela Movimentações
+        txtBuscarMov.setText(null);
+        cBoxTipoMov.setSelectedItem("Todas");
+        ((DefaultTableModel) tblMovimentacoes.getModel()).setRowCount(0);
     }
 
     // Método para estilizar um botão com um nome e uma imagem específicos
@@ -902,7 +921,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnLimparMat = new javax.swing.JButton();
         jLabel24 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
-        telaMovimentacoes = new javax.swing.JPanel();
+        telaCadMovimentacoes = new javax.swing.JPanel();
         btnMovSaida = new com.k33ptoo.components.KButton();
         btnMovEntrada = new com.k33ptoo.components.KButton();
         jLabel30 = new javax.swing.JLabel();
@@ -911,11 +930,14 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel33 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
         tblMovimentacoes = new javax.swing.JTable();
-        btnCadastrarMat1 = new com.k33ptoo.components.KButton();
+        btnNovaMovimentacao = new com.k33ptoo.components.KButton();
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
         txtBuscarMov = new javax.swing.JTextField();
         cBoxTipoMov = new javax.swing.JComboBox<>();
+        btnLimparMovimentacoes = new com.k33ptoo.components.KButton();
+        jLabel34 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("StockSync");
@@ -2316,7 +2338,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("tab2", telaCadMaterial);
 
-        telaMovimentacoes.setBackground(new java.awt.Color(217, 217, 217));
+        telaCadMovimentacoes.setBackground(new java.awt.Color(217, 217, 217));
 
         btnMovSaida.setBackground(new java.awt.Color(222, 222, 222));
         btnMovSaida.setBorder(null);
@@ -2384,40 +2406,40 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel32.setForeground(new java.awt.Color(26, 131, 43));
         jLabel32.setText("SELECIONE O TIPO DE MOVIMENTAÇÃO");
 
-        javax.swing.GroupLayout telaMovimentacoesLayout = new javax.swing.GroupLayout(telaMovimentacoes);
-        telaMovimentacoes.setLayout(telaMovimentacoesLayout);
-        telaMovimentacoesLayout.setHorizontalGroup(
-            telaMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(telaMovimentacoesLayout.createSequentialGroup()
-                .addGroup(telaMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(telaMovimentacoesLayout.createSequentialGroup()
+        javax.swing.GroupLayout telaCadMovimentacoesLayout = new javax.swing.GroupLayout(telaCadMovimentacoes);
+        telaCadMovimentacoes.setLayout(telaCadMovimentacoesLayout);
+        telaCadMovimentacoesLayout.setHorizontalGroup(
+            telaCadMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaCadMovimentacoesLayout.createSequentialGroup()
+                .addGroup(telaCadMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(telaCadMovimentacoesLayout.createSequentialGroup()
                         .addGap(229, 229, 229)
                         .addComponent(btnMovEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(151, 151, 151)
                         .addComponent(btnMovSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(telaMovimentacoesLayout.createSequentialGroup()
+                    .addGroup(telaCadMovimentacoesLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jLabel30))
-                    .addGroup(telaMovimentacoesLayout.createSequentialGroup()
+                    .addGroup(telaCadMovimentacoesLayout.createSequentialGroup()
                         .addGap(386, 386, 386)
                         .addComponent(jLabel32)))
                 .addContainerGap(230, Short.MAX_VALUE))
         );
-        telaMovimentacoesLayout.setVerticalGroup(
-            telaMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(telaMovimentacoesLayout.createSequentialGroup()
+        telaCadMovimentacoesLayout.setVerticalGroup(
+            telaCadMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaCadMovimentacoesLayout.createSequentialGroup()
                 .addGap(50, 50, 50)
                 .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(86, 86, 86)
                 .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(56, 56, 56)
-                .addGroup(telaMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(telaCadMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnMovSaida, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
                     .addComponent(btnMovEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(244, 244, 244))
         );
 
-        jTabbedPane2.addTab("tab3", telaMovimentacoes);
+        jTabbedPane2.addTab("tab3", telaCadMovimentacoes);
 
         telaMenuMovimentacoes.setBackground(new java.awt.Color(217, 217, 217));
 
@@ -2425,6 +2447,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel33.setForeground(new java.awt.Color(26, 131, 43));
         jLabel33.setText("> MOVIMENTAÇÕES");
 
+        tblMovimentacoes = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         tblMovimentacoes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -2436,15 +2463,21 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblMovimentacoes.getTableHeader().setReorderingAllowed(false);
         jScrollPane6.setViewportView(tblMovimentacoes);
 
-        btnCadastrarMat1.setText("Cadastrar");
-        btnCadastrarMat1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnCadastrarMat1.setkAllowGradient(false);
-        btnCadastrarMat1.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        btnCadastrarMat1.setkBorderRadius(20);
-        btnCadastrarMat1.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnCadastrarMat1.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnNovaMovimentacao.setText("Nova Movimentação");
+        btnNovaMovimentacao.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnNovaMovimentacao.setkAllowGradient(false);
+        btnNovaMovimentacao.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnNovaMovimentacao.setkBorderRadius(20);
+        btnNovaMovimentacao.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnNovaMovimentacao.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnNovaMovimentacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovaMovimentacaoActionPerformed(evt);
+            }
+        });
 
         txtBuscarMov.setBackground(new java.awt.Color(223, 223, 223));
         txtBuscarMov.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
@@ -2470,6 +2503,27 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
+        btnLimparMovimentacoes.setText("Limpar");
+        btnLimparMovimentacoes.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnLimparMovimentacoes.setkAllowGradient(false);
+        btnLimparMovimentacoes.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnLimparMovimentacoes.setkBorderRadius(20);
+        btnLimparMovimentacoes.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnLimparMovimentacoes.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnLimparMovimentacoes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparMovimentacoesActionPerformed(evt);
+            }
+        });
+
+        jLabel34.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        jLabel34.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel34.setText("Filtrar");
+
+        jLabel35.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        jLabel35.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel35.setText("Buscar Material");
+
         javax.swing.GroupLayout telaMenuMovimentacoesLayout = new javax.swing.GroupLayout(telaMenuMovimentacoes);
         telaMenuMovimentacoes.setLayout(telaMenuMovimentacoesLayout);
         telaMenuMovimentacoesLayout.setHorizontalGroup(
@@ -2478,7 +2532,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
             .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnCadastrarMat1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNovaMovimentacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel33)
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 1052, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -2487,10 +2541,17 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addGap(0, 22, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, telaMenuMovimentacoesLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(cBoxTipoMov, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(txtBuscarMov, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(95, 95, 95))
+                .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cBoxTipoMov, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel34))
+                .addGap(50, 50, 50)
+                .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
+                        .addComponent(txtBuscarMov, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnLimparMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel35))
+                .addGap(197, 197, 197))
         );
         telaMenuMovimentacoesLayout.setVerticalGroup(
             telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2498,17 +2559,25 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addGap(50, 50, 50)
                 .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel34)
+                    .addComponent(jLabel35))
+                .addGap(0, 1, Short.MAX_VALUE)
+                .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
-                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cBoxTipoMov, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10))
+                    .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
+                        .addGap(0, 0, 0)
                         .addComponent(txtBuscarMov, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(cBoxTipoMov, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
+                    .addComponent(btnLimparMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCadastrarMat1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                .addComponent(btnNovaMovimentacao, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27))
         );
@@ -2767,19 +2836,29 @@ public class testeMenuNovo extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBuscarMovActionPerformed
 
     private void txtBuscarMovKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarMovKeyReleased
-        // Obtenha o termo de pesquisa do campo de texto
         String termoPesquisa = txtBuscarMov.getText();
-
-        // Chame a função pesquisar_Movimentacao com o termo de pesquisa
-        pesquisar_Movimentacao(termoPesquisa);
+        String filtro = (String) cBoxTipoMov.getSelectedItem(); // Supondo que você tenha um JComboBox para selecionar o filtro
+        pesquisar_Movimentacao(termoPesquisa, filtro);
     }//GEN-LAST:event_txtBuscarMovKeyReleased
 
     private void cBoxTipoMovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cBoxTipoMovActionPerformed
         // Obtém o filtro selecionado no JComboBox
         String filtro = (String) cBoxTipoMov.getSelectedItem();
         // Chama a função para atualizar a tabela com o filtro selecionado
-        atualizarTabelaMovimentacoes(filtro);
+        //atualizarTabelaMovimentacoes(filtro);
+        pesquisar_Movimentacao(txtBuscarMov.getText(), filtro);
     }//GEN-LAST:event_cBoxTipoMovActionPerformed
+
+    private void btnLimparMovimentacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparMovimentacoesActionPerformed
+        // TODO add your handling code here:
+        limpar();
+        atualizarTabelas();
+    }//GEN-LAST:event_btnLimparMovimentacoesActionPerformed
+
+    private void btnNovaMovimentacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaMovimentacaoActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaCadMovimentacoes);
+    }//GEN-LAST:event_btnNovaMovimentacaoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2827,7 +2906,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnCadMaterial;
     private com.k33ptoo.components.KButton btnCadastrarCat;
     private com.k33ptoo.components.KButton btnCadastrarMat;
-    private com.k33ptoo.components.KButton btnCadastrarMat1;
     private com.k33ptoo.components.KButton btnCadastros;
     private com.k33ptoo.components.KButton btnDesvincularFM;
     private com.k33ptoo.components.KButton btnExcluir;
@@ -2840,9 +2918,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JButton btnLimpar;
     private com.k33ptoo.components.KButton btnLimparEmCat;
     private javax.swing.JButton btnLimparMat;
+    private com.k33ptoo.components.KButton btnLimparMovimentacoes;
     private com.k33ptoo.components.KButton btnMovEntrada;
     private com.k33ptoo.components.KButton btnMovSaida;
     private com.k33ptoo.components.KButton btnMovimentacoes;
+    private com.k33ptoo.components.KButton btnNovaMovimentacao;
     private com.k33ptoo.components.KButton btnSubstituirCat;
     private com.k33ptoo.components.KButton btnVerTabelas;
     private com.k33ptoo.components.KButton btnVincularFM;
@@ -2873,6 +2953,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -2907,10 +2989,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JPanel telaCadCategoria;
     private javax.swing.JPanel telaCadFornecedor;
     private javax.swing.JPanel telaCadMaterial;
+    private javax.swing.JPanel telaCadMovimentacoes;
     private javax.swing.JPanel telaCadastros;
     private javax.swing.JPanel telaInicial;
     private javax.swing.JPanel telaMenuMovimentacoes;
-    private javax.swing.JPanel telaMovimentacoes;
     private javax.swing.JTextField txtBuscarCatEmCat;
     private javax.swing.JTextField txtBuscarMat;
     private javax.swing.JTextField txtBuscarMov;
