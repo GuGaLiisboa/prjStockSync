@@ -29,6 +29,8 @@ public class PopupTabelasVM extends javax.swing.JFrame {
         initComponents();
         pesquisar_fornecedorEmCat();
         pesquisar_materialEmCat();
+        
+        btnAtualizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     }
 
     //metodo para buscar uma fornecedor no menu Categorias

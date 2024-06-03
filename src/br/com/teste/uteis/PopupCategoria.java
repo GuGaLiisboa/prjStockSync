@@ -28,6 +28,8 @@ public class PopupCategoria extends javax.swing.JFrame {
      */
     public PopupCategoria() {
         initComponents();
+        
+        btnVincularCatNova.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
     }
 

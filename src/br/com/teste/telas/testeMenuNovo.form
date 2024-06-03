@@ -57,12 +57,12 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="btnCadastros" alignment="0" pref="0" max="32767" attributes="0"/>
               <Component id="btnMovimentacoes" alignment="0" pref="0" max="32767" attributes="0"/>
-              <Component id="kButton4" alignment="0" pref="0" max="32767" attributes="0"/>
-              <Component id="kButton5" alignment="0" pref="0" max="32767" attributes="0"/>
-              <Component id="kButton6" alignment="0" pref="0" max="32767" attributes="0"/>
-              <Component id="kButton7" alignment="0" pref="0" max="32767" attributes="0"/>
-              <Component id="kButton8" alignment="0" pref="0" max="32767" attributes="0"/>
-              <Component id="kButton9" alignment="0" pref="0" max="32767" attributes="0"/>
+              <Component id="btnMateriais" alignment="0" pref="0" max="32767" attributes="0"/>
+              <Component id="btnFornecedores" alignment="0" pref="0" max="32767" attributes="0"/>
+              <Component id="btnCategorias" alignment="0" pref="0" max="32767" attributes="0"/>
+              <Component id="btnRelatorios" alignment="0" pref="0" max="32767" attributes="0"/>
+              <Component id="btnAjuda" alignment="0" pref="0" max="32767" attributes="0"/>
+              <Component id="btnSobre" alignment="0" pref="0" max="32767" attributes="0"/>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
@@ -85,17 +85,17 @@
                   <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                   <Component id="btnMovimentacoes" min="-2" pref="35" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                  <Component id="kButton4" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="btnMateriais" min="-2" pref="35" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                  <Component id="kButton5" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="btnFornecedores" min="-2" pref="35" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                  <Component id="kButton6" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="btnCategorias" min="-2" pref="35" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                  <Component id="kButton7" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="btnRelatorios" min="-2" pref="35" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                  <Component id="kButton8" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="btnAjuda" min="-2" pref="35" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                  <Component id="kButton9" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="btnSobre" min="-2" pref="35" max="-2" attributes="0"/>
                   <EmptySpace pref="322" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -197,7 +197,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMovimentacoesActionPerformed"/>
           </Events>
         </Component>
-        <Component class="com.k33ptoo.components.KButton" name="kButton4">
+        <Component class="com.k33ptoo.components.KButton" name="btnMateriais">
           <Properties>
             <Property name="text" type="java.lang.String" value="MATERIAIS"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -236,7 +236,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="com.k33ptoo.components.KButton" name="kButton5">
+        <Component class="com.k33ptoo.components.KButton" name="btnFornecedores">
           <Properties>
             <Property name="text" type="java.lang.String" value="FORNECEDORES"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -275,7 +275,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="com.k33ptoo.components.KButton" name="kButton6">
+        <Component class="com.k33ptoo.components.KButton" name="btnCategorias">
           <Properties>
             <Property name="text" type="java.lang.String" value="CATEGORIAS"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -314,7 +314,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="com.k33ptoo.components.KButton" name="kButton7">
+        <Component class="com.k33ptoo.components.KButton" name="btnRelatorios">
           <Properties>
             <Property name="text" type="java.lang.String" value="RELAT&#xd3;RIOS"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -353,7 +353,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="com.k33ptoo.components.KButton" name="kButton8">
+        <Component class="com.k33ptoo.components.KButton" name="btnAjuda">
           <Properties>
             <Property name="text" type="java.lang.String" value="AJUDA"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -392,7 +392,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="com.k33ptoo.components.KButton" name="kButton9">
+        <Component class="com.k33ptoo.components.KButton" name="btnSobre">
           <Properties>
             <Property name="text" type="java.lang.String" value="SOBRE"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -3709,6 +3709,33 @@
               </Events>
             </Component>
           </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="telaMateriais">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="d9" green="d9" red="d9" type="rgb"/>
+            </Property>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="tab10">
+                <Property name="tabTitle" type="java.lang.String" value="tab10"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="1110" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="715" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+          </Layout>
         </Container>
       </SubComponents>
     </Container>

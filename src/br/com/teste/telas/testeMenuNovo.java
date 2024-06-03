@@ -22,7 +22,7 @@ import net.proteanit.sql.DbUtils;
  * @author Gustavo
  */
 public class testeMenuNovo extends javax.swing.JFrame {
-
+    
     Connection conn = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
@@ -48,9 +48,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnEdit();
 
     }
-    
-    
-    
 
     //=============================================================================================
     //metodo para adicionar fornecedores
@@ -86,8 +83,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         }
     }
     
-    
-
     //metodo para buscar fornecedores
     private void pesquisar_fornecedor() {
         //String sql = "select * from fornecedor where nome_fornecedor like ?";
@@ -800,13 +795,51 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     //setar o icone mão nos botões
     private void btnEdit() {
+        //MENU LATERAL
+        btnCadastros.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMovimentacoes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMateriais.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFornecedores.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCategorias.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRelatorios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAjuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSobre.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        //TELA CADASTROS
+        //FORNECEDOR
         btnAdicionar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAlterar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExcluir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCadastros.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        //CATEGORIA
+        btnCadastrarCat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAlterarCat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExcluirCat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSubstituirCat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVincularFM.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDesvincularFM.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVerTabelas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnLimparEmCat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        //MATERIAL
         btnCadastrarMat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAlterarMat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExcluirMat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        //TELA MOVIMENTAÇÕES
+        //MOVIMENTAÇÕES
+        btnLimparMovimentacoes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNovaMovimentacao.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                
+        //ENTRADA
+        btnSalvarEntrada.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnLimparEntradas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                    
+        //SAÍDA
+        btnSalvarSaida.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnLimparSaidas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        cBoxTipoMov.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
     }
 
@@ -941,12 +974,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         btnCadastros = new com.k33ptoo.components.KButton();
         btnMovimentacoes = new com.k33ptoo.components.KButton();
-        kButton4 = new com.k33ptoo.components.KButton();
-        kButton5 = new com.k33ptoo.components.KButton();
-        kButton6 = new com.k33ptoo.components.KButton();
-        kButton7 = new com.k33ptoo.components.KButton();
-        kButton8 = new com.k33ptoo.components.KButton();
-        kButton9 = new com.k33ptoo.components.KButton();
+        btnMateriais = new com.k33ptoo.components.KButton();
+        btnFornecedores = new com.k33ptoo.components.KButton();
+        btnCategorias = new com.k33ptoo.components.KButton();
+        btnRelatorios = new com.k33ptoo.components.KButton();
+        btnAjuda = new com.k33ptoo.components.KButton();
+        btnSobre = new com.k33ptoo.components.KButton();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         telaInicial = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -1083,6 +1116,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtSaidaBuscar = new javax.swing.JTextField();
         jLabel43 = new javax.swing.JLabel();
         btnLimparSaidas = new com.k33ptoo.components.KButton();
+        telaMateriais = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("StockSync");
@@ -1135,89 +1169,89 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
-        kButton4.setText("MATERIAIS");
-        kButton4.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        kButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        kButton4.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        kButton4.setkEndColor(new java.awt.Color(26, 131, 43));
-        kButton4.setkHoverColor(new java.awt.Color(52, 153, 68));
-        kButton4.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        kButton4.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        kButton4.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        kButton4.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        kButton4.setkPressedColor(new java.awt.Color(52, 153, 68));
-        kButton4.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        kButton4.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnMateriais.setText("MATERIAIS");
+        btnMateriais.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnMateriais.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnMateriais.setkBackGroundColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnMateriais.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.setkHoverEndColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnMateriais.setkHoverStartColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.setkIndicatorColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.setkPressedColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.setkSelectedColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.setkStartColor(new java.awt.Color(26, 131, 43));
 
-        kButton5.setText("FORNECEDORES");
-        kButton5.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        kButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        kButton5.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        kButton5.setkEndColor(new java.awt.Color(26, 131, 43));
-        kButton5.setkHoverColor(new java.awt.Color(52, 153, 68));
-        kButton5.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        kButton5.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        kButton5.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        kButton5.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        kButton5.setkPressedColor(new java.awt.Color(52, 153, 68));
-        kButton5.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        kButton5.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnFornecedores.setText("FORNECEDORES");
+        btnFornecedores.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnFornecedores.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnFornecedores.setkBackGroundColor(new java.awt.Color(52, 153, 68));
+        btnFornecedores.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnFornecedores.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnFornecedores.setkHoverEndColor(new java.awt.Color(52, 153, 68));
+        btnFornecedores.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnFornecedores.setkHoverStartColor(new java.awt.Color(52, 153, 68));
+        btnFornecedores.setkIndicatorColor(new java.awt.Color(52, 153, 68));
+        btnFornecedores.setkPressedColor(new java.awt.Color(52, 153, 68));
+        btnFornecedores.setkSelectedColor(new java.awt.Color(52, 153, 68));
+        btnFornecedores.setkStartColor(new java.awt.Color(26, 131, 43));
 
-        kButton6.setText("CATEGORIAS");
-        kButton6.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        kButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        kButton6.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        kButton6.setkEndColor(new java.awt.Color(26, 131, 43));
-        kButton6.setkHoverColor(new java.awt.Color(52, 153, 68));
-        kButton6.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        kButton6.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        kButton6.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        kButton6.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        kButton6.setkPressedColor(new java.awt.Color(52, 153, 68));
-        kButton6.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        kButton6.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnCategorias.setText("CATEGORIAS");
+        btnCategorias.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnCategorias.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCategorias.setkBackGroundColor(new java.awt.Color(52, 153, 68));
+        btnCategorias.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnCategorias.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnCategorias.setkHoverEndColor(new java.awt.Color(52, 153, 68));
+        btnCategorias.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnCategorias.setkHoverStartColor(new java.awt.Color(52, 153, 68));
+        btnCategorias.setkIndicatorColor(new java.awt.Color(52, 153, 68));
+        btnCategorias.setkPressedColor(new java.awt.Color(52, 153, 68));
+        btnCategorias.setkSelectedColor(new java.awt.Color(52, 153, 68));
+        btnCategorias.setkStartColor(new java.awt.Color(26, 131, 43));
 
-        kButton7.setText("RELATÓRIOS");
-        kButton7.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        kButton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        kButton7.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        kButton7.setkEndColor(new java.awt.Color(26, 131, 43));
-        kButton7.setkHoverColor(new java.awt.Color(52, 153, 68));
-        kButton7.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        kButton7.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        kButton7.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        kButton7.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        kButton7.setkPressedColor(new java.awt.Color(52, 153, 68));
-        kButton7.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        kButton7.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnRelatorios.setText("RELATÓRIOS");
+        btnRelatorios.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnRelatorios.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRelatorios.setkBackGroundColor(new java.awt.Color(52, 153, 68));
+        btnRelatorios.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnRelatorios.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnRelatorios.setkHoverEndColor(new java.awt.Color(52, 153, 68));
+        btnRelatorios.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnRelatorios.setkHoverStartColor(new java.awt.Color(52, 153, 68));
+        btnRelatorios.setkIndicatorColor(new java.awt.Color(52, 153, 68));
+        btnRelatorios.setkPressedColor(new java.awt.Color(52, 153, 68));
+        btnRelatorios.setkSelectedColor(new java.awt.Color(52, 153, 68));
+        btnRelatorios.setkStartColor(new java.awt.Color(26, 131, 43));
 
-        kButton8.setText("AJUDA");
-        kButton8.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        kButton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        kButton8.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        kButton8.setkEndColor(new java.awt.Color(26, 131, 43));
-        kButton8.setkHoverColor(new java.awt.Color(52, 153, 68));
-        kButton8.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        kButton8.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        kButton8.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        kButton8.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        kButton8.setkPressedColor(new java.awt.Color(52, 153, 68));
-        kButton8.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        kButton8.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnAjuda.setText("AJUDA");
+        btnAjuda.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnAjuda.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAjuda.setkBackGroundColor(new java.awt.Color(52, 153, 68));
+        btnAjuda.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnAjuda.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnAjuda.setkHoverEndColor(new java.awt.Color(52, 153, 68));
+        btnAjuda.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnAjuda.setkHoverStartColor(new java.awt.Color(52, 153, 68));
+        btnAjuda.setkIndicatorColor(new java.awt.Color(52, 153, 68));
+        btnAjuda.setkPressedColor(new java.awt.Color(52, 153, 68));
+        btnAjuda.setkSelectedColor(new java.awt.Color(52, 153, 68));
+        btnAjuda.setkStartColor(new java.awt.Color(26, 131, 43));
 
-        kButton9.setText("SOBRE");
-        kButton9.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        kButton9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        kButton9.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        kButton9.setkEndColor(new java.awt.Color(26, 131, 43));
-        kButton9.setkHoverColor(new java.awt.Color(52, 153, 68));
-        kButton9.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        kButton9.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        kButton9.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        kButton9.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        kButton9.setkPressedColor(new java.awt.Color(52, 153, 68));
-        kButton9.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        kButton9.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnSobre.setText("SOBRE");
+        btnSobre.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnSobre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSobre.setkBackGroundColor(new java.awt.Color(52, 153, 68));
+        btnSobre.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnSobre.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnSobre.setkHoverEndColor(new java.awt.Color(52, 153, 68));
+        btnSobre.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnSobre.setkHoverStartColor(new java.awt.Color(52, 153, 68));
+        btnSobre.setkIndicatorColor(new java.awt.Color(52, 153, 68));
+        btnSobre.setkPressedColor(new java.awt.Color(52, 153, 68));
+        btnSobre.setkSelectedColor(new java.awt.Color(52, 153, 68));
+        btnSobre.setkStartColor(new java.awt.Color(26, 131, 43));
 
         javax.swing.GroupLayout menuLateralLayout = new javax.swing.GroupLayout(menuLateral);
         menuLateral.setLayout(menuLateralLayout);
@@ -1225,12 +1259,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
             menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnCadastros, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addComponent(btnMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(kButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(kButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(kButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(kButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(kButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(kButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(btnMateriais, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(btnFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(btnCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(btnRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(btnAjuda, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(btnSobre, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(menuLateralLayout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1250,17 +1284,17 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addGap(2, 2, 2)
                 .addComponent(btnMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(kButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnMateriais, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(kButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(kButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(kButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(kButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAjuda, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(kButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSobre, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(322, Short.MAX_VALUE))
         );
 
@@ -3094,6 +3128,21 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("tab8", telaSaidaMov);
 
+        telaMateriais.setBackground(new java.awt.Color(217, 217, 217));
+
+        javax.swing.GroupLayout telaMateriaisLayout = new javax.swing.GroupLayout(telaMateriais);
+        telaMateriais.setLayout(telaMateriaisLayout);
+        telaMateriaisLayout.setHorizontalGroup(
+            telaMateriaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1110, Short.MAX_VALUE)
+        );
+        telaMateriaisLayout.setVerticalGroup(
+            telaMateriaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 715, Short.MAX_VALUE)
+        );
+
+        jTabbedPane2.addTab("tab10", telaMateriais);
+
         getContentPane().add(jTabbedPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, -50, 1110, 750));
 
         setSize(new java.awt.Dimension(1280, 720));
@@ -3482,6 +3531,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.k33ptoo.components.KButton btnAdicionar;
+    private com.k33ptoo.components.KButton btnAjuda;
     private com.k33ptoo.components.KButton btnAlterar;
     private com.k33ptoo.components.KButton btnAlterarCat;
     private com.k33ptoo.components.KButton btnAlterarMat;
@@ -3491,6 +3541,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnCadastrarCat;
     private com.k33ptoo.components.KButton btnCadastrarMat;
     private com.k33ptoo.components.KButton btnCadastros;
+    private com.k33ptoo.components.KButton btnCategorias;
     private com.k33ptoo.components.KButton btnDesvincularFM;
     private com.k33ptoo.components.KButton btnExcluir;
     private com.k33ptoo.components.KButton btnExcluirCat;
@@ -3499,18 +3550,22 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JButton btnFechar1;
     private javax.swing.JButton btnFechar2;
     private javax.swing.JButton btnFechar3;
+    private com.k33ptoo.components.KButton btnFornecedores;
     private javax.swing.JButton btnLimpar;
     private com.k33ptoo.components.KButton btnLimparEmCat;
     private com.k33ptoo.components.KButton btnLimparEntradas;
     private javax.swing.JButton btnLimparMat;
     private com.k33ptoo.components.KButton btnLimparMovimentacoes;
     private com.k33ptoo.components.KButton btnLimparSaidas;
+    private com.k33ptoo.components.KButton btnMateriais;
     private com.k33ptoo.components.KButton btnMovEntrada;
     private com.k33ptoo.components.KButton btnMovSaida;
     private com.k33ptoo.components.KButton btnMovimentacoes;
     private com.k33ptoo.components.KButton btnNovaMovimentacao;
+    private com.k33ptoo.components.KButton btnRelatorios;
     private com.k33ptoo.components.KButton btnSalvarEntrada;
     private com.k33ptoo.components.KButton btnSalvarSaida;
+    private com.k33ptoo.components.KButton btnSobre;
     private com.k33ptoo.components.KButton btnSubstituirCat;
     private com.k33ptoo.components.KButton btnVerTabelas;
     private com.k33ptoo.components.KButton btnVincularFM;
@@ -3575,12 +3630,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private com.k33ptoo.components.KButton kButton4;
-    private com.k33ptoo.components.KButton kButton5;
-    private com.k33ptoo.components.KButton kButton6;
-    private com.k33ptoo.components.KButton kButton7;
-    private com.k33ptoo.components.KButton kButton8;
-    private com.k33ptoo.components.KButton kButton9;
     private javax.swing.JPanel menuLateral;
     private javax.swing.JTable tblCategoria;
     private javax.swing.JTable tblCategoria2;
@@ -3597,6 +3646,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JPanel telaCadastros;
     private javax.swing.JPanel telaEntradaMov;
     private javax.swing.JPanel telaInicial;
+    private javax.swing.JPanel telaMateriais;
     private javax.swing.JPanel telaMenuMovimentacoes;
     private javax.swing.JPanel telaSaidaMov;
     private javax.swing.JTextField txtBuscarCatEmCat;
