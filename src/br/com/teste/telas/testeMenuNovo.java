@@ -769,10 +769,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
         try {
             pst = conn.prepareStatement(sql);
             //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
-            pst.setString(1, "%" + txtSaidaBuscar.getText() + "%");
+            pst.setString(1,"%" + txtBuscarEmSaida.getText() + "%");
             rs = pst.executeQuery();
             //a linha abaixo usa a biblioteca rs2xml.jar
-            tblSaida.setModel(DbUtils.resultSetToTableModel(rs));
+            tabelaSaidas.setModel(DbUtils.resultSetToTableModel(rs));
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
@@ -942,8 +942,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
         //Tela Movimentações > Saídas
         txtSaidaIdMat.setText(null);
         txtSaidaQnt.setText(null);
-        txtSaidaBuscar.setText(null);
-        ((DefaultTableModel) tblSaida.getModel()).setRowCount(0);
+        txtBuscarEmSaida.setText(null);
+        ((DefaultTableModel) tabelaSaidas.getModel()).setRowCount(0);
 
         //Tela Materiais
         txtBuscarEmMat.setText(null);
@@ -1163,17 +1163,17 @@ public class testeMenuNovo extends javax.swing.JFrame {
         telaSaidaMov = new javax.swing.JPanel();
         jLabel37 = new javax.swing.JLabel();
         btnSalvarSaida = new com.k33ptoo.components.KButton();
-        jScrollPane8 = new javax.swing.JScrollPane();
-        tblSaida = new javax.swing.JTable();
         jLabel41 = new javax.swing.JLabel();
         txtSaidaIdMat = new javax.swing.JTextField();
         jSeparator8 = new javax.swing.JSeparator();
         jSeparator9 = new javax.swing.JSeparator();
         txtSaidaQnt = new javax.swing.JTextField();
         jLabel42 = new javax.swing.JLabel();
-        txtSaidaBuscar = new javax.swing.JTextField();
         jLabel43 = new javax.swing.JLabel();
         btnLimparSaidas = new com.k33ptoo.components.KButton();
+        txtBuscarEmSaida = new javax.swing.JTextField();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        tabelaSaidas = new javax.swing.JTable();
         telaMateriais = new javax.swing.JPanel();
         jLabel44 = new javax.swing.JLabel();
         jScrollPane9 = new javax.swing.JScrollPane();
@@ -1411,7 +1411,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         telaInicialLayout.setHorizontalGroup(
             telaInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, telaInicialLayout.createSequentialGroup()
-                .addContainerGap(348, Short.MAX_VALUE)
+                .addContainerGap(353, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addGap(357, 357, 357))
         );
@@ -1555,7 +1555,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                 .addComponent(btnCadCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(90, 90, 90)
                                 .addComponent(btnCadMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addContainerGap(95, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, telaCadastrosLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnFechar1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2990,11 +2990,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addComponent(jSeparator6, javax.swing.GroupLayout.DEFAULT_SIZE, 1095, Short.MAX_VALUE)
                         .addComponent(jSeparator7)
                         .addGroup(telaEntradaMovLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 1067, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(telaEntradaMovLayout.createSequentialGroup()
                             .addGap(18, 18, 18)
-                            .addComponent(jLabel36)))
+                            .addComponent(jLabel36))
+                        .addGroup(telaEntradaMovLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 1070, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(telaEntradaMovLayout.createSequentialGroup()
                         .addGap(330, 330, 330)
                         .addGroup(telaEntradaMovLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3070,25 +3070,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
-        tblSaida = new javax.swing.JTable(){
-            public boolean isCellEditable(int rowIndex, int colIndex){
-                return false;
-            }
-        };
-        tblSaida.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tblSaida.getTableHeader().setReorderingAllowed(false);
-        jScrollPane8.setViewportView(tblSaida);
-
         jLabel41.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel41.setForeground(new java.awt.Color(26, 131, 43));
         jLabel41.setText("ID Material");
@@ -3127,21 +3108,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel42.setForeground(new java.awt.Color(26, 131, 43));
         jLabel42.setText("Quantidade");
 
-        txtSaidaBuscar.setBackground(new java.awt.Color(223, 223, 223));
-        txtSaidaBuscar.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        txtSaidaBuscar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        txtSaidaBuscar.setSelectionColor(new java.awt.Color(26, 131, 43));
-        txtSaidaBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSaidaBuscarActionPerformed(evt);
-            }
-        });
-        txtSaidaBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtSaidaBuscarKeyReleased(evt);
-            }
-        });
-
         jLabel43.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel43.setForeground(new java.awt.Color(26, 131, 43));
         jLabel43.setText("Buscar");
@@ -3159,6 +3125,40 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
+        txtBuscarEmSaida.setBackground(new java.awt.Color(223, 223, 223));
+        txtBuscarEmSaida.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        txtBuscarEmSaida.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
+        txtBuscarEmSaida.setSelectionColor(new java.awt.Color(26, 131, 43));
+        txtBuscarEmSaida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarEmSaidaActionPerformed(evt);
+            }
+        });
+        txtBuscarEmSaida.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarEmSaidaKeyReleased(evt);
+            }
+        });
+
+        tabelaSaidas = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        tabelaSaidas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tabelaSaidas.getTableHeader().setReorderingAllowed(false);
+        jScrollPane8.setViewportView(tabelaSaidas);
+
         javax.swing.GroupLayout telaSaidaMovLayout = new javax.swing.GroupLayout(telaSaidaMov);
         telaSaidaMov.setLayout(telaSaidaMovLayout);
         telaSaidaMovLayout.setHorizontalGroup(
@@ -3168,9 +3168,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addGroup(telaSaidaMovLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jSeparator8, javax.swing.GroupLayout.DEFAULT_SIZE, 1095, Short.MAX_VALUE)
                         .addComponent(jSeparator9)
-                        .addGroup(telaSaidaMovLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 1067, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(telaSaidaMovLayout.createSequentialGroup()
                             .addGap(18, 18, 18)
                             .addComponent(jLabel37)))
@@ -3191,9 +3188,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addComponent(jLabel43))
                     .addGroup(telaSaidaMovLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(txtSaidaBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtBuscarEmSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnLimparSaidas, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnLimparSaidas, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(telaSaidaMovLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 1070, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         telaSaidaMovLayout.setVerticalGroup(
@@ -3221,8 +3221,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addComponent(jLabel43)
                 .addGap(0, 0, 0)
                 .addGroup(telaSaidaMovLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtSaidaBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLimparSaidas, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnLimparSaidas, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBuscarEmSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27))
@@ -3526,7 +3526,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel46.setForeground(new java.awt.Color(26, 131, 43));
         jLabel46.setText("> CATEGORIAS");
 
-        tblSaida = new javax.swing.JTable(){
+        tblMateriaisEmMat2 = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex){
                 return false;
             }
@@ -4002,15 +4002,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSaidaQntKeyReleased
 
-    private void txtSaidaBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSaidaBuscarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSaidaBuscarActionPerformed
-
-    private void txtSaidaBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSaidaBuscarKeyReleased
-        // TODO add your handling code here:
-        pesquisar_MovSaidas();
-    }//GEN-LAST:event_txtSaidaBuscarKeyReleased
-
     private void btnLimparEntradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparEntradasActionPerformed
         // TODO add your handling code here:
         limpar();
@@ -4111,6 +4102,15 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaFornecedores);
     }//GEN-LAST:event_btnFornecedoresActionPerformed
+
+    private void txtBuscarEmSaidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarEmSaidaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarEmSaidaActionPerformed
+
+    private void txtBuscarEmSaidaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarEmSaidaKeyReleased
+        // TODO add your handling code here:
+        pesquisar_MovSaidas();
+    }//GEN-LAST:event_txtBuscarEmSaidaKeyReleased
 
     /**
      * @param args the command line arguments
@@ -4276,6 +4276,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JPanel menuLateral;
+    private javax.swing.JTable tabelaSaidas;
     private javax.swing.JTable tblCategoria;
     private javax.swing.JTable tblCategoria2;
     private javax.swing.JTable tblEntrada;
@@ -4285,7 +4286,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTable tblMateriaisEmMat2;
     private javax.swing.JTable tblMaterial;
     private javax.swing.JTable tblMovimentacoes;
-    private javax.swing.JTable tblSaida;
     private javax.swing.JTable tblVincularMaterial;
     private javax.swing.JPanel telaCadCategoria;
     private javax.swing.JPanel telaCadFornecedor;
@@ -4303,6 +4303,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTextField txtBuscarEmForn;
     private javax.swing.JTextField txtBuscarEmForn1;
     private javax.swing.JTextField txtBuscarEmMat;
+    private javax.swing.JTextField txtBuscarEmSaida;
     private javax.swing.JTextField txtBuscarMat;
     private javax.swing.JTextField txtBuscarMov;
     private javax.swing.JTextField txtBuscarVM;
@@ -4327,7 +4328,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTextField txtMatBuscarCat;
     private javax.swing.JTextField txtNomeCat;
     private javax.swing.JTextField txtNomeMat;
-    private javax.swing.JTextField txtSaidaBuscar;
     private javax.swing.JTextField txtSaidaIdMat;
     private javax.swing.JTextField txtSaidaQnt;
     private javax.swing.JTextField txtValorMat;
