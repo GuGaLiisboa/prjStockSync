@@ -818,12 +818,30 @@ public class testeMenuNovo extends javax.swing.JFrame {
         }
     }
 
+    //Método para exibir os dados na tabela Fornecedores
+    private void pesquisar_CategoriaEmCat() {
+        conn = Conexao.getConexao();
+        String sql = "SELECT id_categoria AS 'ID Categoria', nome_categoria AS 'Nome da Categoria' FROM categoria WHERE nome_categoria LIKE ?";
+
+        try {
+            pst = conn.prepareStatement(sql);
+            //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
+            pst.setString(1, "%" + txtBuscarCategoria.getText() + "%");
+            rs = pst.executeQuery();
+            //a linha abaixo usa a biblioteca rs2xml.jar
+            tblCategoriasEmCat.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
     //=============================================================================================
     //Métodos da Tela Relatórios
     //Método para exibir o relatório na tabela, com base na combobox
     private void gerarRelatorio(String relatorio) {
         conn = Conexao.getConexao();
-        String sql = "";
+        String sql = " ";
 
         switch (relatorio) {
             case "Relatório de Movimentação de Estoque por Fornecedor":
@@ -834,8 +852,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         + "GROUP BY f.nome_fornecedor, m.nome_material ORDER BY f.nome_fornecedor, m.nome_material;";
                 break;
             case "Relatório de Estoque por Categoria":
-                sql = "SELECT c.nome_categoria AS Categoria, m.nome_material AS Material, e.quantidade_atual AS 'Estoque Atual' FROM estoque e INNER JOIN material m ON e.id_material = m.id_material \n"
-                        + "INNER JOIN categoria c ON m.id_categoria = c.id_categoria ORDER BY c.nome_categoria, m.nome_material";
+                sql = "SELECT c.nome_categoria AS Categoria, SUM(e.quantidade_atual) AS 'Estoque Total', COUNT(m.id_material) AS 'Quantidade de Materiais' FROM estoque e \n"
+                        + "INNER JOIN material m ON e.id_material = m.id_material INNER JOIN categoria c ON m.id_categoria = c.id_categoria GROUP BY c.nome_categoria \n"
+                        + "ORDER BY c.nome_categoria";
                 break;
             case "Relatório de Movimentação de Estoque por Mês":
                 sql = "SELECT YEAR(data_movimentacao) AS Ano, MONTH(data_movimentacao) AS Mês, SUM(CASE WHEN tipo_movimentacao = 'entrada' THEN quantidade ELSE 0 END) AS Entradas, \n"
@@ -843,9 +862,13 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         + "ORDER BY YEAR(data_movimentacao), MONTH(data_movimentacao);";
                 break;
             case "Relatório de Estoques Mínimos": //o parâmetro é 20 unidades
-                sql = "SELECT m.nome_material AS Material, e.quantidade_atual AS Estoque_Atual FROM estoque e INNER JOIN material m ON e.id_material = m.id_material WHERE e.quantidade_atual < 20;";
+                sql = "SELECT m.nome_material AS Material, e.quantidade_atual AS 'Estoque Atual' FROM estoque e INNER JOIN material m ON e.id_material = m.id_material WHERE e.quantidade_atual < 20;";
                 break;
-            // Adicione mais casos conforme necessário
+            case "Relatório de Fornecedores e Materiais":
+                sql = "SELECT f.nome_fornecedor AS Fornecedor, m.nome_material AS Material, c.nome_categoria AS Categoria, f.email AS Email, f.numero_telefone AS Telefone, \n"
+                        + "f.endereco AS Endereco, f.site AS Site FROM fornecedor f INNER JOIN fornecedor_material fm ON f.id_fornecedor = fm.id_fornecedor INNER JOIN \n"
+                        + "material m ON fm.id_material = m.id_material INNER JOIN categoria c ON m.id_categoria = c.id_categoria ORDER BY f.nome_fornecedor, c.nome_categoria, m.nome_material";
+                break;
         }
 
         try {
@@ -872,6 +895,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         pesquisar_MovSaidas();
         pesquisar_MateriaisEmMat();
         pesquisar_FornecedoresEmForn();
+        pesquisar_CategoriaEmCat();
     }
 
     //setar o icone mão nos botões
@@ -930,6 +954,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnLimparEmForn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNovoFornecedorEmForn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnVincEmForn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        btnLimparCategoria.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNovaCategoria.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
     }
 
@@ -992,6 +1019,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
         //Tela Fornecedores
         txtBuscarEmForn.setText(null);
         ((DefaultTableModel) tblFornecedoresEmForn.getModel()).setRowCount(0);
+        
+        //Tela Categorias
+        txtBuscarCategoria.setText(null);
+        ((DefaultTableModel) tblCategoriasEmCat.getModel()).setRowCount(0);
     }
 
     // Método para estilizar um botão com um nome e uma imagem específicos
@@ -1247,7 +1278,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel49 = new javax.swing.JLabel();
         btnLimparCategoria = new com.k33ptoo.components.KButton();
         btnNovaCategoria = new com.k33ptoo.components.KButton();
-        btnVincularCategoria = new com.k33ptoo.components.KButton();
         telaRelatorios = new javax.swing.JPanel();
         jLabel50 = new javax.swing.JLabel();
         jScrollPane12 = new javax.swing.JScrollPane();
@@ -1361,6 +1391,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnCategorias.setkPressedColor(new java.awt.Color(52, 153, 68));
         btnCategorias.setkSelectedColor(new java.awt.Color(52, 153, 68));
         btnCategorias.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnCategorias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCategoriasActionPerformed(evt);
+            }
+        });
 
         btnRelatorios.setText("RELATÓRIOS");
         btnRelatorios.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
@@ -3644,19 +3679,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
-        btnVincularCategoria.setText("Vincular Categoria");
-        btnVincularCategoria.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnVincularCategoria.setkAllowGradient(false);
-        btnVincularCategoria.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        btnVincularCategoria.setkBorderRadius(20);
-        btnVincularCategoria.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnVincularCategoria.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnVincularCategoria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVincularCategoriaActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout telaCategoriasLayout = new javax.swing.GroupLayout(telaCategorias);
         telaCategorias.setLayout(telaCategoriasLayout);
         telaCategoriasLayout.setHorizontalGroup(
@@ -3673,7 +3695,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                             .addGap(18, 18, 18)
                             .addComponent(jLabel46)))
                     .addGroup(telaCategoriasLayout.createSequentialGroup()
-                        .addGap(166, 166, 166)
+                        .addGap(301, 301, 301)
                         .addGroup(telaCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel49)
                             .addGroup(telaCategoriasLayout.createSequentialGroup()
@@ -3681,9 +3703,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnLimparCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(49, 49, 49)
-                        .addComponent(btnNovaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnVincularCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnNovaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         telaCategoriasLayout.setVerticalGroup(
@@ -3700,8 +3720,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addComponent(txtBuscarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(telaCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnLimparCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnNovaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnVincularCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnNovaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator15, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -4228,19 +4247,19 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void txtBuscarCategoriaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarCategoriaKeyReleased
         // TODO add your handling code here:
+        pesquisar_CategoriaEmCat();
     }//GEN-LAST:event_txtBuscarCategoriaKeyReleased
 
     private void btnLimparCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparCategoriaActionPerformed
         // TODO add your handling code here:
+        limpar();
+        atualizarTabelas();
     }//GEN-LAST:event_btnLimparCategoriaActionPerformed
 
     private void btnNovaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaCategoriaActionPerformed
         // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaCadCategoria);
     }//GEN-LAST:event_btnNovaCategoriaActionPerformed
-
-    private void btnVincularCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVincularCategoriaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnVincularCategoriaActionPerformed
 
     private void btnMateriaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMateriaisActionPerformed
         // TODO add your handling code here:
@@ -4283,6 +4302,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaRelatorios);
     }//GEN-LAST:event_btnRelatoriosActionPerformed
+
+    private void btnCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCategoriasActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaCategorias);
+    }//GEN-LAST:event_btnCategoriasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -4369,7 +4393,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnVerTabelas;
     private com.k33ptoo.components.KButton btnVincEmForn;
     private com.k33ptoo.components.KButton btnVincEmMat;
-    private com.k33ptoo.components.KButton btnVincularCategoria;
     private com.k33ptoo.components.KButton btnVincularFM;
     private javax.swing.JComboBox<String> cBoxRelatorios;
     private javax.swing.JComboBox<String> cBoxTipoMov;
