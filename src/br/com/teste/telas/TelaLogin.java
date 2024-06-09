@@ -67,10 +67,10 @@ public class TelaLogin extends javax.swing.JFrame {
 
         // Adiciona os placeholders nos campos
         adicionarPlaceholders();
-        // Estiliza o botão de acessar
-        estilizarBotaoLogin();
         // Altera o icone
         definirIconeJanela();
+        
+        btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
     }
 
@@ -129,32 +129,7 @@ public class TelaLogin extends javax.swing.JFrame {
         });
     }
 
-    // Método para estilizar o botão de acessar
-    private void estilizarBotaoLogin() {
-        btnLogin.setBackground(new Color(24, 140, 91)); // Define a cor de fundo padrão (verde)
-        btnLogin.setForeground(Color.WHITE); // Define a cor do texto (branco)
-        btnLogin.setBorder(new BordaRedonda(7)); // Aplica a borda com cantos arredondados (7 é o raio)
-        btnLogin.setBorderPainted(false); // Remove a borda pintada
-        btnLogin.setFont(new Font("Calibri", Font.BOLD, 14)); // Define a fonte (opcional)
-        btnLogin.setPreferredSize(new Dimension(150, 25)); // Define o tamanho preferido do botão
-        btnLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-
-        // Adiciona um ouvinte de mouse ao botão de acessar
-        btnLogin.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                // Define a cor de fundo quando o mouse entra no botão
-                btnLogin.setBackground(new Color(7, 108, 65)); // Cor verde mais escura
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                // Define a cor de fundo padrão quando o mouse sai do botão
-                btnLogin.setBackground(new Color(24, 140, 91)); // Cor verde padrão
-            }
-        });
-    }
+    
 
     private void definirIconeJanela() {
         // Carrega o ícone da sua aplicação
@@ -176,11 +151,11 @@ public class TelaLogin extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         txtUsuario = new javax.swing.JTextField();
         txtSenha = new javax.swing.JPasswordField();
-        btnLogin = new javax.swing.JButton();
         lblstatus = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        btnLogin = new com.k33ptoo.components.KButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -204,13 +179,6 @@ public class TelaLogin extends javax.swing.JFrame {
         txtSenha.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(155, 155, 155)));
         txtSenha.setCaretColor(new java.awt.Color(143, 142, 142));
 
-        btnLogin.setText("Acessar");
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
-            }
-        });
-
         lblstatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/bancoconectado.png"))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
@@ -230,24 +198,39 @@ public class TelaLogin extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(24, 140, 91));
         jLabel6.setText("acesso.");
 
+        btnLogin.setText("Acessar");
+        btnLogin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnLogin.setkAllowGradient(false);
+        btnLogin.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnLogin.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnLogin.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(txtUsuario, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtSenha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                    .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5))
-                .addGap(32, 32, 32))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblstatus)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtUsuario)
+                    .addComponent(txtSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(32, 32, 32))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,8 +246,8 @@ public class TelaLogin extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
+                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
                 .addComponent(lblstatus))
         );
 
@@ -331,14 +314,14 @@ public class TelaLogin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jLabel1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jLabel1FocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel1FocusGained
+
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
         logar();
     }//GEN-LAST:event_btnLoginActionPerformed
-
-    private void jLabel1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jLabel1FocusGained
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jLabel1FocusGained
 
     /**
      * @param args the command line arguments
@@ -379,7 +362,7 @@ public class TelaLogin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLogin;
+    private com.k33ptoo.components.KButton btnLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

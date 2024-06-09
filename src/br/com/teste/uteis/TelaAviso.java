@@ -168,14 +168,14 @@ public class TelaAviso extends javax.swing.JFrame {
         btnEntendi.setText("Tentar Novamente");
 
         jLabel1.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(24, 140, 91));
+        jLabel1.setForeground(new java.awt.Color(26, 131, 43));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Erro ao logar");
 
         btnSair.setText("Sair do Programa");
 
         jLabel2.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(24, 140, 91));
+        jLabel2.setForeground(new java.awt.Color(26, 131, 43));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Os dados de login estão incorretos.");
 

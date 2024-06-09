@@ -88,6 +88,9 @@ public class PopupTabelasVM extends javax.swing.JFrame {
         tblFornecedorVM = new javax.swing.JTable();
         btnAtualizar = new com.k33ptoo.components.KButton();
 
+        setTitle("StockSync - Tabelas F/M");
+        setBackground(new java.awt.Color(217, 217, 217));
+
         tblFornecedorVM = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex){
                 return false;
