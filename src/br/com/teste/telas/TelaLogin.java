@@ -76,7 +76,7 @@ public class TelaLogin extends javax.swing.JFrame {
 
     private void adicionarPlaceholders() {
         // Placeholder para o campo de usuário
-        txtUsuario.setForeground(new Color(24, 140, 91)); // Cor verde escuro
+        txtUsuario.setForeground(new Color(26,131,43)); // Cor verde escuro
         txtUsuario.setText("Digite o login");
         txtUsuario.setBorder(BorderFactory.createCompoundBorder(
                 txtUsuario.getBorder(),
@@ -87,21 +87,21 @@ public class TelaLogin extends javax.swing.JFrame {
             public void focusGained(FocusEvent e) {
                 if (txtUsuario.getText().equals("Digite o login")) {
                     txtUsuario.setText("");
-                    txtUsuario.setForeground(new Color(24, 140, 91)); // Define a cor do texto como verde
+                    txtUsuario.setForeground(new Color(26,131,43)); // Define a cor do texto como verde
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
                 if (txtUsuario.getText().isEmpty()) {
-                    txtUsuario.setForeground(new Color(24, 140, 91)); // Define a cor do texto como verde
+                    txtUsuario.setForeground(new Color(26,131,43)); // Define a cor do texto como verde
                     txtUsuario.setText("Digite o login");
                 }
             }
         });
 
         // Placeholder para o campo de senha
-        txtSenha.setForeground(new Color(24, 140, 91)); // Cor verde escuro
+        txtSenha.setForeground(new Color(26,131,43)); // Cor verde escuro
         txtSenha.setEchoChar((char) 0); // Remove o caractere de senha inicialmente
         txtSenha.setText("Digite a senha");
         txtSenha.setBorder(BorderFactory.createCompoundBorder(
@@ -113,7 +113,7 @@ public class TelaLogin extends javax.swing.JFrame {
             public void focusGained(FocusEvent e) {
                 if (txtSenha.getText().equals("Digite a senha")) {
                     txtSenha.setText("");
-                    txtSenha.setForeground(new Color(24, 140, 91)); // Define a cor do texto como verde
+                    txtSenha.setForeground(new Color(26,131,43)); // Define a cor do texto como verde
                     txtSenha.setEchoChar('*'); // Define o caractere de senha ao obter foco
                 }
             }
@@ -121,7 +121,7 @@ public class TelaLogin extends javax.swing.JFrame {
             @Override
             public void focusLost(FocusEvent e) {
                 if (txtSenha.getText().isEmpty()) {
-                    txtSenha.setForeground(new Color(24, 140, 91)); // Define a cor do texto como verde
+                    txtSenha.setForeground(new Color(26,131,43)); // Define a cor do texto como verde
                     txtSenha.setText("Digite a senha");
                     txtSenha.setEchoChar((char) 0); // Remove o caractere de senha ao perder foco
                 }
@@ -214,7 +214,7 @@ public class TelaLogin extends javax.swing.JFrame {
         lblstatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/bancoconectado.png"))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(24, 140, 91));
+        jLabel1.setForeground(new java.awt.Color(26, 131, 43));
         jLabel1.setText("Login");
         jLabel1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -223,7 +223,7 @@ public class TelaLogin extends javax.swing.JFrame {
         });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(24, 140, 91));
+        jLabel5.setForeground(new java.awt.Color(26, 131, 43));
         jLabel5.setText("Preencha os campos com os dados de ");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -268,7 +268,7 @@ public class TelaLogin extends javax.swing.JFrame {
                 .addComponent(lblstatus))
         );
 
-        jPanel2.setBackground(new java.awt.Color(24, 140, 91));
+        jPanel2.setBackground(new java.awt.Color(26, 131, 43));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 32)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -323,7 +323,7 @@ public class TelaLogin extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 

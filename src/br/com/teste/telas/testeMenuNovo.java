@@ -37,8 +37,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
         estilizarBotao(btnCadFornecedor, "FORNECEDOR", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeCaminhao.png");
         estilizarBotao(btnCadCategoria, "CATEGORIA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeCategoria.png");
         estilizarBotao(btnCadMaterial, "MATERIAL", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeMaterial.png");
-        estilizarBotao(btnMovEntrada, "ENTRADA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeMaterial.png");
-        estilizarBotao(btnMovSaida, "SAÍDA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeMaterial.png");
+        estilizarBotao(btnMovEntrada, "ENTRADA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeEntrada.png");
+        estilizarBotao(btnMovSaida, "SAÍDA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeSaida.png");
 
         //atualizar as tabelas
         atualizarTabelas();
@@ -841,34 +841,39 @@ public class testeMenuNovo extends javax.swing.JFrame {
     //Método para exibir o relatório na tabela, com base na combobox
     private void gerarRelatorio(String relatorio) {
         conn = Conexao.getConexao();
-        String sql = " ";
+        String sql = "";
 
         switch (relatorio) {
             case "Relatório de Movimentação de Estoque por Fornecedor":
-                sql = "SELECT f.nome_fornecedor AS Fornecedor, m.nome_material AS Material, SUM(CASE WHEN me.tipo_movimentacao = 'entrada' THEN me.quantidade ELSE 0 END) AS Entradas, \n"
-                        + "SUM(CASE WHEN me.tipo_movimentacao = 'saida' THEN me.quantidade ELSE 0 END) AS Saídas, (SUM(CASE WHEN me.tipo_movimentacao = 'entrada' THEN me.quantidade ELSE 0 END) - \n"
-                        + "SUM(CASE WHEN me.tipo_movimentacao = 'saida' THEN me.quantidade ELSE 0 END)) AS Saldo FROM movimentacao_estoque me INNER JOIN material m ON me.id_material = m.id_material \n"
-                        + "INNER JOIN fornecedor_material fm ON fm.id_material = m.id_material INNER JOIN fornecedor f ON f.id_fornecedor = fm.id_fornecedor \n"
+                sql = "SELECT f.nome_fornecedor AS Fornecedor, m.nome_material AS Material, SUM(CASE WHEN me.tipo_movimentacao = 'entrada' THEN me.quantidade ELSE 0 END) AS Entradas, "
+                        + "SUM(CASE WHEN me.tipo_movimentacao = 'saida' THEN me.quantidade ELSE 0 END) AS Saídas, (SUM(CASE WHEN me.tipo_movimentacao = 'entrada' THEN me.quantidade ELSE 0 END) - "
+                        + "SUM(CASE WHEN me.tipo_movimentacao = 'saida' THEN me.quantidade ELSE 0 END)) AS Saldo FROM movimentacao_estoque me INNER JOIN material m ON me.id_material = m.id_material "
+                        + "INNER JOIN fornecedor_material fm ON fm.id_material = m.id_material INNER JOIN fornecedor f ON f.id_fornecedor = fm.id_fornecedor "
                         + "GROUP BY f.nome_fornecedor, m.nome_material ORDER BY f.nome_fornecedor, m.nome_material;";
                 break;
             case "Relatório de Estoque por Categoria":
-                sql = "SELECT c.nome_categoria AS Categoria, SUM(e.quantidade_atual) AS 'Estoque Total', COUNT(m.id_material) AS 'Quantidade de Materiais' FROM estoque e \n"
-                        + "INNER JOIN material m ON e.id_material = m.id_material INNER JOIN categoria c ON m.id_categoria = c.id_categoria GROUP BY c.nome_categoria \n"
+                sql = "SELECT c.nome_categoria AS Categoria, SUM(e.quantidade_atual) AS 'Estoque Total', COUNT(m.id_material) AS 'Quantidade de Materiais' FROM estoque e "
+                        + "INNER JOIN material m ON e.id_material = m.id_material INNER JOIN categoria c ON m.id_categoria = c.id_categoria GROUP BY c.nome_categoria "
                         + "ORDER BY c.nome_categoria";
                 break;
             case "Relatório de Movimentação de Estoque por Mês":
-                sql = "SELECT YEAR(data_movimentacao) AS Ano, MONTH(data_movimentacao) AS Mês, SUM(CASE WHEN tipo_movimentacao = 'entrada' THEN quantidade ELSE 0 END) AS Entradas, \n"
-                        + "SUM(CASE WHEN tipo_movimentacao = 'saida' THEN quantidade ELSE 0 END) AS Saídas FROM movimentacao_estoque GROUP BY YEAR(data_movimentacao), MONTH(data_movimentacao) \n"
+                sql = "SELECT YEAR(data_movimentacao) AS Ano, MONTH(data_movimentacao) AS Mês, SUM(CASE WHEN tipo_movimentacao = 'entrada' THEN quantidade ELSE 0 END) AS Entradas, "
+                        + "SUM(CASE WHEN tipo_movimentacao = 'saida' THEN quantidade ELSE 0 END) AS Saídas FROM movimentacao_estoque GROUP BY YEAR(data_movimentacao), MONTH(data_movimentacao) "
                         + "ORDER BY YEAR(data_movimentacao), MONTH(data_movimentacao);";
                 break;
             case "Relatório de Estoques Mínimos": //o parâmetro é 20 unidades
                 sql = "SELECT m.nome_material AS Material, e.quantidade_atual AS 'Estoque Atual' FROM estoque e INNER JOIN material m ON e.id_material = m.id_material WHERE e.quantidade_atual < 20;";
                 break;
             case "Relatório de Fornecedores e Materiais":
-                sql = "SELECT f.nome_fornecedor AS Fornecedor, m.nome_material AS Material, c.nome_categoria AS Categoria, f.email AS Email, f.numero_telefone AS Telefone, \n"
-                        + "f.endereco AS Endereco, f.site AS Site FROM fornecedor f INNER JOIN fornecedor_material fm ON f.id_fornecedor = fm.id_fornecedor INNER JOIN \n"
+                sql = "SELECT f.nome_fornecedor AS Fornecedor, m.nome_material AS Material, c.nome_categoria AS Categoria, f.email AS Email, f.numero_telefone AS Telefone, "
+                        + "f.endereco AS Endereco, f.site AS Site FROM fornecedor f INNER JOIN fornecedor_material fm ON f.id_fornecedor = fm.id_fornecedor INNER JOIN "
                         + "material m ON fm.id_material = m.id_material INNER JOIN categoria c ON m.id_categoria = c.id_categoria ORDER BY f.nome_fornecedor, c.nome_categoria, m.nome_material";
                 break;
+            case "Relatórios":
+            default:
+                //((DefaultTableModel) tblRelatorios.getModel()).setRowCount(0);
+                resetarTabela();
+                return;
         }
 
         try {
@@ -879,6 +884,13 @@ public class testeMenuNovo extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
+
+    }
+
+    private void resetarTabela() {
+        String[] colunas = {"Selecione um Relatório"};
+        DefaultTableModel modelo = new DefaultTableModel(null, colunas);
+        tblRelatorios.setModel(modelo);
     }
 
     //=============================================================================================
@@ -954,7 +966,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnLimparEmForn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNovoFornecedorEmForn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnVincEmForn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        
+
         btnLimparCategoria.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNovaCategoria.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
@@ -1019,7 +1031,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         //Tela Fornecedores
         txtBuscarEmForn.setText(null);
         ((DefaultTableModel) tblFornecedoresEmForn.getModel()).setRowCount(0);
-        
+
         //Tela Categorias
         txtBuscarCategoria.setText(null);
         ((DefaultTableModel) tblCategoriasEmCat.getModel()).setRowCount(0);
@@ -1284,10 +1296,14 @@ public class testeMenuNovo extends javax.swing.JFrame {
         tblRelatorios = new javax.swing.JTable();
         jSeparator16 = new javax.swing.JSeparator();
         jSeparator17 = new javax.swing.JSeparator();
-        txtBuscarEmRelatorios = new javax.swing.JTextField();
-        jLabel51 = new javax.swing.JLabel();
         btnLimparRelatorios = new com.k33ptoo.components.KButton();
         cBoxRelatorios = new javax.swing.JComboBox<>();
+        telaAjuda = new javax.swing.JPanel();
+        jLabel52 = new javax.swing.JLabel();
+        btnHome7 = new javax.swing.JButton();
+        telaSobre = new javax.swing.JPanel();
+        jLabel53 = new javax.swing.JLabel();
+        jLabel54 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("StockSync");
@@ -1429,6 +1445,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnAjuda.setkPressedColor(new java.awt.Color(52, 153, 68));
         btnAjuda.setkSelectedColor(new java.awt.Color(52, 153, 68));
         btnAjuda.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnAjuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAjudaActionPerformed(evt);
+            }
+        });
 
         btnSobre.setText("SOBRE");
         btnSobre.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
@@ -1443,6 +1464,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnSobre.setkPressedColor(new java.awt.Color(52, 153, 68));
         btnSobre.setkSelectedColor(new java.awt.Color(52, 153, 68));
         btnSobre.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnSobre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSobreActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout menuLateralLayout = new javax.swing.GroupLayout(menuLateral);
         menuLateral.setLayout(menuLateralLayout);
@@ -3755,25 +3781,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         tblRelatorios.getTableHeader().setReorderingAllowed(false);
         jScrollPane12.setViewportView(tblRelatorios);
 
-        txtBuscarEmRelatorios.setBackground(new java.awt.Color(223, 223, 223));
-        txtBuscarEmRelatorios.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        txtBuscarEmRelatorios.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        txtBuscarEmRelatorios.setSelectionColor(new java.awt.Color(26, 131, 43));
-        txtBuscarEmRelatorios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBuscarEmRelatoriosActionPerformed(evt);
-            }
-        });
-        txtBuscarEmRelatorios.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtBuscarEmRelatoriosKeyReleased(evt);
-            }
-        });
-
-        jLabel51.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        jLabel51.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel51.setText("Buscar");
-
         btnLimparRelatorios.setText("Limpar");
         btnLimparRelatorios.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnLimparRelatorios.setkAllowGradient(false);
@@ -3810,15 +3817,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
                             .addGap(18, 18, 18)
                             .addComponent(jLabel50)))
                     .addGroup(telaRelatoriosLayout.createSequentialGroup()
-                        .addGap(166, 166, 166)
-                        .addGroup(telaRelatoriosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel51)
-                            .addGroup(telaRelatoriosLayout.createSequentialGroup()
-                                .addComponent(txtBuscarEmRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnLimparRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(87, 87, 87)
-                                .addComponent(cBoxRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(292, 292, 292)
+                        .addComponent(cBoxRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(btnLimparRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         telaRelatoriosLayout.setVerticalGroup(
@@ -3828,14 +3830,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addComponent(jLabel50, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator16, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel51)
-                .addGap(0, 0, 0)
-                .addGroup(telaRelatoriosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtBuscarEmRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(telaRelatoriosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnLimparRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cBoxRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(27, 27, 27)
+                .addGroup(telaRelatoriosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLimparRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cBoxRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator17, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -3844,6 +3842,78 @@ public class testeMenuNovo extends javax.swing.JFrame {
         );
 
         jTabbedPane2.addTab("tab8", telaRelatorios);
+
+        telaAjuda.setBackground(new java.awt.Color(217, 217, 217));
+
+        jLabel52.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
+        jLabel52.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel52.setText("> AJUDA");
+
+        btnHome7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/btnHome.png"))); // NOI18N
+        btnHome7.setBorderPainted(false);
+        btnHome7.setContentAreaFilled(false);
+        btnHome7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnHome7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHome7ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout telaAjudaLayout = new javax.swing.GroupLayout(telaAjuda);
+        telaAjuda.setLayout(telaAjudaLayout);
+        telaAjudaLayout.setHorizontalGroup(
+            telaAjudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaAjudaLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(btnHome7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel52)
+                .addContainerGap(984, Short.MAX_VALUE))
+        );
+        telaAjudaLayout.setVerticalGroup(
+            telaAjudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaAjudaLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(telaAjudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnHome7, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel52, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(629, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("tab14", telaAjuda);
+
+        telaSobre.setBackground(new java.awt.Color(217, 217, 217));
+
+        jLabel53.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
+        jLabel53.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel53.setText("> SOBRE");
+
+        jLabel54.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/txtStockSync.png"))); // NOI18N
+
+        javax.swing.GroupLayout telaSobreLayout = new javax.swing.GroupLayout(telaSobre);
+        telaSobre.setLayout(telaSobreLayout);
+        telaSobreLayout.setHorizontalGroup(
+            telaSobreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaSobreLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jLabel53)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, telaSobreLayout.createSequentialGroup()
+                .addContainerGap(105, Short.MAX_VALUE)
+                .addComponent(jLabel54)
+                .addContainerGap(105, Short.MAX_VALUE))
+        );
+        telaSobreLayout.setVerticalGroup(
+            telaSobreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaSobreLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(jLabel53, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel54)
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("tab15", telaSobre);
 
         getContentPane().add(jTabbedPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, -50, 1110, 750));
 
@@ -4280,14 +4350,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         pesquisar_MovSaidas();
     }//GEN-LAST:event_txtBuscarEmSaidaKeyReleased
 
-    private void txtBuscarEmRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarEmRelatoriosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBuscarEmRelatoriosActionPerformed
-
-    private void txtBuscarEmRelatoriosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarEmRelatoriosKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBuscarEmRelatoriosKeyReleased
-
     private void btnLimparRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparRelatoriosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnLimparRelatoriosActionPerformed
@@ -4307,6 +4369,21 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaCategorias);
     }//GEN-LAST:event_btnCategoriasActionPerformed
+
+    private void btnAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjudaActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaAjuda);
+    }//GEN-LAST:event_btnAjudaActionPerformed
+
+    private void btnSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSobreActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaSobre);
+    }//GEN-LAST:event_btnSobreActionPerformed
+
+    private void btnHome7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome7ActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaInicial);
+    }//GEN-LAST:event_btnHome7ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -4366,6 +4443,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JButton btnFechar2;
     private javax.swing.JButton btnFechar3;
     private com.k33ptoo.components.KButton btnFornecedores;
+    private javax.swing.JButton btnHome7;
     private javax.swing.JButton btnLimpar;
     private com.k33ptoo.components.KButton btnLimparCategoria;
     private com.k33ptoo.components.KButton btnLimparEmCat;
@@ -4441,7 +4519,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
-    private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
+    private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -4489,6 +4569,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTable tblMovimentacoes;
     private javax.swing.JTable tblRelatorios;
     private javax.swing.JTable tblVincularMaterial;
+    private javax.swing.JPanel telaAjuda;
     private javax.swing.JPanel telaCadCategoria;
     private javax.swing.JPanel telaCadFornecedor;
     private javax.swing.JPanel telaCadMaterial;
@@ -4502,11 +4583,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JPanel telaMenuMovimentacoes;
     private javax.swing.JPanel telaRelatorios;
     private javax.swing.JPanel telaSaidaMov;
+    private javax.swing.JPanel telaSobre;
     private javax.swing.JTextField txtBuscarCatEmCat;
     private javax.swing.JTextField txtBuscarCategoria;
     private javax.swing.JTextField txtBuscarEmForn;
     private javax.swing.JTextField txtBuscarEmMat;
-    private javax.swing.JTextField txtBuscarEmRelatorios;
     private javax.swing.JTextField txtBuscarEmSaida;
     private javax.swing.JTextField txtBuscarMat;
     private javax.swing.JTextField txtBuscarMov;
