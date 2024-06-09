@@ -34,11 +34,16 @@ public class testeMenuNovo extends javax.swing.JFrame {
         initComponents();
         conn = Conexao.getConexao();
         //Estiliza os botões com imagens do menu cadastro
-        estilizarBotao(btnCadFornecedor, "FORNECEDOR", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeCaminhao.png");
-        estilizarBotao(btnCadCategoria, "CATEGORIA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeCategoria.png");
-        estilizarBotao(btnCadMaterial, "MATERIAL", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeMaterial.png");
-        estilizarBotao(btnMovEntrada, "ENTRADA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeEntrada.png");
-        estilizarBotao(btnMovSaida, "SAÍDA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeSaida.png");
+        //estilizarBotao(btnCadFornecedor, "FORNECEDOR", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeCaminhao.png");
+        //estilizarBotao(btnCadCategoria, "CATEGORIA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeCategoria.png");
+        //estilizarBotao(btnCadMaterial, "MATERIAL", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeMaterial.png");
+        //estilizarBotao(btnMovEntrada, "ENTRADA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeEntrada.png");
+        //estilizarBotao(btnMovSaida, "SAÍDA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeSaida.png");
+        btnCadFornecedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/iconeCaminhao.png")));
+        btnCadCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/iconeCategoria.png")));
+        btnCadMaterial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/iconeMaterial.png")));
+        btnMovEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/iconeEntrada.png")));
+        btnMovSaida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/iconeSaida.png")));
 
         //atualizar as tabelas
         atualizarTabelas();
@@ -1167,6 +1172,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnLimpar = new javax.swing.JButton();
         jLabel51 = new javax.swing.JLabel();
         btnHome14 = new javax.swing.JButton();
+        jLabel37 = new javax.swing.JLabel();
         telaCadCategoria = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         btnFechar2 = new javax.swing.JButton();
@@ -1224,6 +1230,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel24 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
         btnHome16 = new javax.swing.JButton();
+        jLabel44 = new javax.swing.JLabel();
         telaCadMovimentacoes = new javax.swing.JPanel();
         btnMovSaida = new com.k33ptoo.components.KButton();
         btnMovEntrada = new com.k33ptoo.components.KButton();
@@ -1752,7 +1759,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel2.setText("Nome do Fornecedor");
+        jLabel2.setText("Nome do Fornecedor *");
 
         txtFornNome.setBackground(new java.awt.Color(223, 223, 223));
         txtFornNome.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
@@ -1793,11 +1800,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel13.setText("E-mail");
+        jLabel13.setText("E-mail *");
 
         jLabel14.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel14.setText("Telefone");
+        jLabel14.setText("Telefone *");
 
         txtFornFone.setBackground(new java.awt.Color(223, 223, 223));
         txtFornFone.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
@@ -1916,6 +1923,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
+        jLabel37.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        jLabel37.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel37.setText("* Campos Obrigatórios");
+
         javax.swing.GroupLayout telaCadFornecedorLayout = new javax.swing.GroupLayout(telaCadFornecedor);
         telaCadFornecedor.setLayout(telaCadFornecedorLayout);
         telaCadFornecedorLayout.setHorizontalGroup(
@@ -1923,15 +1934,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
             .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                 .addGap(98, 98, 98)
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, telaCadFornecedorLayout.createSequentialGroup()
-                        .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(txtFornNome, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addComponent(txtFornCnpj, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(86, 86, 86))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, telaCadFornecedorLayout.createSequentialGroup()
                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel11)
@@ -1953,7 +1955,21 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtFornFone, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel14))
-                        .addGap(127, 127, 127))))
+                        .addGap(127, 127, 127))
+                    .addGroup(telaCadFornecedorLayout.createSequentialGroup()
+                        .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(telaCadFornecedorLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel37))
+                            .addGroup(telaCadFornecedorLayout.createSequentialGroup()
+                                .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(txtFornNome, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel10)
+                                    .addComponent(txtFornCnpj, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(86, 86, 86))))
             .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                 .addGap(150, 150, 150)
                 .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1965,26 +1981,27 @@ public class testeMenuNovo extends javax.swing.JFrame {
             .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(telaCadFornecedorLayout.createSequentialGroup()
+                        .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(telaCadFornecedorLayout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(btnHome14, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel51)
+                                .addGap(833, 833, 833))
+                            .addComponent(jScrollPane1)
+                            .addGroup(telaCadFornecedorLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnFechar)))
+                        .addGap(34, 34, 34))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, telaCadFornecedorLayout.createSequentialGroup()
                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, telaCadFornecedorLayout.createSequentialGroup()
                                 .addComponent(txtFornPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnLimpar))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, telaCadFornecedorLayout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(btnHome14, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel51)))
-                        .addGap(731, 736, Short.MAX_VALUE))
-                    .addGroup(telaCadFornecedorLayout.createSequentialGroup()
-                        .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1)
-                            .addGroup(telaCadFornecedorLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnFechar)))
-                        .addGap(34, 34, 34))))
+                                .addComponent(btnLimpar)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         telaCadFornecedorLayout.setVerticalGroup(
             telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1996,7 +2013,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                         .addGap(50, 50, 50)
                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel37))
                             .addComponent(btnHome14, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -2039,7 +2058,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addComponent(txtFornFone, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(17, 17, 17)
                 .addComponent(jLabel15)
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 2, Short.MAX_VALUE)
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtFornPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar))
@@ -2548,7 +2567,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         jLabel18.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel18.setText("ID Categoria");
+        jLabel18.setText("ID Categoria *");
 
         txtIdCat.setBackground(new java.awt.Color(223, 223, 223));
         txtIdCat.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
@@ -2572,7 +2591,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         jLabel19.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel19.setText("Nome do Material");
+        jLabel19.setText("Nome do Material *");
 
         txtDescMat.setBackground(new java.awt.Color(223, 223, 223));
         txtDescMat.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
@@ -2600,7 +2619,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         jLabel21.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel21.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel21.setText("Valor");
+        jLabel21.setText("Valor *");
 
         btnCadastrarMat.setText("Cadastrar");
         btnCadastrarMat.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -2700,6 +2719,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
+        jLabel44.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        jLabel44.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel44.setText("* Campos Obrigatórios");
+
         javax.swing.GroupLayout telaCadMaterialLayout = new javax.swing.GroupLayout(telaCadMaterial);
         telaCadMaterial.setLayout(telaCadMaterialLayout);
         telaCadMaterialLayout.setHorizontalGroup(
@@ -2717,26 +2740,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
             .addGroup(telaCadMaterialLayout.createSequentialGroup()
                 .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(telaCadMaterialLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(btnHome16, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel9))
-                    .addGroup(telaCadMaterialLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, telaCadMaterialLayout.createSequentialGroup()
-                                .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtIdMat, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel17))
-                                .addGap(101, 101, 101)
-                                .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtIdCat, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel18))
-                                .addGap(106, 106, 106)
-                                .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel19)
-                                    .addComponent(txtNomeMat, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(96, 96, 96))
+                        .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, telaCadMaterialLayout.createSequentialGroup()
                                 .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2751,7 +2756,29 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                     .addComponent(txtMatBuscarCat, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel25)))
-                            .addComponent(btnFechar3, javax.swing.GroupLayout.Alignment.TRAILING)))
+                            .addComponent(btnFechar3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, telaCadMaterialLayout.createSequentialGroup()
+                                .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(telaCadMaterialLayout.createSequentialGroup()
+                                        .addGap(12, 12, 12)
+                                        .addComponent(btnHome16, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel9)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel44))
+                                    .addGroup(telaCadMaterialLayout.createSequentialGroup()
+                                        .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtIdMat, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel17))
+                                        .addGap(101, 101, 101)
+                                        .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtIdCat, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel18))
+                                        .addGap(106, 106, 106)
+                                        .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel19)
+                                            .addComponent(txtNomeMat, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(96, 96, 96))))
                     .addGroup(telaCadMaterialLayout.createSequentialGroup()
                         .addGap(153, 153, 153)
                         .addComponent(btnCadastrarMat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2768,7 +2795,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addComponent(btnFechar3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                    .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                        .addComponent(jLabel44))
                     .addComponent(btnHome16, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(39, 39, 39)
                 .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -5149,6 +5178,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
@@ -5156,6 +5186,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;

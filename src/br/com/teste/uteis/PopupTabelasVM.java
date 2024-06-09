@@ -91,7 +91,7 @@ public class PopupTabelasVM extends javax.swing.JFrame {
         setTitle("StockSync - Tabelas F/M");
         setBackground(new java.awt.Color(217, 217, 217));
 
-        tblFornecedorVM = new javax.swing.JTable(){
+        tblMaterialVM = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex){
                 return false;
             }
@@ -142,6 +142,11 @@ public class PopupTabelasVM extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(26, 131, 43));
         jLabel8.setText("VISUALIZAR FORNECEDORES E MATERIAIS");
 
+        tblFornecedorVM = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         tblFornecedorVM.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
