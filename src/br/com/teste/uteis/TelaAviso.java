@@ -76,7 +76,7 @@ public class TelaAviso extends javax.swing.JFrame {
     }
     
     private void estilizarBotoes() {
-        btnEntendi.setBackground(new Color(24, 140, 91)); // Define a cor de fundo padrão (verde)
+        btnEntendi.setBackground(new Color(26,131,43)); // Define a cor de fundo padrão (verde)
         btnEntendi.setForeground(Color.WHITE); // Define a cor do texto (branco)
         btnEntendi.setBorder(new BordaRedonda(7)); // Aplica a borda com cantos arredondados (7 é o raio)
         btnEntendi.setBorderPainted(false); // Remove a borda pintada
@@ -85,7 +85,7 @@ public class TelaAviso extends javax.swing.JFrame {
         btnEntendi.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnEntendi.setOpaque(false); // Define o botão como transparente
         
-        btnSair.setBackground(new Color(24, 140, 91)); // Define a cor de fundo padrão (verde)
+        btnSair.setBackground(new Color(26,131,43)); // Define a cor de fundo padrão (verde)
         btnSair.setForeground(Color.WHITE); // Define a cor do texto (branco)
         btnSair.setBorder(new BordaRedonda(7)); // Aplica a borda com cantos arredondados (7 é o raio)
         btnSair.setBorderPainted(false); // Remove a borda pintada
@@ -100,13 +100,13 @@ public class TelaAviso extends javax.swing.JFrame {
             @Override
             public void mouseEntered(MouseEvent e) {
                 // Define a cor de fundo quando o mouse entra no botão
-                btnEntendi.setBackground(new Color(7, 108, 65)); // Cor verde mais escura
+                btnEntendi.setBackground(new Color(52,153,68)); // Cor verde mais escura
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 // Define a cor de fundo padrão quando o mouse sai do botão
-                btnEntendi.setBackground(new Color(24, 140, 91)); // Cor verde padrão
+                btnEntendi.setBackground(new Color(26,131,43)); // Cor verde padrão
             }
         });
         
@@ -114,13 +114,13 @@ public class TelaAviso extends javax.swing.JFrame {
             @Override
             public void mouseEntered(MouseEvent e) {
                 // Define a cor de fundo quando o mouse entra no botão
-                btnSair.setBackground(new Color(7, 108, 65)); // Cor verde mais escura
+                btnSair.setBackground(new Color(52,153,68)); // Cor verde mais escura
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 // Define a cor de fundo padrão quando o mouse sai do botão
-                btnSair.setBackground(new Color(24, 140, 91)); // Cor verde padrão
+                btnSair.setBackground(new Color(26,131,43)); // Cor verde padrão
             }
         });
     }
