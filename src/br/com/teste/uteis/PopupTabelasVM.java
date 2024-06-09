@@ -158,6 +158,7 @@ public class PopupTabelasVM extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblFornecedorVM.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblFornecedorVM);
 
         btnAtualizar.setText("Atualizar");

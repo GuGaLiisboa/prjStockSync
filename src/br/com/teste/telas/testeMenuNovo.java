@@ -14,6 +14,7 @@ import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
@@ -34,16 +35,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
         initComponents();
         conn = Conexao.getConexao();
         //Estiliza os botões com imagens do menu cadastro
-        //estilizarBotao(btnCadFornecedor, "FORNECEDOR", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeCaminhao.png");
-        //estilizarBotao(btnCadCategoria, "CATEGORIA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeCategoria.png");
-        //estilizarBotao(btnCadMaterial, "MATERIAL", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeMaterial.png");
-        //estilizarBotao(btnMovEntrada, "ENTRADA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeEntrada.png");
-        //estilizarBotao(btnMovSaida, "SAÍDA", "..\\prjStockSync\\src\\br\\com\\teste\\icones\\iconeSaida.png");
-        btnCadFornecedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/iconeCaminhao.png")));
-        btnCadCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/iconeCategoria.png")));
-        btnCadMaterial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/iconeMaterial.png")));
-        btnMovEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/iconeEntrada.png")));
-        btnMovSaida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/iconeSaida.png")));
+        estilizarBotao(btnCadFornecedor, "FORNECEDOR", "/br/com/teste/icones/iconeCaminhao.png");
+        estilizarBotao(btnCadCategoria, "CATEGORIA", "/br/com/teste/icones/iconeCategoria.png");
+        estilizarBotao(btnCadMaterial, "MATERIAL", "/br/com/teste/icones/iconeMaterial.png");
+        estilizarBotao(btnMovEntrada, "ENTRADA", "/br/com/teste/icones/iconeEntrada.png");
+        estilizarBotao(btnMovSaida, "SAÍDA", "/br/com/teste/icones/IconeSaida.png");
 
         //atualizar as tabelas
         atualizarTabelas();
@@ -974,10 +970,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         btnLimparCategoria.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNovaCategoria.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        
+
         //RELATÓRIOS
         cBoxRelatorios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        
+
         //AJUDA
         ajudaCad.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         ajudaMov.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1053,58 +1049,46 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     // Método para estilizar um botão com um nome e uma imagem específicos
     private void estilizarBotao(KButton btn, String nome, String caminhoImagem) {
-        // Define o tamanho preferido do botão
         btn.setPreferredSize(new Dimension(200, 175));
-
-        // Adiciona um layout para o botão
         btn.setLayout(new BorderLayout());
 
-        // Carrega a imagem
-        ImageIcon icon = new ImageIcon(caminhoImagem);
+        // Carrega a imagem como recurso
+        URL iconeURL = getClass().getResource(caminhoImagem);
+        if (iconeURL != null) {
+            ImageIcon icon = new ImageIcon(iconeURL);
+            Image image = icon.getImage();
+            Image newImage = image.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+            ImageIcon newIcon = new ImageIcon(newImage);
 
-        // Ajusta o tamanho da imagem
-        Image image = icon.getImage();
-        Image newImage = image.getScaledInstance(150, 150, Image.SCALE_SMOOTH); // Ajusta a largura e a altura conforme necessário
-        ImageIcon newIcon = new ImageIcon(newImage);
+            JLabel label = new JLabel("", newIcon, JLabel.CENTER);
+            btn.add(label, BorderLayout.CENTER);
 
-        // Adiciona a imagem em cima do texto
-        JLabel label = new JLabel("", newIcon, JLabel.CENTER);
-        btn.add(label, BorderLayout.CENTER);
+            JLabel textLabel = new JLabel(nome, JLabel.CENTER);
+            textLabel.setForeground(new Color(26, 131, 43));
+            textLabel.setVerticalAlignment(JLabel.TOP);
+            textLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
+            btn.add(textLabel, BorderLayout.SOUTH);
 
-        // Adiciona o texto embaixo da imagem
-        JLabel textLabel = new JLabel(nome, JLabel.CENTER);
-        textLabel.setForeground(new Color(26, 131, 43)); // Define a cor do texto (verde)
-        textLabel.setVerticalAlignment(JLabel.TOP); // Alinha o texto ao topo do JLabel
-        textLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0)); // Adiciona uma margem inferior para separar o texto da imagem
-        btn.add(textLabel, BorderLayout.SOUTH);
+            btn.setBackground(new Color(24, 140, 91));
+            btn.setForeground(Color.WHITE);
+            btn.setBorderPainted(false);
+            textLabel.setFont(new Font("Calibri", Font.BOLD, 28));
+            btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        // Define a cor de fundo padrão (verde)
-        btn.setBackground(new Color(24, 140, 91));
+            btn.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    btn.setBackground(new Color(7, 108, 65));
+                }
 
-        // Define a cor do texto (branco)
-        btn.setForeground(Color.WHITE);
-
-        // Remove a borda pintada
-        btn.setBorderPainted(false);
-
-        // Define a fonte para o texto (opcional)
-        textLabel.setFont(new Font("Calibri", Font.BOLD, 28));
-
-        // Define o cursor para a mãozinha quando passar por cima
-        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-        // Adiciona um ouvinte de mouse ao botão
-        btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn.setBackground(new Color(7, 108, 65)); // Cor verde mais escura
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn.setBackground(new Color(24, 140, 91)); // Cor verde padrão
-            }
-        });
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    btn.setBackground(new Color(24, 140, 91));
+                }
+            });
+        } else {
+            System.err.println("Ícone não encontrado: " + caminhoImagem);
+        }
     }
 
     private void definirIconeJanela() {
