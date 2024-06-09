@@ -969,6 +969,15 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         btnLimparCategoria.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNovaCategoria.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        //RELATÓRIOS
+        cBoxRelatorios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        //AJUDA
+        ajudaCad.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        ajudaMov.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        ajudaVerCad.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        ajudaRelat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
     }
 
@@ -1309,10 +1318,26 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel52 = new javax.swing.JLabel();
         btnHome8 = new javax.swing.JButton();
         ajudaCad = new com.k33ptoo.components.KButton();
+        ajudaMov = new com.k33ptoo.components.KButton();
+        ajudaVerCad = new com.k33ptoo.components.KButton();
+        ajudaRelat = new com.k33ptoo.components.KButton();
+        jLabel61 = new javax.swing.JLabel();
         telaAjuda1 = new javax.swing.JPanel();
         jLabel57 = new javax.swing.JLabel();
         btnHome12 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        telaAjuda2 = new javax.swing.JPanel();
+        jLabel58 = new javax.swing.JLabel();
+        btnHome18 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        telaAjuda3 = new javax.swing.JPanel();
+        jLabel59 = new javax.swing.JLabel();
+        btnHome19 = new javax.swing.JButton();
+        jLabel53 = new javax.swing.JLabel();
+        telaAjuda4 = new javax.swing.JPanel();
+        jLabel60 = new javax.swing.JLabel();
+        btnHome20 = new javax.swing.JButton();
+        jLabel56 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("StockSync");
@@ -1951,14 +1976,13 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                         .addGap(25, 25, 25)
-                        .addComponent(btnFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                         .addGap(50, 50, 50)
                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnHome14, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(btnHome14, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1987,20 +2011,17 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(17, 17, 17))
+                            .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
-                        .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(telaCadFornecedorLayout.createSequentialGroup()
-                                .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel13)
-                                    .addComponent(jLabel14))
-                                .addGap(0, 0, 0)
-                                .addComponent(txtFornEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(telaCadFornecedorLayout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(txtFornFone, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(95, 95, 95)))
+                        .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14))
+                        .addGap(0, 0, 0)
+                        .addComponent(txtFornEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(telaCadFornecedorLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(txtFornFone, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(17, 17, 17)
                 .addComponent(jLabel15)
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -3942,6 +3963,47 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
+        ajudaMov.setText("Movimentações");
+        ajudaMov.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        ajudaMov.setkAllowGradient(false);
+        ajudaMov.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        ajudaMov.setkBorderRadius(20);
+        ajudaMov.setkHoverColor(new java.awt.Color(52, 153, 68));
+        ajudaMov.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        ajudaMov.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajudaMovActionPerformed(evt);
+            }
+        });
+
+        ajudaVerCad.setText("Visualizar Cadastros");
+        ajudaVerCad.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        ajudaVerCad.setkAllowGradient(false);
+        ajudaVerCad.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        ajudaVerCad.setkBorderRadius(20);
+        ajudaVerCad.setkHoverColor(new java.awt.Color(52, 153, 68));
+        ajudaVerCad.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        ajudaVerCad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajudaVerCadActionPerformed(evt);
+            }
+        });
+
+        ajudaRelat.setText("Relatórios");
+        ajudaRelat.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        ajudaRelat.setkAllowGradient(false);
+        ajudaRelat.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        ajudaRelat.setkBorderRadius(20);
+        ajudaRelat.setkHoverColor(new java.awt.Color(52, 153, 68));
+        ajudaRelat.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        ajudaRelat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajudaRelatActionPerformed(evt);
+            }
+        });
+
+        jLabel61.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/txtTelaAjuda.png"))); // NOI18N
+
         javax.swing.GroupLayout telaAjudaLayout = new javax.swing.GroupLayout(telaAjuda);
         telaAjuda.setLayout(telaAjudaLayout);
         telaAjudaLayout.setHorizontalGroup(
@@ -3954,9 +4016,18 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel52))
                     .addGroup(telaAjudaLayout.createSequentialGroup()
-                        .addGap(81, 81, 81)
-                        .addComponent(ajudaCad, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(893, Short.MAX_VALUE))
+                        .addGap(44, 44, 44)
+                        .addComponent(jLabel61))
+                    .addGroup(telaAjudaLayout.createSequentialGroup()
+                        .addGap(169, 169, 169)
+                        .addComponent(ajudaCad, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
+                        .addComponent(ajudaMov, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
+                        .addComponent(ajudaVerCad, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
+                        .addComponent(ajudaRelat, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
         telaAjudaLayout.setVerticalGroup(
             telaAjudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3965,9 +4036,15 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addGroup(telaAjudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnHome8, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel52, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(83, 83, 83)
-                .addComponent(ajudaCad, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(519, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel61)
+                .addGap(18, 18, 18)
+                .addGroup(telaAjudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ajudaCad, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ajudaMov, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ajudaVerCad, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ajudaRelat, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(343, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("tab14", telaAjuda);
@@ -4020,6 +4097,153 @@ public class testeMenuNovo extends javax.swing.JFrame {
         );
 
         jTabbedPane2.addTab("tab14", telaAjuda1);
+
+        telaAjuda2.setBackground(new java.awt.Color(217, 217, 217));
+        telaAjuda2.setAutoscrolls(true);
+
+        jLabel58.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
+        jLabel58.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel58.setText("> AJUDA > MOVIMENTAÇÕES");
+
+        btnHome18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/btnHome.png"))); // NOI18N
+        btnHome18.setBorderPainted(false);
+        btnHome18.setContentAreaFilled(false);
+        btnHome18.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnHome18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHome18ActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/ajudaMovimentacoes.png"))); // NOI18N
+
+        javax.swing.GroupLayout telaAjuda2Layout = new javax.swing.GroupLayout(telaAjuda2);
+        telaAjuda2.setLayout(telaAjuda2Layout);
+        telaAjuda2Layout.setHorizontalGroup(
+            telaAjuda2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaAjuda2Layout.createSequentialGroup()
+                .addGroup(telaAjuda2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(telaAjuda2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(btnHome18, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel58))
+                    .addGroup(telaAjuda2Layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(jLabel7)))
+                .addContainerGap(66, Short.MAX_VALUE))
+        );
+        telaAjuda2Layout.setVerticalGroup(
+            telaAjuda2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaAjuda2Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(telaAjuda2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnHome18, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel58, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7)
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("tab14", telaAjuda2);
+
+        telaAjuda3.setBackground(new java.awt.Color(217, 217, 217));
+        telaAjuda3.setAutoscrolls(true);
+
+        jLabel59.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
+        jLabel59.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel59.setText("> AJUDA > VISUALIZAR CADASTROS");
+
+        btnHome19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/btnHome.png"))); // NOI18N
+        btnHome19.setBorderPainted(false);
+        btnHome19.setContentAreaFilled(false);
+        btnHome19.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnHome19.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHome19ActionPerformed(evt);
+            }
+        });
+
+        jLabel53.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/ajudaMenus.png"))); // NOI18N
+
+        javax.swing.GroupLayout telaAjuda3Layout = new javax.swing.GroupLayout(telaAjuda3);
+        telaAjuda3.setLayout(telaAjuda3Layout);
+        telaAjuda3Layout.setHorizontalGroup(
+            telaAjuda3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaAjuda3Layout.createSequentialGroup()
+                .addGroup(telaAjuda3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(telaAjuda3Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(btnHome19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel59))
+                    .addGroup(telaAjuda3Layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(jLabel53)))
+                .addContainerGap(66, Short.MAX_VALUE))
+        );
+        telaAjuda3Layout.setVerticalGroup(
+            telaAjuda3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaAjuda3Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(telaAjuda3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnHome19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel59, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel53)
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("tab14", telaAjuda3);
+
+        telaAjuda4.setBackground(new java.awt.Color(217, 217, 217));
+        telaAjuda4.setAutoscrolls(true);
+
+        jLabel60.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
+        jLabel60.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel60.setText("> AJUDA > RELATÓRIOS");
+
+        btnHome20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/btnHome.png"))); // NOI18N
+        btnHome20.setBorderPainted(false);
+        btnHome20.setContentAreaFilled(false);
+        btnHome20.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnHome20.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHome20ActionPerformed(evt);
+            }
+        });
+
+        jLabel56.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/ajudaRelatorios.png"))); // NOI18N
+
+        javax.swing.GroupLayout telaAjuda4Layout = new javax.swing.GroupLayout(telaAjuda4);
+        telaAjuda4.setLayout(telaAjuda4Layout);
+        telaAjuda4Layout.setHorizontalGroup(
+            telaAjuda4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaAjuda4Layout.createSequentialGroup()
+                .addGroup(telaAjuda4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(telaAjuda4Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(btnHome20, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel60))
+                    .addGroup(telaAjuda4Layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(jLabel56)))
+                .addContainerGap(66, Short.MAX_VALUE))
+        );
+        telaAjuda4Layout.setVerticalGroup(
+            telaAjuda4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaAjuda4Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(telaAjuda4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnHome20, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel60, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel56)
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("tab14", telaAjuda4);
 
         getContentPane().add(jTabbedPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, -50, 1110, 750));
 
@@ -4496,6 +4720,33 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jTabbedPane2.setSelectedComponent(telaAjuda1);
     }//GEN-LAST:event_ajudaCadActionPerformed
 
+    private void btnHome18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome18ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnHome18ActionPerformed
+
+    private void btnHome19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome19ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnHome19ActionPerformed
+
+    private void btnHome20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome20ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnHome20ActionPerformed
+
+    private void ajudaMovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ajudaMovActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaAjuda2);
+    }//GEN-LAST:event_ajudaMovActionPerformed
+
+    private void ajudaVerCadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ajudaVerCadActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaAjuda3);
+    }//GEN-LAST:event_ajudaVerCadActionPerformed
+
+    private void ajudaRelatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ajudaRelatActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaAjuda4);
+    }//GEN-LAST:event_ajudaRelatActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -4534,6 +4785,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.k33ptoo.components.KButton ajudaCad;
+    private com.k33ptoo.components.KButton ajudaMov;
+    private com.k33ptoo.components.KButton ajudaRelat;
+    private com.k33ptoo.components.KButton ajudaVerCad;
     private com.k33ptoo.components.KButton btnAdicionar;
     private com.k33ptoo.components.KButton btnAjuda;
     private com.k33ptoo.components.KButton btnAlterar;
@@ -4560,6 +4814,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JButton btnHome15;
     private javax.swing.JButton btnHome16;
     private javax.swing.JButton btnHome17;
+    private javax.swing.JButton btnHome18;
+    private javax.swing.JButton btnHome19;
+    private javax.swing.JButton btnHome20;
     private javax.swing.JButton btnHome8;
     private javax.swing.JButton btnHome9;
     private javax.swing.JButton btnLimpar;
@@ -4639,10 +4896,17 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
+    private javax.swing.JLabel jLabel56;
     private javax.swing.JLabel jLabel57;
+    private javax.swing.JLabel jLabel58;
+    private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel60;
+    private javax.swing.JLabel jLabel61;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
@@ -4690,6 +4954,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTable tblVincularMaterial;
     private javax.swing.JPanel telaAjuda;
     private javax.swing.JPanel telaAjuda1;
+    private javax.swing.JPanel telaAjuda2;
+    private javax.swing.JPanel telaAjuda3;
+    private javax.swing.JPanel telaAjuda4;
     private javax.swing.JPanel telaCadCategoria;
     private javax.swing.JPanel telaCadFornecedor;
     private javax.swing.JPanel telaCadMaterial;
