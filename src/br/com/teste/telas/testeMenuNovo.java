@@ -10,6 +10,7 @@ import br.com.teste.dal.Conexao;
 import br.com.teste.uteis.PopupCategoria;
 import br.com.teste.uteis.PopupTabelasVM;
 import com.k33ptoo.components.KButton;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.*;
@@ -66,21 +67,24 @@ public class testeMenuNovo extends javax.swing.JFrame {
             pst.setString(5, txtFornEndereco.getText());
             pst.setString(6, txtFornSite.getText());
 
-            if ((txtFornNome.getText().isEmpty()) || (txtFornEmail.getText().isEmpty()) || (txtFornFone.getText().isEmpty())) {
+            if (txtFornNome.getText().isEmpty() || txtFornEmail.getText().isEmpty() || txtFornFone.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Preencha todos os Campos Obrigatórios.");
             } else {
-
                 int adicionado = pst.executeUpdate();
 
                 if (adicionado > 0) {
                     JOptionPane.showMessageDialog(null, "Fornecedor Cadastrado com Sucesso.");
 
-                    limpar(); //chamando a função de limpar os campos
+                    limpar(); // chamando a função de limpar os campos
                     atualizarTabelas();
                 }
             }
-        } catch (HeadlessException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (MysqlDataTruncation e) {
+            JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro no banco de dados.");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica.");
         }
     }
 
@@ -151,8 +155,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     btnAdicionar.setkHoverColor(new Color(52, 153, 68));
                 }
             }
-        } catch (HeadlessException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (MysqlDataTruncation e) {
+            JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro no banco de dados.");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica.");
         }
     }
 
@@ -215,8 +223,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     atualizarTabelas();
                 }
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (MysqlDataTruncation e) {
+            JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro no banco de dados.");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica.");
         }
     }
 
@@ -305,8 +317,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     btnCadastrarMat.setkHoverColor(new Color(52, 153, 68));
                 }
             }
-        } catch (HeadlessException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (MysqlDataTruncation e) {
+            JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro no banco de dados.");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica.");
         }
     }
 
@@ -367,8 +383,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     atualizarTabelas();
                 }
             }
-        } catch (HeadlessException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (MysqlDataTruncation e) {
+            JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro no banco de dados.");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica.");
         }
     }
 
@@ -398,8 +418,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     btnCadastrarCat.setkHoverColor(new Color(52, 153, 68));
                 }
             }
-        } catch (HeadlessException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (MysqlDataTruncation e) {
+            JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro no banco de dados.");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica.");
         }
     }
 
@@ -440,7 +464,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     substituir_categoria(); // Chamar a função de substituição de categoria
                 } else {
                     e.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Erro ao excluir a categoria: " + e.getMessage());
+                    JOptionPane.showMessageDialog(null, "Erro ao excluir a categoria.");
                 }
             }
         }
@@ -458,7 +482,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Erro ao verificar a existência da categoria: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao verificar a existência da categoria.");
         }
         return false;
     }
@@ -490,7 +514,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Erro ao substituir a categoria: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao substituir a categoria.");
         }
     }
 
@@ -518,8 +542,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     atualizarTabelas();
                 }
             }
-        } catch (HeadlessException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (MysqlDataTruncation e) {
+            JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro no banco de dados.");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica.");
         }
     }
 
@@ -548,8 +576,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     btnVincularFM.setkBackGroundColor(new Color(26, 131, 43));
                     btnVincularFM.setkHoverColor(new Color(52, 153, 68));
                 }
-            } catch (HeadlessException | SQLException e) {
-                // Lidar com a exceção aqui
+            } catch (MysqlDataTruncation e) {
+                JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro no banco de dados.");
+            } catch (HeadlessException e) {
+                JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica.");
             }
         }
     }
@@ -708,8 +740,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     atualizarTabelas();
                 }
             }
-        } catch (HeadlessException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (MysqlDataTruncation e) {
+            JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro no banco de dados.");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica.");
         }
     }
 
@@ -756,8 +792,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     atualizarTabelas();
                 }
             }
-        } catch (HeadlessException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+        } catch (MysqlDataTruncation e) {
+            JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro no banco de dados.");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica.");
         }
     }
 
