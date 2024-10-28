@@ -200,7 +200,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     //metodo para adicionar um material
     private void cadastrarMaterial() {
         conn = Conexao.getConexao();
-        String sql = "INSERT INTO material(id_categoria, nome_material, valor_compra, descricao) VALUES(?, ?, ?, ?)";
+        String sql = "INSERT INTO material(id_categoria, nome_material, descricao) VALUES(?, ?, ?)";
 
         try {
             pst = conn.prepareStatement(sql);
@@ -236,7 +236,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private void pesquisar_material() {
         conn = Conexao.getConexao();
         //String sql = "select * from fornecedor where nome_fornecedor like ?";
-        String sql = "select id_material AS ID, id_categoria AS 'ID Categoria', nome_material AS Material, valor_compra AS Valor, descricao AS Descriçao FROM material where nome_material like ?";
+        String sql = "select id_material AS ID, id_categoria AS 'ID Categoria', nome_material AS Material, descricao AS Descriçao FROM material where nome_material like ?";
         try {
             pst = conn.prepareStatement(sql);
             //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
@@ -752,7 +752,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     //metodo para buscar material na Tela de Nova Entrada
     private void pesquisar_MovEntradas() {
         conn = Conexao.getConexao();
-        String sql = "SELECT id_material AS 'ID Material', nome_material AS 'Nome', nome_categoria AS 'Categoria', valor_compra AS 'Valor', descricao AS 'Descrição' FROM material AS m "
+        String sql = "SELECT id_material AS 'ID Material', nome_material AS 'Nome', nome_categoria AS 'Categoria', descricao AS 'Descrição' FROM material AS m "
                 + "INNER JOIN categoria AS c ON m.id_categoria = c.id_categoria WHERE nome_material LIKE ?";
 
         try {
@@ -804,7 +804,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     //metodo para buscar material na Tela de Saída
     private void pesquisar_MovSaidas() {
         conn = Conexao.getConexao();
-        String sql = "SELECT id_material AS 'ID Material', nome_material AS 'Nome', nome_categoria AS 'Categoria', valor_compra AS 'Valor', descricao AS 'Descrição' FROM material AS m "
+        String sql = "SELECT id_material AS 'ID Material', nome_material AS 'Nome', nome_categoria AS 'Categoria', descricao AS 'Descrição' FROM material AS m "
                 + "INNER JOIN categoria AS c ON m.id_categoria = c.id_categoria WHERE nome_material LIKE ?";
 
         try {
@@ -825,7 +825,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     //Método para exibir os dados na tabela Materiais
     private void pesquisar_MateriaisEmMat() {
         conn = Conexao.getConexao();
-        String sql = "SELECT m.id_material AS 'ID Material', nome_material AS Material, c.nome_categoria AS Categoria, valor_compra AS Valor, e.quantidade_atual AS 'Estoque Atual', descricao AS Descrição "
+        String sql = "SELECT m.id_material AS 'ID Material', nome_material AS Material, c.nome_categoria AS Categoria, e.quantidade_atual AS 'Estoque Atual', descricao AS Descrição "
                 + "FROM material AS m INNER JOIN estoque AS e ON m.id_material = e.id_material INNER JOIN categoria AS c ON m.id_categoria = c.id_categoria WHERE m.nome_material LIKE ?";
 
         try {
@@ -1039,7 +1039,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtIdMat.setText(null);
         txtIdCat.setText(null);
         txtNomeMat.setText(null);
-        txtValorMat.setText(null);
         txtDescMat.setText(null);
         txtMatBuscarCat.setText(null);
         txtBuscarMat.setText(null);
