@@ -207,10 +207,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
             pst.setString(1, txtIdCat.getText());
             pst.setString(2, txtNomeMat.getText());
-            pst.setString(3, txtValorMat.getText());
             pst.setString(4, txtDescMat.getText());
 
-            if (txtIdCat.getText().isEmpty() || txtNomeMat.getText().isEmpty() || txtValorMat.getText().isEmpty()) {
+            if (txtIdCat.getText().isEmpty() || txtNomeMat.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Preencha os Campos Obrigatórios.");
             } else {
                 int adicionado = pst.executeUpdate();
@@ -273,7 +272,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtIdMat.setText(tblMaterial.getModel().getValueAt(setar, 0).toString());
         txtIdCat.setText(tblMaterial.getModel().getValueAt(setar, 1).toString());
         txtNomeMat.setText(tblMaterial.getModel().getValueAt(setar, 2).toString());
-        txtValorMat.setText(tblMaterial.getModel().getValueAt(setar, 3).toString());
+        
+        
         txtDescMat.setText(tblMaterial.getModel().getValueAt(setar, 4).toString());
 
         // Desabilitar o botão de adicionar para evitar dados duplicados
@@ -285,7 +285,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     //metodo para alterar dados dos materiais
     private void alterar_material() {
         conn = Conexao.getConexao();
-        String sql = "UPDATE material SET id_categoria=?, nome_material=?, valor_compra=?, descricao=? WHERE id_material=?";
+        String sql = "UPDATE material SET id_categoria=?, nome_material=?, descricao=? WHERE id_material=?";
 
         try {
             pst = conn.prepareStatement(sql);
@@ -296,11 +296,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 pst.setInt(1, Integer.parseInt(txtIdCat.getText()));
             }
             pst.setString(2, txtNomeMat.getText());
-            pst.setString(3, txtValorMat.getText());
             pst.setString(4, txtDescMat.getText());
             pst.setString(5, txtIdMat.getText());
 
-            if (txtNomeMat.getText().isEmpty() || txtValorMat.getText().isEmpty()) {
+            if (txtNomeMat.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Preencha os Campos Obrigatórios.");
             } else {
 
@@ -331,7 +330,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         conn = Conexao.getConexao();
 
         // Verifica se os campos obrigatórios estão vazios
-        if (txtNomeMat.getText().isEmpty() || txtValorMat.getText().isEmpty()) {
+        if (txtNomeMat.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Preencha todos os Campos Obrigatórios.");
             return; // Encerra a execução da função se algum campo estiver vazio
         }
@@ -1147,17 +1146,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        menuLateral = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        btnCadastros = new com.k33ptoo.components.KButton();
-        btnMovimentacoes = new com.k33ptoo.components.KButton();
-        btnMateriais = new com.k33ptoo.components.KButton();
-        btnFornecedores = new com.k33ptoo.components.KButton();
-        btnCategorias = new com.k33ptoo.components.KButton();
-        btnRelatorios = new com.k33ptoo.components.KButton();
-        btnAjuda = new com.k33ptoo.components.KButton();
-        btnSobre = new com.k33ptoo.components.KButton();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         telaInicial = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -1377,6 +1365,17 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel60 = new javax.swing.JLabel();
         btnHome20 = new javax.swing.JButton();
         jLabel56 = new javax.swing.JLabel();
+        menuLateral = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        btnCadastros = new com.k33ptoo.components.KButton();
+        btnMovimentacoes = new com.k33ptoo.components.KButton();
+        btnMateriais = new com.k33ptoo.components.KButton();
+        btnFornecedores = new com.k33ptoo.components.KButton();
+        btnCategorias = new com.k33ptoo.components.KButton();
+        btnRelatorios = new com.k33ptoo.components.KButton();
+        btnAjuda = new com.k33ptoo.components.KButton();
+        btnSobre = new com.k33ptoo.components.KButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("StockSync");
@@ -1386,209 +1385,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         setResizable(false);
         setSize(new java.awt.Dimension(1280, 720));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        menuLateral.setBackground(new java.awt.Color(26, 131, 43));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/STOCKSYNCIMG.png"))); // NOI18N
-
-        btnCadastros.setText("CADASTROS");
-        btnCadastros.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        btnCadastros.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.setkEndColor(new java.awt.Color(26, 131, 43));
-        btnCadastros.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnCadastros.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.setkStartColor(new java.awt.Color(26, 131, 43));
-        btnCadastros.setMargin(new java.awt.Insets(8, 50, 3, 14));
-        btnCadastros.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCadastrosActionPerformed(evt);
-            }
-        });
-
-        btnMovimentacoes.setText("MOVIMENTAÇÕES");
-        btnMovimentacoes.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        btnMovimentacoes.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnMovimentacoes.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnMovimentacoes.setkEndColor(new java.awt.Color(26, 131, 43));
-        btnMovimentacoes.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnMovimentacoes.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnMovimentacoes.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnMovimentacoes.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnMovimentacoes.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnMovimentacoes.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnMovimentacoes.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnMovimentacoes.setkStartColor(new java.awt.Color(26, 131, 43));
-        btnMovimentacoes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMovimentacoesActionPerformed(evt);
-            }
-        });
-
-        btnMateriais.setText("MATERIAIS");
-        btnMateriais.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        btnMateriais.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnMateriais.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.setkEndColor(new java.awt.Color(26, 131, 43));
-        btnMateriais.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnMateriais.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.setkStartColor(new java.awt.Color(26, 131, 43));
-        btnMateriais.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMateriaisActionPerformed(evt);
-            }
-        });
-
-        btnFornecedores.setText("FORNECEDORES");
-        btnFornecedores.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        btnFornecedores.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnFornecedores.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnFornecedores.setkEndColor(new java.awt.Color(26, 131, 43));
-        btnFornecedores.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnFornecedores.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnFornecedores.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnFornecedores.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnFornecedores.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnFornecedores.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnFornecedores.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnFornecedores.setkStartColor(new java.awt.Color(26, 131, 43));
-        btnFornecedores.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFornecedoresActionPerformed(evt);
-            }
-        });
-
-        btnCategorias.setText("CATEGORIAS");
-        btnCategorias.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        btnCategorias.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnCategorias.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnCategorias.setkEndColor(new java.awt.Color(26, 131, 43));
-        btnCategorias.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnCategorias.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnCategorias.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnCategorias.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnCategorias.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnCategorias.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnCategorias.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnCategorias.setkStartColor(new java.awt.Color(26, 131, 43));
-        btnCategorias.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCategoriasActionPerformed(evt);
-            }
-        });
-
-        btnRelatorios.setText("RELATÓRIOS");
-        btnRelatorios.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        btnRelatorios.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnRelatorios.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnRelatorios.setkEndColor(new java.awt.Color(26, 131, 43));
-        btnRelatorios.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnRelatorios.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnRelatorios.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnRelatorios.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnRelatorios.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnRelatorios.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnRelatorios.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnRelatorios.setkStartColor(new java.awt.Color(26, 131, 43));
-        btnRelatorios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRelatoriosActionPerformed(evt);
-            }
-        });
-
-        btnAjuda.setText("AJUDA");
-        btnAjuda.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        btnAjuda.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAjuda.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnAjuda.setkEndColor(new java.awt.Color(26, 131, 43));
-        btnAjuda.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnAjuda.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnAjuda.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnAjuda.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnAjuda.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnAjuda.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnAjuda.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnAjuda.setkStartColor(new java.awt.Color(26, 131, 43));
-        btnAjuda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAjudaActionPerformed(evt);
-            }
-        });
-
-        btnSobre.setText("SOBRE");
-        btnSobre.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        btnSobre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnSobre.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnSobre.setkEndColor(new java.awt.Color(26, 131, 43));
-        btnSobre.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnSobre.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnSobre.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnSobre.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnSobre.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnSobre.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnSobre.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnSobre.setkStartColor(new java.awt.Color(26, 131, 43));
-        btnSobre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSobreActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout menuLateralLayout = new javax.swing.GroupLayout(menuLateral);
-        menuLateral.setLayout(menuLateralLayout);
-        menuLateralLayout.setHorizontalGroup(
-            menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnCadastros, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(btnMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(btnMateriais, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(btnFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(btnCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(btnRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(btnAjuda, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(btnSobre, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(menuLateralLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(21, Short.MAX_VALUE))
-        );
-        menuLateralLayout.setVerticalGroup(
-            menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuLateralLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnCadastros, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(btnMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(btnMateriais, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(btnFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(btnCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(btnRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(btnAjuda, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(btnSobre, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(322, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(menuLateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 180, 700));
 
         telaInicial.setBackground(new java.awt.Color(217, 217, 217));
 
@@ -4472,6 +4268,209 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jTabbedPane2.addTab("tab14", telaAjuda4);
 
         getContentPane().add(jTabbedPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, -50, 1110, 750));
+
+        menuLateral.setBackground(new java.awt.Color(26, 131, 43));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/STOCKSYNCIMG.png"))); // NOI18N
+
+        btnCadastros.setText("CADASTROS");
+        btnCadastros.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnCadastros.setkBackGroundColor(new java.awt.Color(52, 153, 68));
+        btnCadastros.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnCadastros.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnCadastros.setkHoverEndColor(new java.awt.Color(52, 153, 68));
+        btnCadastros.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnCadastros.setkHoverStartColor(new java.awt.Color(52, 153, 68));
+        btnCadastros.setkIndicatorColor(new java.awt.Color(52, 153, 68));
+        btnCadastros.setkPressedColor(new java.awt.Color(52, 153, 68));
+        btnCadastros.setkSelectedColor(new java.awt.Color(52, 153, 68));
+        btnCadastros.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnCadastros.setMargin(new java.awt.Insets(8, 50, 3, 14));
+        btnCadastros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCadastrosActionPerformed(evt);
+            }
+        });
+
+        btnMovimentacoes.setText("MOVIMENTAÇÕES");
+        btnMovimentacoes.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnMovimentacoes.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnMovimentacoes.setkBackGroundColor(new java.awt.Color(52, 153, 68));
+        btnMovimentacoes.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnMovimentacoes.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnMovimentacoes.setkHoverEndColor(new java.awt.Color(52, 153, 68));
+        btnMovimentacoes.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnMovimentacoes.setkHoverStartColor(new java.awt.Color(52, 153, 68));
+        btnMovimentacoes.setkIndicatorColor(new java.awt.Color(52, 153, 68));
+        btnMovimentacoes.setkPressedColor(new java.awt.Color(52, 153, 68));
+        btnMovimentacoes.setkSelectedColor(new java.awt.Color(52, 153, 68));
+        btnMovimentacoes.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnMovimentacoes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMovimentacoesActionPerformed(evt);
+            }
+        });
+
+        btnMateriais.setText("MATERIAIS");
+        btnMateriais.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnMateriais.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnMateriais.setkBackGroundColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnMateriais.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.setkHoverEndColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnMateriais.setkHoverStartColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.setkIndicatorColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.setkPressedColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.setkSelectedColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnMateriais.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMateriaisActionPerformed(evt);
+            }
+        });
+
+        btnFornecedores.setText("FORNECEDORES");
+        btnFornecedores.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnFornecedores.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnFornecedores.setkBackGroundColor(new java.awt.Color(52, 153, 68));
+        btnFornecedores.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnFornecedores.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnFornecedores.setkHoverEndColor(new java.awt.Color(52, 153, 68));
+        btnFornecedores.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnFornecedores.setkHoverStartColor(new java.awt.Color(52, 153, 68));
+        btnFornecedores.setkIndicatorColor(new java.awt.Color(52, 153, 68));
+        btnFornecedores.setkPressedColor(new java.awt.Color(52, 153, 68));
+        btnFornecedores.setkSelectedColor(new java.awt.Color(52, 153, 68));
+        btnFornecedores.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnFornecedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFornecedoresActionPerformed(evt);
+            }
+        });
+
+        btnCategorias.setText("CATEGORIAS");
+        btnCategorias.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnCategorias.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCategorias.setkBackGroundColor(new java.awt.Color(52, 153, 68));
+        btnCategorias.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnCategorias.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnCategorias.setkHoverEndColor(new java.awt.Color(52, 153, 68));
+        btnCategorias.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnCategorias.setkHoverStartColor(new java.awt.Color(52, 153, 68));
+        btnCategorias.setkIndicatorColor(new java.awt.Color(52, 153, 68));
+        btnCategorias.setkPressedColor(new java.awt.Color(52, 153, 68));
+        btnCategorias.setkSelectedColor(new java.awt.Color(52, 153, 68));
+        btnCategorias.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnCategorias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCategoriasActionPerformed(evt);
+            }
+        });
+
+        btnRelatorios.setText("RELATÓRIOS");
+        btnRelatorios.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnRelatorios.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRelatorios.setkBackGroundColor(new java.awt.Color(52, 153, 68));
+        btnRelatorios.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnRelatorios.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnRelatorios.setkHoverEndColor(new java.awt.Color(52, 153, 68));
+        btnRelatorios.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnRelatorios.setkHoverStartColor(new java.awt.Color(52, 153, 68));
+        btnRelatorios.setkIndicatorColor(new java.awt.Color(52, 153, 68));
+        btnRelatorios.setkPressedColor(new java.awt.Color(52, 153, 68));
+        btnRelatorios.setkSelectedColor(new java.awt.Color(52, 153, 68));
+        btnRelatorios.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnRelatorios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRelatoriosActionPerformed(evt);
+            }
+        });
+
+        btnAjuda.setText("AJUDA");
+        btnAjuda.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnAjuda.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAjuda.setkBackGroundColor(new java.awt.Color(52, 153, 68));
+        btnAjuda.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnAjuda.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnAjuda.setkHoverEndColor(new java.awt.Color(52, 153, 68));
+        btnAjuda.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnAjuda.setkHoverStartColor(new java.awt.Color(52, 153, 68));
+        btnAjuda.setkIndicatorColor(new java.awt.Color(52, 153, 68));
+        btnAjuda.setkPressedColor(new java.awt.Color(52, 153, 68));
+        btnAjuda.setkSelectedColor(new java.awt.Color(52, 153, 68));
+        btnAjuda.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnAjuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAjudaActionPerformed(evt);
+            }
+        });
+
+        btnSobre.setText("SOBRE");
+        btnSobre.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnSobre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSobre.setkBackGroundColor(new java.awt.Color(52, 153, 68));
+        btnSobre.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnSobre.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnSobre.setkHoverEndColor(new java.awt.Color(52, 153, 68));
+        btnSobre.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnSobre.setkHoverStartColor(new java.awt.Color(52, 153, 68));
+        btnSobre.setkIndicatorColor(new java.awt.Color(52, 153, 68));
+        btnSobre.setkPressedColor(new java.awt.Color(52, 153, 68));
+        btnSobre.setkSelectedColor(new java.awt.Color(52, 153, 68));
+        btnSobre.setkStartColor(new java.awt.Color(26, 131, 43));
+        btnSobre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSobreActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout menuLateralLayout = new javax.swing.GroupLayout(menuLateral);
+        menuLateral.setLayout(menuLateralLayout);
+        menuLateralLayout.setHorizontalGroup(
+            menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnCadastros, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(btnMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(btnMateriais, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(btnFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(btnCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(btnRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(btnAjuda, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(btnSobre, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addGroup(menuLateralLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addGroup(menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+        menuLateralLayout.setVerticalGroup(
+            menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(menuLateralLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnCadastros, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(btnMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(btnMateriais, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(btnFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(btnCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(btnRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(btnAjuda, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(btnSobre, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(322, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(menuLateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 180, 700));
 
         setSize(new java.awt.Dimension(1280, 720));
         setLocationRelativeTo(null);
