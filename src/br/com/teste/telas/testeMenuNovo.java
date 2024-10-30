@@ -207,7 +207,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
             pst.setString(1, txtIdCat.getText());
             pst.setString(2, txtNomeMat.getText());
-            pst.setString(4, txtDescMat.getText());
+            pst.setString(3, txtDescMat.getText());
 
             if (txtIdCat.getText().isEmpty() || txtNomeMat.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Preencha os Campos Obrigatórios.");
