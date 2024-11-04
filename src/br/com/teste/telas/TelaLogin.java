@@ -9,6 +9,7 @@ import br.com.teste.uteis.BordaRedonda;
 import java.sql.*;
 import br.com.teste.dal.Conexao;
 import br.com.teste.uteis.TelaAviso;
+import com.k33ptoo.components.KButton;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.*;
@@ -71,7 +72,48 @@ public class TelaLogin extends javax.swing.JFrame {
         definirIconeJanela();
         
         btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        estilizarBotaoCadastrar(btnLogin);
 
+    }
+    
+    private void estilizarBotaoCadastrar(KButton btn) {
+        String nome = "Login"; // Texto do botão
+
+        btn.setPreferredSize(new Dimension(200, 75)); // Ajusta o tamanho do botão
+        btn.setLayout(new GridBagLayout()); // Usar GridBagLayout para melhor controle de posicionamento
+
+        // Define o texto do botão
+        JLabel textLabel = new JLabel(nome);
+        textLabel.setForeground(Color.WHITE); // Define a cor do texto como branco
+        textLabel.setFont(new Font("Roboto", Font.BOLD, 16)); // Mantém a fonte Roboto
+
+        // Configura o GridBagConstraints para centralizar o texto
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0; // Coluna 0
+        gbc.gridy = 0; // Linha 0
+        gbc.anchor = GridBagConstraints.CENTER; // Centraliza
+        gbc.fill = GridBagConstraints.NONE; // Não preenche todo o espaço
+        btn.add(textLabel, gbc); // Adiciona o texto ao botão
+
+        // Configurações de estilo
+        btn.setBackground(new Color(24, 140, 91)); // Cor de fundo
+        btn.setForeground(Color.WHITE);
+        btn.setBorderPainted(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        // Efeito de hover (muda a cor ao passar o mouse)
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btn.setBackground(new Color(7, 108, 65)); // Cor ao passar o mouse
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btn.setBackground(new Color(24, 140, 91)); // Cor padrão ao sair
+            }
+        });
     }
 
     private void adicionarPlaceholders() {
@@ -156,7 +198,7 @@ public class TelaLogin extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         btnLogin = new com.k33ptoo.components.KButton();
-        jButton1 = new javax.swing.JButton();
+        botaoCadastro = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -199,7 +241,6 @@ public class TelaLogin extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(24, 140, 91));
         jLabel6.setText("acesso.");
 
-        btnLogin.setText("Acessar");
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnLogin.setkAllowGradient(false);
         btnLogin.setkBackGroundColor(new java.awt.Color(26, 131, 43));
@@ -211,11 +252,16 @@ public class TelaLogin extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Novo cadastro");
-        jButton1.setContentAreaFilled(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        botaoCadastro.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        botaoCadastro.setForeground(new java.awt.Color(26, 131, 43));
+        botaoCadastro.setText("Novo cadastro");
+        botaoCadastro.setContentAreaFilled(false);
+        botaoCadastro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        botaoCadastro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoCadastroActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -241,7 +287,7 @@ public class TelaLogin extends javax.swing.JFrame {
                         .addComponent(lblstatus)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(botaoCadastro)
                         .addGap(20, 20, 20))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -260,7 +306,7 @@ public class TelaLogin extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(botaoCadastro)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
                 .addComponent(lblstatus))
         );
@@ -337,6 +383,12 @@ public class TelaLogin extends javax.swing.JFrame {
         logar();
     }//GEN-LAST:event_btnLoginActionPerformed
 
+    private void botaoCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastroActionPerformed
+        // TODO add your handling code here:
+        telaCadastro popUpCad = new telaCadastro();
+        popUpCad.setVisible(true);
+    }//GEN-LAST:event_botaoCadastroActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -376,8 +428,8 @@ public class TelaLogin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botaoCadastro;
     private com.k33ptoo.components.KButton btnLogin;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
