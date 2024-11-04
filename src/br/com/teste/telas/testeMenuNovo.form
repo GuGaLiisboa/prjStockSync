@@ -5055,7 +5055,6 @@
               <Component id="btnFornecedores" alignment="0" pref="180" max="32767" attributes="0"/>
               <Component id="btnCategorias" alignment="0" pref="180" max="32767" attributes="0"/>
               <Component id="btnAjuda" alignment="0" pref="180" max="32767" attributes="0"/>
-              <Component id="btnSobre" alignment="0" pref="180" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -5077,9 +5076,7 @@
                   <Component id="btnCategorias" min="-2" pref="35" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                   <Component id="btnAjuda" min="-2" pref="35" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                  <Component id="btnSobre" min="-2" pref="35" max="-2" attributes="0"/>
-                  <EmptySpace pref="365" max="32767" attributes="0"/>
+                  <EmptySpace pref="401" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -5230,29 +5227,6 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAjudaActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="com.k33ptoo.components.KButton" name="btnSobre">
-          <Properties>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="0" green="0" red="0" type="rgb"/>
-            </Property>
-            <Property name="toolTipText" type="java.lang.String" value=""/>
-            <Property name="alignmentY" type="float" value="0.0"/>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Calibri" size="16" style="1"/>
-            </Property>
-            <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="kAllowGradient" type="boolean" value="false"/>
-            <Property name="kBackGroundColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="2b" green="83" red="1a" type="rgb"/>
-            </Property>
-            <Property name="kHoverColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="44" green="99" red="34" type="rgb"/>
-            </Property>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSobreActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

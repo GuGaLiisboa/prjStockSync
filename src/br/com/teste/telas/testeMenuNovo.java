@@ -56,7 +56,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         estilizarBotaoLateral(btnFornecedores, "Fornecedores", "/br/com/teste/icones/IconeCadastro.png");
         estilizarBotaoLateral(btnCategorias, "Categorias", "/br/com/teste/icones/IconeCadastro.png");
         estilizarBotaoLateral(btnAjuda, "Ajuda", "/br/com/teste/icones/IconeCadastro.png");
-        estilizarBotaoLateral(btnSobre, "Sobre", "/br/com/teste/icones/IconeCadastro.png");
 
     }
 
@@ -1025,8 +1024,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnFornecedores.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCategorias.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAjuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSobre.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSobre.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         //TELA CADASTROS
         //FORNECEDOR
@@ -1439,7 +1436,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnFornecedores = new com.k33ptoo.components.KButton();
         btnCategorias = new com.k33ptoo.components.KButton();
         btnAjuda = new com.k33ptoo.components.KButton();
-        btnSobre = new com.k33ptoo.components.KButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("StockSync");
@@ -1475,8 +1471,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addComponent(jLabel4))
                     .addGroup(telaInicialLayout.createSequentialGroup()
                         .addGap(282, 282, 282)
-                        .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(357, 357, 357))
         );
         telaInicialLayout.setVerticalGroup(
@@ -2615,13 +2610,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
         telaCadMaterialLayout.setHorizontalGroup(
             telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(telaCadMaterialLayout.createSequentialGroup()
-                .addGap(185, 185, 185)
                 .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel20)
-                    .addComponent(txtDescMat, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(336, 425, Short.MAX_VALUE))
-            .addGroup(telaCadMaterialLayout.createSequentialGroup()
-                .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(telaCadMaterialLayout.createSequentialGroup()
+                        .addGap(185, 185, 185)
+                        .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel20)
+                            .addComponent(txtDescMat, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(telaCadMaterialLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -4415,20 +4409,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
-        btnSobre.setForeground(new java.awt.Color(0, 0, 0));
-        btnSobre.setToolTipText("");
-        btnSobre.setAlignmentY(0.0F);
-        btnSobre.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        btnSobre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnSobre.setkAllowGradient(false);
-        btnSobre.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        btnSobre.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnSobre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSobreActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout menuLateralLayout = new javax.swing.GroupLayout(menuLateral);
         menuLateral.setLayout(menuLateralLayout);
         menuLateralLayout.setHorizontalGroup(
@@ -4445,7 +4425,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
             .addComponent(btnFornecedores, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
             .addComponent(btnCategorias, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
             .addComponent(btnAjuda, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-            .addComponent(btnSobre, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
         );
         menuLateralLayout.setVerticalGroup(
             menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4466,9 +4445,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addComponent(btnCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(btnAjuda, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(btnSobre, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(365, Short.MAX_VALUE))
+                .addContainerGap(401, Short.MAX_VALUE))
         );
 
         getContentPane().add(menuLateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 180, 700));
@@ -5045,11 +5022,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jTabbedPane2.setSelectedComponent(telaAjuda);
     }//GEN-LAST:event_btnAjudaActionPerformed
 
-    private void btnSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSobreActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaSobre);
-    }//GEN-LAST:event_btnSobreActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -5151,7 +5123,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnNovoMaterialEmMat;
     private com.k33ptoo.components.KButton btnSalvarEntrada;
     private com.k33ptoo.components.KButton btnSalvarSaida;
-    private com.k33ptoo.components.KButton btnSobre;
     private com.k33ptoo.components.KButton btnSubstituirCat;
     private com.k33ptoo.components.KButton btnVerTabelas;
     private com.k33ptoo.components.KButton btnVincEmForn;
