@@ -60,6 +60,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     }
 
+    // ================================================================
     // Nova função para estilizar o botão com ícone à esquerda e texto ao lado, alinhados à esquerda
     private void estilizarBotaoLateral(KButton btn, String nome, String caminhoImagem) {
         btn.setPreferredSize(new Dimension(200, 75)); // Ajusta o tamanho para o novo estilo
