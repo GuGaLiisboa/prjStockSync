@@ -49,6 +49,72 @@ public class testeMenuNovo extends javax.swing.JFrame {
         definirIconeJanela();
         btnEdit();
 
+        // Estiliza os botões do menu lateral com icones
+        estilizarBotaoLateral(btnCadastros, "Cadastros", "/br/com/teste/icones/IconeCadastro.png");
+        estilizarBotaoLateral(btnMovimentacoes, "Movimentações", "/br/com/teste/icones/IconeCadastro.png");
+        estilizarBotaoLateral(btnMateriais, "Materiais", "/br/com/teste/icones/IconeCadastro.png");
+        estilizarBotaoLateral(btnFornecedores, "Fornecedores", "/br/com/teste/icones/IconeCadastro.png");
+        estilizarBotaoLateral(btnCategorias, "Categorias", "/br/com/teste/icones/IconeCadastro.png");
+        estilizarBotaoLateral(btnAjuda, "Ajuda", "/br/com/teste/icones/IconeCadastro.png");
+        estilizarBotaoLateral(btnSobre, "Sobre", "/br/com/teste/icones/IconeCadastro.png");
+
+    }
+
+    // Nova função para estilizar o botão com ícone à esquerda e texto ao lado, alinhados à esquerda
+    private void estilizarBotaoLateral(KButton btn, String nome, String caminhoImagem) {
+        btn.setPreferredSize(new Dimension(200, 75)); // Ajusta o tamanho para o novo estilo
+        btn.setLayout(new BorderLayout()); // Usar BorderLayout para posicionar o ícone e o texto
+
+        // Carrega a imagem como recurso
+        URL iconeURL = getClass().getResource(caminhoImagem);
+        if (iconeURL != null) {
+            ImageIcon icon = new ImageIcon(iconeURL);
+            Image image = icon.getImage();
+            Image newImage = image.getScaledInstance(25, 25, Image.SCALE_SMOOTH); // Redimensiona o ícone
+            ImageIcon newIcon = new ImageIcon(newImage);
+
+            // Define o ícone e o texto
+            JLabel labelIcon = new JLabel(newIcon);
+            JLabel textLabel = new JLabel(nome);
+            textLabel.setForeground(Color.WHITE); // Define a cor do texto como branco
+
+            // Adiciona o ícone e o texto ao botão
+            JPanel panel = new JPanel(); // Usar um JPanel para alinhar o ícone e o texto
+            panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS)); // Usar BoxLayout para alinhar horizontalmente
+            panel.setOpaque(false); // Para manter a transparência
+
+            // Ajusta o alinhamento vertical do ícone e do texto
+            labelIcon.setAlignmentY(JLabel.CENTER_ALIGNMENT); // Centraliza verticalmente o ícone
+            textLabel.setAlignmentY(JLabel.CENTER_ALIGNMENT); // Centraliza verticalmente o texto
+
+            panel.add(labelIcon);
+            panel.add(Box.createRigidArea(new Dimension(5, 0))); // Espaço entre o ícone e o texto
+            panel.add(textLabel);
+
+            btn.add(panel, BorderLayout.WEST); // Adiciona o painel ao lado esquerdo do botão
+
+            // Configurações de estilo
+            btn.setBackground(new Color(24, 140, 91)); // Cor de fundo
+            btn.setForeground(Color.WHITE);
+            btn.setBorderPainted(false);
+            textLabel.setFont(new Font("Roboto", Font.BOLD, 16));
+            btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+            // Efeito de hover (muda a cor ao passar o mouse)
+            btn.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    btn.setBackground(new Color(7, 108, 65)); // Cor ao passar o mouse
+                }
+
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    btn.setBackground(new Color(24, 140, 91)); // Cor padrão ao sair
+                }
+            });
+        } else {
+            System.err.println("Ícone não encontrado: " + caminhoImagem);
+        }
     }
 
     //=============================================================================================
@@ -272,8 +338,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtIdMat.setText(tblMaterial.getModel().getValueAt(setar, 0).toString());
         txtIdCat.setText(tblMaterial.getModel().getValueAt(setar, 1).toString());
         txtNomeMat.setText(tblMaterial.getModel().getValueAt(setar, 2).toString());
-        
-        
+
         txtDescMat.setText(tblMaterial.getModel().getValueAt(setar, 4).toString());
 
         // Desabilitar o botão de adicionar para evitar dados duplicados
@@ -958,8 +1023,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnMateriais.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFornecedores.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCategorias.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnRelatorios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAjuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSobre.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSobre.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         //TELA CADASTROS
@@ -1149,6 +1214,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jTabbedPane2 = new javax.swing.JTabbedPane();
         telaInicial = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
         telaCadastros = new javax.swing.JPanel();
         btnCadFornecedor = new com.k33ptoo.components.KButton();
         btnCadCategoria = new com.k33ptoo.components.KButton();
@@ -1230,8 +1296,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel19 = new javax.swing.JLabel();
         txtDescMat = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
-        txtValorMat = new javax.swing.JTextField();
-        jLabel21 = new javax.swing.JLabel();
         btnCadastrarMat = new com.k33ptoo.components.KButton();
         btnAlterarMat = new com.k33ptoo.components.KButton();
         btnExcluirMat = new com.k33ptoo.components.KButton();
@@ -1373,7 +1437,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnMateriais = new com.k33ptoo.components.KButton();
         btnFornecedores = new com.k33ptoo.components.KButton();
         btnCategorias = new com.k33ptoo.components.KButton();
-        btnRelatorios = new com.k33ptoo.components.KButton();
         btnAjuda = new com.k33ptoo.components.KButton();
         btnSobre = new com.k33ptoo.components.KButton();
 
@@ -1381,7 +1444,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         setTitle("StockSync");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(900, 550));
-        setPreferredSize(new java.awt.Dimension(1280, 720));
         setResizable(false);
         setSize(new java.awt.Dimension(1280, 720));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1390,21 +1452,40 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/STOCKSYNCIMG2.png"))); // NOI18N
 
+        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
+        jLayeredPane1.setLayout(jLayeredPane1Layout);
+        jLayeredPane1Layout.setHorizontalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 212, Short.MAX_VALUE)
+        );
+        jLayeredPane1Layout.setVerticalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout telaInicialLayout = new javax.swing.GroupLayout(telaInicial);
         telaInicial.setLayout(telaInicialLayout);
         telaInicialLayout.setHorizontalGroup(
             telaInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, telaInicialLayout.createSequentialGroup()
-                .addContainerGap(353, Short.MAX_VALUE)
-                .addComponent(jLabel4)
+            .addGroup(telaInicialLayout.createSequentialGroup()
+                .addGroup(telaInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(telaInicialLayout.createSequentialGroup()
+                        .addGap(353, 353, 353)
+                        .addComponent(jLabel4))
+                    .addGroup(telaInicialLayout.createSequentialGroup()
+                        .addGap(282, 282, 282)
+                        .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(357, 357, 357))
         );
         telaInicialLayout.setVerticalGroup(
             telaInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(telaInicialLayout.createSequentialGroup()
-                .addGap(309, 309, 309)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, telaInicialLayout.createSequentialGroup()
+                .addContainerGap(149, Short.MAX_VALUE)
+                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(136, 136, 136)
                 .addComponent(jLabel4)
-                .addContainerGap(306, Short.MAX_VALUE))
+                .addGap(290, 290, 290))
         );
 
         jTabbedPane2.addTab("tab1", telaInicial);
@@ -2426,20 +2507,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel20.setForeground(new java.awt.Color(26, 131, 43));
         jLabel20.setText("Descrição");
 
-        txtValorMat.setBackground(new java.awt.Color(223, 223, 223));
-        txtValorMat.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        txtValorMat.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        txtValorMat.setSelectionColor(new java.awt.Color(26, 131, 43));
-        txtValorMat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtValorMatActionPerformed(evt);
-            }
-        });
-
-        jLabel21.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel21.setText("Valor *");
-
         btnCadastrarMat.setText("Cadastrar");
         btnCadastrarMat.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnCadastrarMat.setkAllowGradient(false);
@@ -2551,11 +2618,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel20)
                     .addComponent(txtDescMat, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel21)
-                    .addComponent(txtValorMat, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(201, 201, 201))
+                .addGap(336, 425, Short.MAX_VALUE))
             .addGroup(telaCadMaterialLayout.createSequentialGroup()
                 .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(telaCadMaterialLayout.createSequentialGroup()
@@ -2633,15 +2696,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addGap(0, 0, 0)
                         .addComponent(txtNomeMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(telaCadMaterialLayout.createSequentialGroup()
-                        .addComponent(jLabel20)
-                        .addGap(0, 0, 0)
-                        .addComponent(txtDescMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, telaCadMaterialLayout.createSequentialGroup()
-                        .addComponent(jLabel21)
-                        .addGap(0, 0, 0)
-                        .addComponent(txtValorMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jLabel20)
+                .addGap(0, 0, 0)
+                .addComponent(txtDescMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47)
                 .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCadastrarMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -4273,152 +4330,98 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/STOCKSYNCIMG.png"))); // NOI18N
 
-        btnCadastros.setText("CADASTROS");
+        btnCadastros.setForeground(new java.awt.Color(0, 0, 0));
+        btnCadastros.setToolTipText("");
+        btnCadastros.setAlignmentY(0.0F);
         btnCadastros.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        btnCadastros.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnCadastros.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCadastros.setkAllowGradient(false);
+        btnCadastros.setkBackGroundColor(new java.awt.Color(26, 131, 43));
         btnCadastros.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnCadastros.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.setkStartColor(new java.awt.Color(26, 131, 43));
-        btnCadastros.setMargin(new java.awt.Insets(8, 50, 3, 14));
         btnCadastros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCadastrosActionPerformed(evt);
             }
         });
 
-        btnMovimentacoes.setText("MOVIMENTAÇÕES");
+        btnMovimentacoes.setForeground(new java.awt.Color(0, 0, 0));
+        btnMovimentacoes.setToolTipText("");
+        btnMovimentacoes.setAlignmentY(0.0F);
         btnMovimentacoes.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
         btnMovimentacoes.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnMovimentacoes.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnMovimentacoes.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnMovimentacoes.setkAllowGradient(false);
+        btnMovimentacoes.setkBackGroundColor(new java.awt.Color(26, 131, 43));
         btnMovimentacoes.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnMovimentacoes.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnMovimentacoes.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnMovimentacoes.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnMovimentacoes.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnMovimentacoes.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnMovimentacoes.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnMovimentacoes.setkStartColor(new java.awt.Color(26, 131, 43));
         btnMovimentacoes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMovimentacoesActionPerformed(evt);
             }
         });
 
-        btnMateriais.setText("MATERIAIS");
+        btnMateriais.setForeground(new java.awt.Color(0, 0, 0));
+        btnMateriais.setToolTipText("");
+        btnMateriais.setAlignmentY(0.0F);
         btnMateriais.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
         btnMateriais.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnMateriais.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnMateriais.setkAllowGradient(false);
+        btnMateriais.setkBackGroundColor(new java.awt.Color(26, 131, 43));
         btnMateriais.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnMateriais.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.setkStartColor(new java.awt.Color(26, 131, 43));
         btnMateriais.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMateriaisActionPerformed(evt);
             }
         });
 
-        btnFornecedores.setText("FORNECEDORES");
+        btnFornecedores.setForeground(new java.awt.Color(0, 0, 0));
+        btnFornecedores.setToolTipText("");
+        btnFornecedores.setAlignmentY(0.0F);
         btnFornecedores.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
         btnFornecedores.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnFornecedores.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnFornecedores.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnFornecedores.setkAllowGradient(false);
+        btnFornecedores.setkBackGroundColor(new java.awt.Color(26, 131, 43));
         btnFornecedores.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnFornecedores.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnFornecedores.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnFornecedores.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnFornecedores.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnFornecedores.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnFornecedores.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnFornecedores.setkStartColor(new java.awt.Color(26, 131, 43));
         btnFornecedores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFornecedoresActionPerformed(evt);
             }
         });
 
-        btnCategorias.setText("CATEGORIAS");
+        btnCategorias.setForeground(new java.awt.Color(0, 0, 0));
+        btnCategorias.setToolTipText("");
+        btnCategorias.setAlignmentY(0.0F);
         btnCategorias.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
         btnCategorias.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnCategorias.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnCategorias.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnCategorias.setkAllowGradient(false);
+        btnCategorias.setkBackGroundColor(new java.awt.Color(26, 131, 43));
         btnCategorias.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnCategorias.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnCategorias.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnCategorias.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnCategorias.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnCategorias.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnCategorias.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnCategorias.setkStartColor(new java.awt.Color(26, 131, 43));
         btnCategorias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCategoriasActionPerformed(evt);
             }
         });
 
-        btnRelatorios.setText("RELATÓRIOS");
-        btnRelatorios.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        btnRelatorios.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnRelatorios.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnRelatorios.setkEndColor(new java.awt.Color(26, 131, 43));
-        btnRelatorios.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnRelatorios.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnRelatorios.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnRelatorios.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnRelatorios.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnRelatorios.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnRelatorios.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnRelatorios.setkStartColor(new java.awt.Color(26, 131, 43));
-        btnRelatorios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRelatoriosActionPerformed(evt);
-            }
-        });
-
-        btnAjuda.setText("AJUDA");
+        btnAjuda.setForeground(new java.awt.Color(0, 0, 0));
+        btnAjuda.setToolTipText("");
+        btnAjuda.setAlignmentY(0.0F);
         btnAjuda.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
         btnAjuda.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAjuda.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnAjuda.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnAjuda.setkAllowGradient(false);
+        btnAjuda.setkBackGroundColor(new java.awt.Color(26, 131, 43));
         btnAjuda.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnAjuda.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnAjuda.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnAjuda.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnAjuda.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnAjuda.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnAjuda.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnAjuda.setkStartColor(new java.awt.Color(26, 131, 43));
         btnAjuda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAjudaActionPerformed(evt);
             }
         });
 
-        btnSobre.setText("SOBRE");
+        btnSobre.setForeground(new java.awt.Color(0, 0, 0));
+        btnSobre.setToolTipText("");
+        btnSobre.setAlignmentY(0.0F);
         btnSobre.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
         btnSobre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnSobre.setkBackGroundColor(new java.awt.Color(52, 153, 68));
-        btnSobre.setkEndColor(new java.awt.Color(26, 131, 43));
+        btnSobre.setkAllowGradient(false);
+        btnSobre.setkBackGroundColor(new java.awt.Color(26, 131, 43));
         btnSobre.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnSobre.setkHoverEndColor(new java.awt.Color(52, 153, 68));
-        btnSobre.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnSobre.setkHoverStartColor(new java.awt.Color(52, 153, 68));
-        btnSobre.setkIndicatorColor(new java.awt.Color(52, 153, 68));
-        btnSobre.setkPressedColor(new java.awt.Color(52, 153, 68));
-        btnSobre.setkSelectedColor(new java.awt.Color(52, 153, 68));
-        btnSobre.setkStartColor(new java.awt.Color(26, 131, 43));
         btnSobre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSobreActionPerformed(evt);
@@ -4429,20 +4432,19 @@ public class testeMenuNovo extends javax.swing.JFrame {
         menuLateral.setLayout(menuLateralLayout);
         menuLateralLayout.setHorizontalGroup(
             menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnCadastros, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(btnMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(btnMateriais, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(btnFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(btnCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(btnRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(btnAjuda, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(btnSobre, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(btnCadastros, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
             .addGroup(menuLateralLayout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(btnMovimentacoes, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+            .addComponent(btnMateriais, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+            .addComponent(btnFornecedores, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+            .addComponent(btnCategorias, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+            .addComponent(btnAjuda, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+            .addComponent(btnSobre, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
         );
         menuLateralLayout.setVerticalGroup(
             menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4453,21 +4455,19 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnCadastros, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
+                .addGap(1, 1, 1)
                 .addComponent(btnMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
+                .addGap(1, 1, 1)
                 .addComponent(btnMateriais, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
+                .addGap(1, 1, 1)
                 .addComponent(btnFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
+                .addGap(1, 1, 1)
                 .addComponent(btnCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(btnRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
+                .addGap(1, 1, 1)
                 .addComponent(btnAjuda, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
+                .addGap(1, 1, 1)
                 .addComponent(btnSobre, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(322, Short.MAX_VALUE))
+                .addContainerGap(365, Short.MAX_VALUE))
         );
 
         getContentPane().add(menuLateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 180, 700));
@@ -4475,17 +4475,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(1280, 720));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnCadastrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrosActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaCadastros);
-    }//GEN-LAST:event_btnCadastrosActionPerformed
-
-    private void btnMovimentacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimentacoesActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaMenuMovimentacoes);
-        atualizarTabelas();
-    }//GEN-LAST:event_btnMovimentacoesActionPerformed
 
     private void btnCadCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadCategoriaActionPerformed
         // TODO add your handling code here:
@@ -4575,10 +4564,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private void txtDescMatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescMatActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDescMatActionPerformed
-
-    private void txtValorMatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValorMatActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtValorMatActionPerformed
 
     private void btnCadastrarMatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarMatActionPerformed
         // TODO add your handling code here:
@@ -4884,18 +4869,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jTabbedPane2.setSelectedComponent(telaCadCategoria);
     }//GEN-LAST:event_btnNovaCategoriaActionPerformed
 
-    private void btnMateriaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMateriaisActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaMateriais);
-        atualizarTabelas();
-    }//GEN-LAST:event_btnMateriaisActionPerformed
-
-    private void btnFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFornecedoresActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaFornecedores);
-        atualizarTabelas();
-    }//GEN-LAST:event_btnFornecedoresActionPerformed
-
     private void txtBuscarEmSaidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarEmSaidaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBuscarEmSaidaActionPerformed
@@ -4910,29 +4883,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         String relatorio = (String) cBoxRelatorios.getSelectedItem();
         gerarRelatorio(relatorio);
     }//GEN-LAST:event_cBoxRelatoriosActionPerformed
-
-    private void btnRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatoriosActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaRelatorios);
-        resetarTabela();
-        cBoxRelatorios.setSelectedItem("Relatórios");
-    }//GEN-LAST:event_btnRelatoriosActionPerformed
-
-    private void btnCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCategoriasActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaCategorias);
-        atualizarTabelas();
-    }//GEN-LAST:event_btnCategoriasActionPerformed
-
-    private void btnAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjudaActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaAjuda);
-    }//GEN-LAST:event_btnAjudaActionPerformed
-
-    private void btnSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSobreActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaSobre);
-    }//GEN-LAST:event_btnSobreActionPerformed
 
     private void btnHome8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome8ActionPerformed
         // TODO add your handling code here:
@@ -5060,6 +5010,45 @@ public class testeMenuNovo extends javax.swing.JFrame {
         limpar();
     }//GEN-LAST:event_btnFechar5ActionPerformed
 
+    private void btnCadastrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrosActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaCadastros);
+    }//GEN-LAST:event_btnCadastrosActionPerformed
+
+    private void btnMovimentacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimentacoesActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaMenuMovimentacoes);
+        atualizarTabelas();
+    }//GEN-LAST:event_btnMovimentacoesActionPerformed
+
+    private void btnMateriaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMateriaisActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaMateriais);
+        atualizarTabelas();
+    }//GEN-LAST:event_btnMateriaisActionPerformed
+
+    private void btnFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFornecedoresActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaFornecedores);
+        atualizarTabelas();
+    }//GEN-LAST:event_btnFornecedoresActionPerformed
+
+    private void btnCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCategoriasActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaCategorias);
+        atualizarTabelas();
+    }//GEN-LAST:event_btnCategoriasActionPerformed
+
+    private void btnAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjudaActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaAjuda);
+    }//GEN-LAST:event_btnAjudaActionPerformed
+
+    private void btnSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSobreActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane2.setSelectedComponent(telaSobre);
+    }//GEN-LAST:event_btnSobreActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -5159,7 +5148,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnNovaMovimentacao;
     private com.k33ptoo.components.KButton btnNovoFornecedorEmForn;
     private com.k33ptoo.components.KButton btnNovoMaterialEmMat;
-    private com.k33ptoo.components.KButton btnRelatorios;
     private com.k33ptoo.components.KButton btnSalvarEntrada;
     private com.k33ptoo.components.KButton btnSalvarSaida;
     private com.k33ptoo.components.KButton btnSobre;
@@ -5183,7 +5171,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
@@ -5233,6 +5220,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
@@ -5326,6 +5314,5 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTextField txtNomeMat;
     private javax.swing.JTextField txtSaidaIdMat;
     private javax.swing.JTextField txtSaidaQnt;
-    private javax.swing.JTextField txtValorMat;
     // End of variables declaration//GEN-END:variables
 }
