@@ -4,19 +4,34 @@
  */
 package br.com.teste.telas;
 
+import br.com.teste.dal.Conexao;
 import com.k33ptoo.components.KButton;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,17 +39,155 @@ import javax.swing.JLabel;
  */
 public class telaCadastro extends javax.swing.JFrame {
 
+    Connection conn = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+
     /**
      * Creates new form telaCadastro
      */
     public telaCadastro() {
         initComponents();
+        conn = Conexao.getConexao();
 
         adicionarPlaceholders();
+
+        preencherComboBoxCad();
 
         definirIconeJanela();
 
         estilizarBotaoCadastrar(btnCadastrar);
+
+        estilizarComboBox(comboBoxCad);
+    }
+
+    private void adicionar() {
+        Connection conn = null; // Não inicialize aqui
+        PreparedStatement pst = null;
+        ResultSet countRs = null;
+
+        try {
+            conn = Conexao.getConexao(); // Obtém a conexão
+            String sql = "INSERT INTO almoxarife(nome, login, senha, tipo_almoxarife) VALUES (?, ?, ?, ?)";
+
+            // Verifica quantos usuários já existem na tabela almoxarife
+            String countSql = "SELECT COUNT(*) FROM almoxarife";
+            pst = conn.prepareStatement(countSql);
+            countRs = pst.executeQuery();
+
+            // Determina o tipo de almoxarife baseado na quantidade de registros
+            String tipoAlmoxarife;
+            if (countRs.next() && countRs.getInt(1) == 0) {
+                tipoAlmoxarife = "adm"; // Primeiro usuário será 'adm'
+            } else {
+                tipoAlmoxarife = "compras"; // Usuários subsequentes serão 'compras'
+            }
+
+            // Agora, insere os dados do novo usuário
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, txtCadNome.getText());
+            pst.setString(2, txtCadUsuario.getText());
+            pst.setString(3, new String(txtCadSenha.getPassword()));
+            pst.setString(4, tipoAlmoxarife); // Define o tipo de almoxarife
+
+            // Verifica campos obrigatórios
+            if (txtCadNome.getText().isEmpty() || txtCadUsuario.getText().isEmpty() || txtCadSenha.getPassword().length == 0) {
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
+            } else {
+                int adicionado = pst.executeUpdate();
+                if (adicionado > 0) {
+                    JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso.");
+                    this.dispose(); // Fecha a tela de cadastro após o sucesso
+                }
+            }
+        } catch (MysqlDataTruncation e) {
+            JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro no banco de dados: " + e.getMessage());
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica.");
+        } finally {
+            // Fechar os recursos
+            try {
+                if (countRs != null) {
+                    countRs.close(); // Fecha o ResultSet
+                }
+                if (pst != null) {
+                    pst.close(); // Fecha o PreparedStatement
+                }
+                if (conn != null) {
+                    conn.close(); // Fecha a conexão
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao fechar os recursos: " + e.getMessage());
+            }
+        }
+    }
+
+    // função de estilo para a combobox
+    public void estilizarComboBox(JComboBox<String> comboBox) {
+        // Remove a borda
+        comboBox.setBorder(BorderFactory.createEmptyBorder());
+
+        // Altera a cor do popup da JComboBox
+        comboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (isSelected) {
+                    c.setBackground(new Color(26, 131, 43)); // Cor de fundo da seleção
+                    c.setForeground(Color.WHITE); // Cor do texto da seleção
+                } else {
+                    c.setBackground(Color.WHITE); // Cor de fundo normal
+                    c.setForeground(Color.BLACK); // Cor do texto normal
+                }
+                return c;
+            }
+        });
+
+        comboBox.setFont(new Font("Arial", Font.PLAIN, 14)); // Fonte
+        comboBox.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Cursor ao passar o mouse
+
+        // Personalizar as cores de fundo e texto
+        comboBox.setBackground(new Color(240, 240, 240)); // Cor de fundo padrão
+        comboBox.setForeground(Color.BLACK); // Cor do texto padrão
+    }
+
+    private void preencherComboBoxCad() {
+        conn = Conexao.getConexao();
+        String sql = "SHOW COLUMNS FROM almoxarife LIKE 'tipo_almoxarife'";
+        try {
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                // Obtém o tipo de dados do campo tipo_almoxarife
+                String columnType = rs.getString("Type");
+                // Remove o prefixo "enum(" e o sufixo ")" para obter os valores
+                String enumValues = columnType.substring(columnType.indexOf("(") + 1, columnType.lastIndexOf(")"));
+                // Divide os valores separados por vírgula e remove as aspas
+                String[] values = enumValues.replace("'", "").split(",");
+
+                // Preenche a comboBoxCad com os valores do ENUM
+                comboBoxCad.setModel(new DefaultComboBoxModel<>(values));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao preencher a combobox: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao fechar a conexão: " + ex.getMessage());
+            }
+        }
     }
 
     private void estilizarBotaoCadastrar(KButton btn) {
@@ -184,7 +337,7 @@ public class telaCadastro extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        comboBoxCad = new javax.swing.JComboBox<>();
 
         setTitle("Cadastro - StockSync");
 
@@ -257,7 +410,7 @@ public class telaCadastro extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(26, 131, 43));
         jLabel4.setText("Senha");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboBoxCad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -267,7 +420,6 @@ public class telaCadastro extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel3)
                     .addComponent(jLabel2)
@@ -275,7 +427,8 @@ public class telaCadastro extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(txtCadSenha)
                         .addComponent(txtCadUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboBoxCad, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -295,7 +448,7 @@ public class telaCadastro extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCadSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(comboBoxCad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28))
@@ -318,6 +471,7 @@ public class telaCadastro extends javax.swing.JFrame {
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         // TODO add your handling code here:
+        adicionar();
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void txtCadSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCadSenhaActionPerformed
@@ -361,7 +515,7 @@ public class telaCadastro extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.k33ptoo.components.KButton btnCadastrar;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> comboBoxCad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

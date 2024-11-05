@@ -27,10 +27,10 @@ public class TelaLogin extends javax.swing.JFrame {
     ResultSet rs = null;
 
     public void logar() {
-        String sql = "select * from almoxarife where login =? and senha =?";
+        Connection conn = Conexao.getConexao(); // Obter nova conexão a cada tentativa de login
+        String sql = "SELECT * FROM almoxarife WHERE login = ? AND senha = ?";
+
         try {
-            //essas linhas preparam a consulta ao banco para verificar login e senha
-            //onde a ? é substituido pelo conteúdo das variáveis.
             pst = conn.prepareStatement(sql);
             pst.setString(1, txtUsuario.getText());
             pst.setString(2, new String(txtSenha.getPassword()));
@@ -40,18 +40,30 @@ public class TelaLogin extends javax.swing.JFrame {
             if (rs.next()) {
                 testeMenuNovo principal = new testeMenuNovo();
                 principal.setVisible(true);
-                //MenuPrincipal.lblUsuario.setText(rs.getString(2));
-                //MenuPrincipal.lblUsuario.setForeground(Color.blue);
+                // MenuPrincipal.lblUsuario.setText(rs.getString(2));
+                // MenuPrincipal.lblUsuario.setForeground(Color.blue);
                 this.dispose();
-                conn.close();
             } else {
-            TelaAviso aviso = new TelaAviso(this, true); // 'this' se refere ao JFrame atual (TelaLogin)
-            aviso.setVisible(true);
+                TelaAviso aviso = new TelaAviso(this, true);
+                aviso.setVisible(true);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close(); // Fecha o ResultSet
+                }
+                if (pst != null) {
+                    pst.close(); // Fecha o PreparedStatement
+                }
+                if (conn != null) {
+                    conn.close(); // Fecha a conexão
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao fechar os recursos: " + e.getMessage());
+            }
         }
-
     }
 
     /**
@@ -70,13 +82,41 @@ public class TelaLogin extends javax.swing.JFrame {
         adicionarPlaceholders();
         // Altera o icone
         definirIconeJanela();
-        
+
         btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        
+
         estilizarBotaoCadastrar(btnLogin);
 
+        verificarUsuarios();
+
     }
-    
+
+    private void verificarUsuarios() {
+        String sql = "SELECT COUNT(*) FROM almoxarife"; // Ajuste aqui se a tabela for diferente
+        try {
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+
+            if (rs.next() && rs.getInt(1) == 0) { // Se não houver usuários cadastrados
+                // Espera 3 segundos e depois abre a tela de cadastro
+                Timer timer = new Timer(3000, e -> abrirTelaCadastro());
+                timer.setRepeats(false); // Apenas executar uma vez
+                timer.start();
+            } else {
+                // Continuar com a execução normal do programa
+                this.setVisible(true); // Mostra a tela de login
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao verificar usuários: " + e.getMessage());
+        }
+    }
+
+    private void abrirTelaCadastro() {
+        telaCadastro cadastro = new telaCadastro(); // Cria nova instância da tela de cadastro
+        cadastro.setVisible(true); // Exibe a tela de cadastro
+        // A tela de login permanece aberta
+    }
+
     private void estilizarBotaoCadastrar(KButton btn) {
         String nome = "Login"; // Texto do botão
 
@@ -118,7 +158,7 @@ public class TelaLogin extends javax.swing.JFrame {
 
     private void adicionarPlaceholders() {
         // Placeholder para o campo de usuário
-        txtUsuario.setForeground(new Color(26,131,43)); // Cor verde escuro
+        txtUsuario.setForeground(new Color(26, 131, 43)); // Cor verde escuro
         txtUsuario.setText("Digite o login");
         txtUsuario.setBorder(BorderFactory.createCompoundBorder(
                 txtUsuario.getBorder(),
@@ -129,21 +169,21 @@ public class TelaLogin extends javax.swing.JFrame {
             public void focusGained(FocusEvent e) {
                 if (txtUsuario.getText().equals("Digite o login")) {
                     txtUsuario.setText("");
-                    txtUsuario.setForeground(new Color(26,131,43)); // Define a cor do texto como verde
+                    txtUsuario.setForeground(new Color(26, 131, 43)); // Define a cor do texto como verde
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
                 if (txtUsuario.getText().isEmpty()) {
-                    txtUsuario.setForeground(new Color(26,131,43)); // Define a cor do texto como verde
+                    txtUsuario.setForeground(new Color(26, 131, 43)); // Define a cor do texto como verde
                     txtUsuario.setText("Digite o login");
                 }
             }
         });
 
         // Placeholder para o campo de senha
-        txtSenha.setForeground(new Color(26,131,43)); // Cor verde escuro
+        txtSenha.setForeground(new Color(26, 131, 43)); // Cor verde escuro
         txtSenha.setEchoChar((char) 0); // Remove o caractere de senha inicialmente
         txtSenha.setText("Digite a senha");
         txtSenha.setBorder(BorderFactory.createCompoundBorder(
@@ -155,7 +195,7 @@ public class TelaLogin extends javax.swing.JFrame {
             public void focusGained(FocusEvent e) {
                 if (txtSenha.getText().equals("Digite a senha")) {
                     txtSenha.setText("");
-                    txtSenha.setForeground(new Color(26,131,43)); // Define a cor do texto como verde
+                    txtSenha.setForeground(new Color(26, 131, 43)); // Define a cor do texto como verde
                     txtSenha.setEchoChar('*'); // Define o caractere de senha ao obter foco
                 }
             }
@@ -163,15 +203,13 @@ public class TelaLogin extends javax.swing.JFrame {
             @Override
             public void focusLost(FocusEvent e) {
                 if (txtSenha.getText().isEmpty()) {
-                    txtSenha.setForeground(new Color(26,131,43)); // Define a cor do texto como verde
+                    txtSenha.setForeground(new Color(26, 131, 43)); // Define a cor do texto como verde
                     txtSenha.setText("Digite a senha");
                     txtSenha.setEchoChar((char) 0); // Remove o caractere de senha ao perder foco
                 }
             }
         });
     }
-
-    
 
     private void definirIconeJanela() {
         // Carrega o ícone da sua aplicação
