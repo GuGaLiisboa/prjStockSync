@@ -8,6 +8,7 @@ package br.com.teste.telas;
 import java.sql.*;
 import br.com.teste.dal.Conexao;
 import br.com.teste.uteis.PopupCategoria;
+import br.com.teste.uteis.PopupSair;
 import br.com.teste.uteis.PopupTabelasVM;
 import com.k33ptoo.components.KButton;
 import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
@@ -60,6 +61,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
         //atualizar as tabelas
         atualizarTabelas();
 
+        // Adicionando o listener para o botão de logout
+        btnSairApp.addActionListener(e -> logout());
+
         // =====================================
         // FUNÇÕES DE ESTILO:
         //outros etilos
@@ -74,10 +78,32 @@ public class testeMenuNovo extends javax.swing.JFrame {
         estilizarBotaoLateral(btnCategorias, "Categorias", "/br/com/teste/icones/IconeCadastro.png");
         estilizarBotaoLateral(btnAjuda, "Ajuda", "/br/com/teste/icones/IconeCadastro.png");
         estilizarBotaoLateral(btnPainelAdmin, "Painel Admin", "/br/com/teste/icones/IconeCadastro.png");
+        estilizarBotaoLateral(btnSairApp, "Sair", "/br/com/teste/icones/iconeSair.png");
 
         // Estiliza uma tabela
         estilizarTabela(tblMateriaisEmMat);
 
+    }
+
+    // Função sair do programa
+    public void logout() {
+        PopupSair popupSair = new PopupSair();
+        popupSair.setLocationRelativeTo(null);
+        popupSair.setVisible(true); // Exibe o popup e aguarda a resposta
+
+        // Verifica a escolha do usuário
+        if (popupSair.isSairSelecionado()) {
+            // Usuário escolheu "Sair", então vá para a tela de login
+            TelaLogin telaLogin = new TelaLogin();
+            telaLogin.setVisible(true);
+
+            // Fecha a tela atual (menu principal)
+            if (this instanceof JFrame) {
+                ((JFrame) this).dispose();
+            }
+        } else {
+            System.out.println("Usuário escolheu 'Voltar', permanece na aplicação.");
+        }
     }
 
     // ================================================================
@@ -1504,6 +1530,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnCategorias = new com.k33ptoo.components.KButton();
         btnAjuda = new com.k33ptoo.components.KButton();
         btnPainelAdmin = new com.k33ptoo.components.KButton();
+        btnSairApp = new com.k33ptoo.components.KButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("StockSync");
@@ -4626,6 +4653,20 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
+        btnSairApp.setForeground(new java.awt.Color(0, 0, 0));
+        btnSairApp.setToolTipText("");
+        btnSairApp.setAlignmentY(0.0F);
+        btnSairApp.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnSairApp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSairApp.setkAllowGradient(false);
+        btnSairApp.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnSairApp.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnSairApp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairAppActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout menuLateralLayout = new javax.swing.GroupLayout(menuLateral);
         menuLateral.setLayout(menuLateralLayout);
         menuLateralLayout.setHorizontalGroup(
@@ -4643,6 +4684,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
             .addComponent(btnCategorias, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
             .addComponent(btnAjuda, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
             .addComponent(btnPainelAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+            .addComponent(btnSairApp, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         menuLateralLayout.setVerticalGroup(
             menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4665,7 +4707,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addComponent(btnAjuda, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(btnPainelAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(365, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 303, Short.MAX_VALUE)
+                .addComponent(btnSairApp, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27))
         );
 
         getContentPane().add(menuLateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 180, 700));
@@ -5267,6 +5311,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_ops5ActionPerformed
 
+    private void btnSairAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairAppActionPerformed
+        // TODO add your handling code here:
+        // btnSairApp.addActionListener(e -> logout());
+    }//GEN-LAST:event_btnSairAppActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -5368,6 +5417,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnNovoFornecedorEmForn;
     private com.k33ptoo.components.KButton btnNovoMaterialEmMat;
     private com.k33ptoo.components.KButton btnPainelAdmin;
+    private com.k33ptoo.components.KButton btnSairApp;
     private com.k33ptoo.components.KButton btnSalvarEntrada;
     private com.k33ptoo.components.KButton btnSalvarSaida;
     private com.k33ptoo.components.KButton btnSubstituirCat;

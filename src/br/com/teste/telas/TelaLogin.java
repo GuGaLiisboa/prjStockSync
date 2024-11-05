@@ -5,7 +5,6 @@
  */
 package br.com.teste.telas;
 
-import br.com.teste.uteis.BordaRedonda;
 import java.sql.*;
 import br.com.teste.dal.Conexao;
 import br.com.teste.uteis.TelaAviso;
