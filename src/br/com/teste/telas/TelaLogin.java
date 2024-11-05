@@ -26,6 +26,31 @@ public class TelaLogin extends javax.swing.JFrame {
     PreparedStatement pst = null;
     ResultSet rs = null;
 
+    /**
+     * Creates new form TelaLogin
+     */
+    public TelaLogin() {
+        initComponents();
+        conn = Conexao.getConexao();
+        if (conn != null) {
+            lblstatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/bancoconectado.png")));
+        } else {
+            lblstatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/bancodesconectado.png")));
+        }
+
+        // Adiciona os placeholders nos campos
+        adicionarPlaceholders();
+        // Altera o icone
+        definirIconeJanela();
+
+        btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        estilizarBotaoCadastrar(btnLogin);
+
+        verificarUsuarios();
+
+    }
+
     public void logar() {
         Connection conn = Conexao.getConexao(); // Obter nova conexão a cada tentativa de login
         String sql = "SELECT * FROM almoxarife WHERE login = ? AND senha = ?";
@@ -66,31 +91,6 @@ public class TelaLogin extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * Creates new form TelaLogin
-     */
-    public TelaLogin() {
-        initComponents();
-        conn = Conexao.getConexao();
-        if (conn != null) {
-            lblstatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/bancoconectado.png")));
-        } else {
-            lblstatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/bancodesconectado.png")));
-        }
-
-        // Adiciona os placeholders nos campos
-        adicionarPlaceholders();
-        // Altera o icone
-        definirIconeJanela();
-
-        btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        estilizarBotaoCadastrar(btnLogin);
-
-        verificarUsuarios();
-
-    }
-
     private void verificarUsuarios() {
         String sql = "SELECT COUNT(*) FROM almoxarife"; // Ajuste aqui se a tabela for diferente
         try {
@@ -99,7 +99,7 @@ public class TelaLogin extends javax.swing.JFrame {
 
             if (rs.next() && rs.getInt(1) == 0) { // Se não houver usuários cadastrados
                 // Espera 3 segundos e depois abre a tela de cadastro
-                Timer timer = new Timer(3000, e -> abrirTelaCadastro());
+                Timer timer = new Timer(2000, e -> abrirTelaCadastro());
                 timer.setRepeats(false); // Apenas executar uma vez
                 timer.start();
             } else {

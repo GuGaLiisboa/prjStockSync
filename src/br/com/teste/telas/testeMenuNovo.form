@@ -5041,7 +5041,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="btnCadastros" alignment="0" pref="180" max="32767" attributes="0"/>
+              <Component id="btnMateriais" alignment="0" pref="180" max="32767" attributes="0"/>
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
@@ -5051,7 +5051,7 @@
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
               <Component id="btnMovimentacoes" alignment="0" pref="180" max="32767" attributes="0"/>
-              <Component id="btnMateriais" alignment="0" pref="180" max="32767" attributes="0"/>
+              <Component id="btnMateriais2" alignment="0" pref="180" max="32767" attributes="0"/>
               <Component id="btnFornecedores" alignment="0" pref="180" max="32767" attributes="0"/>
               <Component id="btnCategorias" alignment="0" pref="180" max="32767" attributes="0"/>
               <Component id="btnAjuda" alignment="0" pref="180" max="32767" attributes="0"/>
@@ -5065,11 +5065,11 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="btnCadastros" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="btnMateriais" min="-2" pref="35" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                   <Component id="btnMovimentacoes" min="-2" pref="35" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                  <Component id="btnMateriais" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="btnMateriais2" min="-2" pref="35" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                   <Component id="btnFornecedores" min="-2" pref="35" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
@@ -5091,7 +5091,7 @@
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator1">
         </Component>
-        <Component class="com.k33ptoo.components.KButton" name="btnCadastros">
+        <Component class="com.k33ptoo.components.KButton" name="btnMateriais">
           <Properties>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="0" type="rgb"/>
@@ -5111,7 +5111,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCadastrosActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMateriaisActionPerformed"/>
           </Events>
         </Component>
         <Component class="com.k33ptoo.components.KButton" name="btnMovimentacoes">
@@ -5137,7 +5137,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMovimentacoesActionPerformed"/>
           </Events>
         </Component>
-        <Component class="com.k33ptoo.components.KButton" name="btnMateriais">
+        <Component class="com.k33ptoo.components.KButton" name="btnMateriais2">
           <Properties>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="0" type="rgb"/>
@@ -5157,7 +5157,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMateriaisActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMateriais2ActionPerformed"/>
           </Events>
         </Component>
         <Component class="com.k33ptoo.components.KButton" name="btnFornecedores">

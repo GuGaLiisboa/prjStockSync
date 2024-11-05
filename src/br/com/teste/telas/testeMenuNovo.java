@@ -50,9 +50,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnEdit();
 
         // Estiliza os botões do menu lateral com icones
-        estilizarBotaoLateral(btnCadastros, "Cadastros", "/br/com/teste/icones/IconeCadastro.png");
-        estilizarBotaoLateral(btnMovimentacoes, "Movimentações", "/br/com/teste/icones/IconeCadastro.png");
         estilizarBotaoLateral(btnMateriais, "Materiais", "/br/com/teste/icones/IconeCadastro.png");
+        estilizarBotaoLateral(btnMovimentacoes, "Movimentações", "/br/com/teste/icones/IconeCadastro.png");
+        estilizarBotaoLateral(btnMateriais2, "N.A", "/br/com/teste/icones/IconeCadastro.png");
         estilizarBotaoLateral(btnFornecedores, "Fornecedores", "/br/com/teste/icones/IconeCadastro.png");
         estilizarBotaoLateral(btnCategorias, "Categorias", "/br/com/teste/icones/IconeCadastro.png");
         estilizarBotaoLateral(btnAjuda, "Ajuda", "/br/com/teste/icones/IconeCadastro.png");
@@ -856,11 +856,14 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     atualizarTabelas();
                 }
             }
-        } catch (MysqlDataTruncation e) {
-            JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro no banco de dados.");
+            if (e.getSQLState().equals("45000")) {
+                JOptionPane.showMessageDialog(null, "Não pode ser realizado a saída, a quantidade excede a quantidade atual do estoque.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro no banco de dados: " + e.getMessage());
+            }
         } catch (HeadlessException e) {
+
             JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica.");
         }
     }
@@ -1018,9 +1021,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
     //setar o icone mão nos botões
     private void btnEdit() {
         //MENU LATERAL
-        btnCadastros.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnMovimentacoes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMateriais.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMovimentacoes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMateriais2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFornecedores.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCategorias.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAjuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1430,9 +1433,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
         menuLateral = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        btnCadastros = new com.k33ptoo.components.KButton();
-        btnMovimentacoes = new com.k33ptoo.components.KButton();
         btnMateriais = new com.k33ptoo.components.KButton();
+        btnMovimentacoes = new com.k33ptoo.components.KButton();
+        btnMateriais2 = new com.k33ptoo.components.KButton();
         btnFornecedores = new com.k33ptoo.components.KButton();
         btnCategorias = new com.k33ptoo.components.KButton();
         btnAjuda = new com.k33ptoo.components.KButton();
@@ -4325,17 +4328,17 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/STOCKSYNCIMG.png"))); // NOI18N
 
-        btnCadastros.setForeground(new java.awt.Color(0, 0, 0));
-        btnCadastros.setToolTipText("");
-        btnCadastros.setAlignmentY(0.0F);
-        btnCadastros.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        btnCadastros.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnCadastros.setkAllowGradient(false);
-        btnCadastros.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        btnCadastros.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnCadastros.addActionListener(new java.awt.event.ActionListener() {
+        btnMateriais.setForeground(new java.awt.Color(0, 0, 0));
+        btnMateriais.setToolTipText("");
+        btnMateriais.setAlignmentY(0.0F);
+        btnMateriais.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnMateriais.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnMateriais.setkAllowGradient(false);
+        btnMateriais.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnMateriais.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnMateriais.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCadastrosActionPerformed(evt);
+                btnMateriaisActionPerformed(evt);
             }
         });
 
@@ -4353,17 +4356,17 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
-        btnMateriais.setForeground(new java.awt.Color(0, 0, 0));
-        btnMateriais.setToolTipText("");
-        btnMateriais.setAlignmentY(0.0F);
-        btnMateriais.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
-        btnMateriais.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnMateriais.setkAllowGradient(false);
-        btnMateriais.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        btnMateriais.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnMateriais.addActionListener(new java.awt.event.ActionListener() {
+        btnMateriais2.setForeground(new java.awt.Color(0, 0, 0));
+        btnMateriais2.setToolTipText("");
+        btnMateriais2.setAlignmentY(0.0F);
+        btnMateriais2.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
+        btnMateriais2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnMateriais2.setkAllowGradient(false);
+        btnMateriais2.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnMateriais2.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnMateriais2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMateriaisActionPerformed(evt);
+                btnMateriais2ActionPerformed(evt);
             }
         });
 
@@ -4413,7 +4416,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         menuLateral.setLayout(menuLateralLayout);
         menuLateralLayout.setHorizontalGroup(
             menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnCadastros, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+            .addComponent(btnMateriais, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
             .addGroup(menuLateralLayout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -4421,7 +4424,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(btnMovimentacoes, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-            .addComponent(btnMateriais, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+            .addComponent(btnMateriais2, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
             .addComponent(btnFornecedores, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
             .addComponent(btnCategorias, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
             .addComponent(btnAjuda, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
@@ -4434,11 +4437,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnCadastros, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnMateriais, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(btnMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
-                .addComponent(btnMateriais, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnMateriais2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(btnFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
@@ -4988,10 +4991,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
         limpar();
     }//GEN-LAST:event_btnFechar5ActionPerformed
 
-    private void btnCadastrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrosActionPerformed
+    private void btnMateriaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMateriaisActionPerformed
         // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaCadastros);
-    }//GEN-LAST:event_btnCadastrosActionPerformed
+        jTabbedPane2.setSelectedComponent(telaMateriais);
+    }//GEN-LAST:event_btnMateriaisActionPerformed
 
     private void btnMovimentacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimentacoesActionPerformed
         // TODO add your handling code here:
@@ -4999,11 +5002,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
         atualizarTabelas();
     }//GEN-LAST:event_btnMovimentacoesActionPerformed
 
-    private void btnMateriaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMateriaisActionPerformed
+    private void btnMateriais2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMateriais2ActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaMateriais);
         atualizarTabelas();
-    }//GEN-LAST:event_btnMateriaisActionPerformed
+    }//GEN-LAST:event_btnMateriais2ActionPerformed
 
     private void btnFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFornecedoresActionPerformed
         // TODO add your handling code here:
@@ -5073,7 +5076,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnCadMaterial;
     private com.k33ptoo.components.KButton btnCadastrarCat;
     private com.k33ptoo.components.KButton btnCadastrarMat;
-    private com.k33ptoo.components.KButton btnCadastros;
     private com.k33ptoo.components.KButton btnCategorias;
     private com.k33ptoo.components.KButton btnDesvincularFM;
     private com.k33ptoo.components.KButton btnExcluir;
@@ -5113,6 +5115,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnLimparMovimentacoes;
     private com.k33ptoo.components.KButton btnLimparSaidas;
     private com.k33ptoo.components.KButton btnMateriais;
+    private com.k33ptoo.components.KButton btnMateriais2;
     private com.k33ptoo.components.KButton btnMovEntrada;
     private com.k33ptoo.components.KButton btnMovSaida;
     private com.k33ptoo.components.KButton btnMovimentacoes;
