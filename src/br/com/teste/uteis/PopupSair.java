@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 public class PopupSair extends javax.swing.JFrame {
 
     // Crie uma referência para armazenar a resposta do usuário
+    // em andamento
     private boolean sairSelecionado = false;
 
     /**
