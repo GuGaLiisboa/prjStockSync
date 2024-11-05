@@ -52,7 +52,7 @@ public class TelaLogin extends javax.swing.JFrame {
     }
 
     public void logar() {
-        Connection conn = Conexao.getConexao(); // Obter nova conexão a cada tentativa de login
+        Connection conn = Conexao.getConexao();
         String sql = "SELECT * FROM almoxarife WHERE login = ? AND senha = ?";
 
         try {
@@ -63,11 +63,14 @@ public class TelaLogin extends javax.swing.JFrame {
             rs = pst.executeQuery();
 
             if (rs.next()) {
+                // Aqui você pode obter o tipo de almoxarife do ResultSet
+                String tipoAlmoxarife = rs.getString("tipo_almoxarife");
+
                 testeMenuNovo principal = new testeMenuNovo();
-                principal.setVisible(true);
-                // MenuPrincipal.lblUsuario.setText(rs.getString(2));
-                // MenuPrincipal.lblUsuario.setForeground(Color.blue);
-                this.dispose();
+                principal.configurarVisibilidade(tipoAlmoxarife); // Configura a visibilidade de acordo com o tipo
+                principal.setVisible(true); // Exibe a tela do menu
+
+                this.dispose(); // Fecha a tela de login
             } else {
                 TelaAviso aviso = new TelaAviso(this, true);
                 aviso.setVisible(true);
@@ -77,13 +80,13 @@ public class TelaLogin extends javax.swing.JFrame {
         } finally {
             try {
                 if (rs != null) {
-                    rs.close(); // Fecha o ResultSet
+                    rs.close();
                 }
                 if (pst != null) {
-                    pst.close(); // Fecha o PreparedStatement
+                    pst.close();
                 }
                 if (conn != null) {
-                    conn.close(); // Fecha a conexão
+                    conn.close();
                 }
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, "Erro ao fechar os recursos: " + e.getMessage());
