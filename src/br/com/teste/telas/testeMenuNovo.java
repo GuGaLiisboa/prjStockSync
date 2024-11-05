@@ -16,7 +16,9 @@ import javax.swing.JOptionPane;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -45,6 +47,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
         //atualizar as tabelas
         atualizarTabelas();
 
+        // =====================================
+        // FUNÇÕES DE ESTILO:
         //outros etilos
         definirIconeJanela();
         btnEdit();
@@ -56,6 +60,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
         estilizarBotaoLateral(btnFornecedores, "Fornecedores", "/br/com/teste/icones/IconeCadastro.png");
         estilizarBotaoLateral(btnCategorias, "Categorias", "/br/com/teste/icones/IconeCadastro.png");
         estilizarBotaoLateral(btnAjuda, "Ajuda", "/br/com/teste/icones/IconeCadastro.png");
+
+        // Estiliza uma tabela
+        estilizarTabela(tblMateriaisEmMat);
 
     }
 
@@ -1016,6 +1023,38 @@ public class testeMenuNovo extends javax.swing.JFrame {
         pesquisar_MateriaisEmMat();
         pesquisar_FornecedoresEmForn();
         pesquisar_CategoriaEmCat();
+    }
+
+    private void estilizarTabela(JTable tabela) {
+        // Estilização do cabeçalho da tabela
+        JTableHeader header = tabela.getTableHeader();
+        header.setFont(new Font("Arial", Font.BOLD, 14));
+        header.setBackground(new Color(240, 240, 240)); // Fundo cinza claro para o cabeçalho
+        header.setForeground(Color.BLACK); // Texto preto no cabeçalho
+        header.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(26, 131, 43))); // Linha inferior verde escuro
+
+        // Estilização das células
+        tabela.setFont(new Font("Arial", Font.PLAIN, 12));
+        tabela.setBackground(Color.WHITE); // Fundo branco nas células
+        tabela.setForeground(Color.BLACK); // Texto preto nas células
+        tabela.setGridColor(new Color(220, 220, 220)); // Cor cinza claro para as grades da tabela
+        tabela.setRowHeight(25); // Altura das linhas
+
+        // Definir renderizador para as linhas
+        tabela.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (isSelected) {
+                    c.setBackground(new Color(26, 131, 43)); // Fundo verde ao selecionar
+                    c.setForeground(Color.WHITE); // Texto branco ao selecionar
+                } else {
+                    c.setBackground(Color.WHITE);
+                    c.setForeground(Color.BLACK);
+                }
+                return c;
+            }
+        });
     }
 
     //setar o icone mão nos botões
