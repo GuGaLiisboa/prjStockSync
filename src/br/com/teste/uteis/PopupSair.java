@@ -19,38 +19,34 @@ import javax.swing.JLabel;
  */
 public class PopupSair extends javax.swing.JFrame {
 
-    // Crie uma referência para armazenar a resposta do usuário
-    // em andamento
-    private boolean sairSelecionado = false;
+    private PopupSairListener listener;
 
-    /**
-     * Creates new form PopupSair
-     */
-    public PopupSair() {
+    // Construtor que aceita o listener
+    public PopupSair(PopupSairListener listener) {
+        this.listener = listener;
         initComponents();
 
         estilizarBotao(btnSair, "Sair");
         estilizarBotao(btnVoltar, "Voltar");
 
-        // Adiciona ActionListener aos botões
+        // Define o comportamento dos botões
         btnSair.addActionListener(e -> {
-            sairSelecionado = true; // O usuário escolheu sair
+            if (listener != null) {
+                listener.onEscolha(true);  // Usuário escolheu "Sair"
+            }
             this.dispose(); // Fecha o popup
         });
 
         btnVoltar.addActionListener(e -> {
-            sairSelecionado = false; // O usuário escolheu voltar
+            if (listener != null) {
+                listener.onEscolha(false); // Usuário escolheu "Voltar"
+            }
             this.dispose(); // Fecha o popup
         });
     }
 
-    public PopupSair(Object object, boolean b) {
+    private PopupSair() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    // Método para verificar se o usuário escolheu sair
-    public boolean isSairSelecionado() {
-        return sairSelecionado;
     }
 
     private void estilizarBotao(KButton btn, String texto) {
@@ -101,6 +97,8 @@ public class PopupSair extends javax.swing.JFrame {
 
         btnSair = new com.k33ptoo.components.KButton();
         btnVoltar = new com.k33ptoo.components.KButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         btnSair.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnSair.setkAllowGradient(false);
@@ -124,21 +122,42 @@ public class PopupSair extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(24, 140, 91));
+        jLabel1.setText("Deseja sair do programa?");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(24, 140, 91));
+        jLabel2.setText("Ao sair, será necessário fazer login novamente.");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(71, 71, 71))
             .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(44, 44, 44)
-                .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jLabel2)))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(105, Short.MAX_VALUE)
+                .addGap(16, 16, 16)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -195,5 +214,7 @@ public class PopupSair extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.k33ptoo.components.KButton btnSair;
     private com.k33ptoo.components.KButton btnVoltar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
