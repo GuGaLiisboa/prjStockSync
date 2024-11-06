@@ -32,19 +32,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     PreparedStatement pst = null;
     ResultSet rs = null;
 
-    // Classe para esconder/mostrar botão de acordo com a hierarquia
-    public void configurarVisibilidade(String tipoAlmoxarife) {
-        if (tipoAlmoxarife.equals("adm")) {
-            // Exibe funções exclusivas para administradores
-            btnPainelAdmin.setVisible(true);
-            painelAdmin.setVisible(true);
-        } else {
-            // Oculta funções para usuários que não são administradores
-            btnPainelAdmin.setVisible(false);
-            painelAdmin.setVisible(false);
-        }
-    }
-
     /**
      * Creates new form testeMenuNovo
      */
@@ -63,6 +50,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         // Adicionando o listener para o botão de logout
         btnSairApp.addActionListener(e -> logout());
+
+        // Adicionado o listener para o botão do Painel adm
+        btnPainelAdmin.addActionListener(e -> {
+            painelAdmin.setVisible(true); // Somente aqui o painel é exibido
+        });
 
         // =====================================
         // FUNÇÕES DE ESTILO:
@@ -83,6 +75,19 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // Estiliza uma tabela
         estilizarTabela(tblMateriaisEmMat);
 
+    }
+
+    // Classe para esconder/mostrar botão de acordo com a hierarquia
+    public void configurarVisibilidade(String tipoAlmoxarife) {
+        if (tipoAlmoxarife.equals("adm")) {
+            // Exibe apenas o botão para abrir o painel de administração, não o painel em si
+            btnPainelAdmin.setVisible(true);
+            painelAdmin.setVisible(false); // painel escondido por padrão
+        } else {
+            // Oculta o botão e o painel para usuários que não são administradores
+            btnPainelAdmin.setVisible(false);
+            painelAdmin.setVisible(false);
+        }
     }
 
     // Função sair do programa
