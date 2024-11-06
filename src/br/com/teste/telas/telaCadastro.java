@@ -52,13 +52,10 @@ public class telaCadastro extends javax.swing.JFrame {
 
         adicionarPlaceholders();
 
-        preencherComboBoxCad();
-
         definirIconeJanela();
 
         estilizarBotaoCadastrar(btnCadastrar);
 
-        estilizarComboBox(comboBoxCad);
     }
 
     private void adicionar() {
@@ -153,42 +150,7 @@ public class telaCadastro extends javax.swing.JFrame {
         comboBox.setForeground(Color.BLACK); // Cor do texto padrão
     }
 
-    private void preencherComboBoxCad() {
-        conn = Conexao.getConexao();
-        String sql = "SHOW COLUMNS FROM almoxarife LIKE 'tipo_almoxarife'";
-        try {
-            pst = conn.prepareStatement(sql);
-            rs = pst.executeQuery();
-
-            if (rs.next()) {
-                // Obtém o tipo de dados do campo tipo_almoxarife
-                String columnType = rs.getString("Type");
-                // Remove o prefixo "enum(" e o sufixo ")" para obter os valores
-                String enumValues = columnType.substring(columnType.indexOf("(") + 1, columnType.lastIndexOf(")"));
-                // Divide os valores separados por vírgula e remove as aspas
-                String[] values = enumValues.replace("'", "").split(",");
-
-                // Preenche a comboBoxCad com os valores do ENUM
-                comboBoxCad.setModel(new DefaultComboBoxModel<>(values));
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao preencher a combobox: " + e.getMessage());
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (pst != null) {
-                    pst.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao fechar a conexão: " + ex.getMessage());
-            }
-        }
-    }
+    
 
     private void estilizarBotaoCadastrar(KButton btn) {
         String nome = "Cadastrar"; // Texto do botão
@@ -337,7 +299,6 @@ public class telaCadastro extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        comboBoxCad = new javax.swing.JComboBox<>();
 
         setTitle("Cadastro - StockSync");
 
@@ -410,8 +371,6 @@ public class telaCadastro extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(26, 131, 43));
         jLabel4.setText("Senha");
 
-        comboBoxCad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -427,8 +386,7 @@ public class telaCadastro extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(txtCadSenha)
                         .addComponent(txtCadUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(comboBoxCad, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -447,9 +405,7 @@ public class telaCadastro extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCadSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addComponent(comboBoxCad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28))
         );
@@ -515,7 +471,6 @@ public class telaCadastro extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.k33ptoo.components.KButton btnCadastrar;
-    private javax.swing.JComboBox<String> comboBoxCad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

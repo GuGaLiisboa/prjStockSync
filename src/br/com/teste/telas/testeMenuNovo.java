@@ -79,9 +79,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
         estilizarTabela(tblFornecedores);
         estilizarTabela(tblFornecedoresEmForn);
         estilizarTabela(tblMaterial);
+        estilizarTabela(tblPainelAdmin);
 
         // Estiliza as comboBox
         estilizarComboBox(cBoxIdCat);
+        estilizarComboBox(cBoxTipoAlmox);
     }
 
     // Classe para esconder/mostrar botão de acordo com a hierarquia
@@ -159,7 +161,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     //metodo para buscar fornecedores
     private void pesquisar_fornecedor() {
-        //String sql = "select * from fornecedor where nome_fornecedor like ?";
         conn = Conexao.getConexao();
         String sql = "select id_fornecedor AS ID, nome_fornecedor AS Fornecedor, cnpj AS CNPJ, email AS Email, numero_telefone AS Telefone, endereco AS Endereço,"
                 + "site AS Site from fornecedor where nome_fornecedor like ?";
@@ -1037,60 +1038,26 @@ public class testeMenuNovo extends javax.swing.JFrame {
     }
 
     //=============================================================================================
-    //Métodos da Tela Relatórios
-    //Método para exibir o relatório na tabela, com base na combobox
-    private void gerarRelatorio(String relatorio) {
+    //Métodos do Painel Admin
+    //Método para buscar dados na tabela
+    private void pesquisar_painelAdmin() {
         conn = Conexao.getConexao();
-        String sql = "";
-
-        switch (relatorio) {
-            case "Relatório de Movimentação de Estoque por Fornecedor":
-                sql = "SELECT f.nome_fornecedor AS Fornecedor, m.nome_material AS Material, SUM(CASE WHEN me.tipo_movimentacao = 'entrada' THEN me.quantidade ELSE 0 END) AS Entradas, "
-                        + "SUM(CASE WHEN me.tipo_movimentacao = 'saida' THEN me.quantidade ELSE 0 END) AS Saídas, (SUM(CASE WHEN me.tipo_movimentacao = 'entrada' THEN me.quantidade ELSE 0 END) - "
-                        + "SUM(CASE WHEN me.tipo_movimentacao = 'saida' THEN me.quantidade ELSE 0 END)) AS Saldo FROM movimentacao_estoque me INNER JOIN material m ON me.id_material = m.id_material "
-                        + "INNER JOIN fornecedor_material fm ON fm.id_material = m.id_material INNER JOIN fornecedor f ON f.id_fornecedor = fm.id_fornecedor "
-                        + "GROUP BY f.nome_fornecedor, m.nome_material ORDER BY f.nome_fornecedor, m.nome_material;";
-                break;
-            case "Relatório de Estoque por Categoria":
-                sql = "SELECT c.nome_categoria AS Categoria, SUM(e.quantidade_atual) AS 'Estoque Total', COUNT(m.id_material) AS 'Quantidade de Materiais' FROM estoque e "
-                        + "INNER JOIN material m ON e.id_material = m.id_material INNER JOIN categoria c ON m.id_categoria = c.id_categoria GROUP BY c.nome_categoria "
-                        + "ORDER BY c.nome_categoria";
-                break;
-            case "Relatório de Movimentação de Estoque por Mês":
-                sql = "SELECT YEAR(data_movimentacao) AS Ano, MONTH(data_movimentacao) AS Mês, SUM(CASE WHEN tipo_movimentacao = 'entrada' THEN quantidade ELSE 0 END) AS Entradas, "
-                        + "SUM(CASE WHEN tipo_movimentacao = 'saida' THEN quantidade ELSE 0 END) AS Saídas FROM movimentacao_estoque GROUP BY YEAR(data_movimentacao), MONTH(data_movimentacao) "
-                        + "ORDER BY YEAR(data_movimentacao), MONTH(data_movimentacao);";
-                break;
-            case "Relatório de Estoques Mínimos": //o parâmetro é 20 unidades
-                sql = "SELECT m.nome_material AS Material, e.quantidade_atual AS 'Estoque Atual' FROM estoque e INNER JOIN material m ON e.id_material = m.id_material WHERE e.quantidade_atual < 20;";
-                break;
-            case "Relatório de Fornecedores e Materiais":
-                sql = "SELECT f.nome_fornecedor AS Fornecedor, m.nome_material AS Material, c.nome_categoria AS Categoria, f.email AS Email, f.numero_telefone AS Telefone, "
-                        + "f.endereco AS Endereco, f.site AS Site FROM fornecedor f INNER JOIN fornecedor_material fm ON f.id_fornecedor = fm.id_fornecedor INNER JOIN "
-                        + "material m ON fm.id_material = m.id_material INNER JOIN categoria c ON m.id_categoria = c.id_categoria ORDER BY f.nome_fornecedor, c.nome_categoria, m.nome_material";
-                break;
-            case "Relatórios":
-            default:
-                resetarTabela();
-                return;
-        }
+        String sql = "SELECT id_almoxarife AS 'ID', tipo_almoxarife AS 'Tipo', nome AS 'Nome', login AS 'Login', senha AS 'Senha' "
+                + "FROM almoxarife "
+                + "WHERE nome LIKE ?";
 
         try {
             pst = conn.prepareStatement(sql);
+            // Passando o texto de busca digitado no txtPainelAdmin para o parâmetro de consulta
+            pst.setString(1, "%" + txtPainelAdmin.getText() + "%");
             rs = pst.executeQuery();
-            // Atualiza a tabela com o resultado da consulta
-            tblRelatorios.setModel(DbUtils.resultSetToTableModel(rs));
+
+            // Exibindo o resultado na tblPainelAdmin
+            tblPainelAdmin.setModel(DbUtils.resultSetToTableModel(rs));
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Erro ao buscar dados para o painel administrativo: " + e.getMessage());
         }
-
-    }
-
-    //método para retornar a tabela de relatórios
-    private void resetarTabela() {
-        String[] colunas = {"Selecione um Relatório"};
-        DefaultTableModel modelo = new DefaultTableModel(null, colunas);
-        tblRelatorios.setModel(modelo);
     }
 
     //=============================================================================================
@@ -1107,6 +1074,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         pesquisar_MateriaisEmMat();
         pesquisar_FornecedoresEmForn();
         pesquisar_CategoriaEmCat();
+        pesquisar_painelAdmin();
     }
 
     // Método para atualizar as comboboxes
@@ -1291,8 +1259,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnLimparCategoria.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNovaCategoria.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        //RELATÓRIOS
-        cBoxRelatorios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        //PAINEL ADMIN
+        cBoxTipoAlmox.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         //AJUDA
         ajudaCad.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1603,14 +1571,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnNovaCategoria = new com.k33ptoo.components.KButton();
         jLabel65 = new javax.swing.JLabel();
         btnHome26 = new javax.swing.JButton();
-        telaRelatorios = new javax.swing.JPanel();
-        jScrollPane12 = new javax.swing.JScrollPane();
-        tblRelatorios = new javax.swing.JTable();
-        jSeparator16 = new javax.swing.JSeparator();
-        jSeparator17 = new javax.swing.JSeparator();
-        cBoxRelatorios = new javax.swing.JComboBox<>();
-        jLabel66 = new javax.swing.JLabel();
-        btnHome27 = new javax.swing.JButton();
         telaSobre = new javax.swing.JPanel();
         jLabel54 = new javax.swing.JLabel();
         jLabel55 = new javax.swing.JLabel();
@@ -1641,15 +1601,25 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel56 = new javax.swing.JLabel();
         painelAdmin = new javax.swing.JPanel();
         jScrollPane13 = new javax.swing.JScrollPane();
-        tblAlmoxarife = new javax.swing.JTable();
+        tblPainelAdmin = new javax.swing.JTable();
         jSeparator18 = new javax.swing.JSeparator();
         jSeparator19 = new javax.swing.JSeparator();
-        ops3 = new javax.swing.JTextField();
+        txtPainelAdmin = new javax.swing.JTextField();
         jLabel50 = new javax.swing.JLabel();
         OPS = new com.k33ptoo.components.KButton();
         ops2 = new com.k33ptoo.components.KButton();
         jLabel67 = new javax.swing.JLabel();
         ops5 = new javax.swing.JButton();
+        ops4 = new javax.swing.JTextField();
+        jLabel68 = new javax.swing.JLabel();
+        cBoxTipoAlmox = new javax.swing.JComboBox<>();
+        ops6 = new javax.swing.JTextField();
+        jLabel69 = new javax.swing.JLabel();
+        ops7 = new javax.swing.JTextField();
+        jLabel70 = new javax.swing.JLabel();
+        ops8 = new javax.swing.JTextField();
+        jLabel71 = new javax.swing.JLabel();
+        ops9 = new com.k33ptoo.components.KButton();
         menuLateral = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -2103,10 +2073,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(telaCadFornecedorLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnFechar))
+                            .addComponent(btnFechar)
                             .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jScrollPane1)
                                 .addGroup(telaCadFornecedorLayout.createSequentialGroup()
@@ -4047,90 +4016,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("tab8", telaCategorias);
 
-        telaRelatorios.setBackground(new java.awt.Color(217, 217, 217));
-
-        tblRelatorios = new javax.swing.JTable(){
-            public boolean isCellEditable(int rowIndex, int colIndex){
-                return false;
-            }
-        };
-        tblRelatorios.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tblRelatorios.getTableHeader().setReorderingAllowed(false);
-        jScrollPane12.setViewportView(tblRelatorios);
-
-        cBoxRelatorios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Relatórios", "Relatório de Movimentação de Estoque por Fornecedor", "Relatório de Estoque por Categoria", "Relatório de Movimentação de Estoque por Mês", "Relatório de Estoques Mínimos" }));
-        cBoxRelatorios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cBoxRelatoriosActionPerformed(evt);
-            }
-        });
-
-        jLabel66.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
-        jLabel66.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel66.setText("> RELATÓRIO");
-
-        btnHome27.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/btnHome.png"))); // NOI18N
-        btnHome27.setBorderPainted(false);
-        btnHome27.setContentAreaFilled(false);
-        btnHome27.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnHome27.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHome27ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout telaRelatoriosLayout = new javax.swing.GroupLayout(telaRelatorios);
-        telaRelatorios.setLayout(telaRelatoriosLayout);
-        telaRelatoriosLayout.setHorizontalGroup(
-            telaRelatoriosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(telaRelatoriosLayout.createSequentialGroup()
-                .addGroup(telaRelatoriosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(telaRelatoriosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jSeparator16, javax.swing.GroupLayout.DEFAULT_SIZE, 1095, Short.MAX_VALUE)
-                        .addComponent(jSeparator17)
-                        .addGroup(telaRelatoriosLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 1067, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(telaRelatoriosLayout.createSequentialGroup()
-                            .addGap(18, 18, 18)
-                            .addComponent(btnHome27, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel66)))
-                    .addGroup(telaRelatoriosLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(cBoxRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-        telaRelatoriosLayout.setVerticalGroup(
-            telaRelatoriosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(telaRelatoriosLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addGroup(telaRelatoriosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel66, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHome27, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator16, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
-                .addComponent(cBoxRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator17, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
-                .addGap(27, 27, 27))
-        );
-
-        jTabbedPane2.addTab("tab8", telaRelatorios);
-
         telaSobre.setBackground(new java.awt.Color(217, 217, 217));
 
         jLabel54.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/txtStockSync.png"))); // NOI18N
@@ -4497,7 +4382,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 return false;
             }
         };
-        tblAlmoxarife.setModel(new javax.swing.table.DefaultTableModel(
+        tblPainelAdmin.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -4508,21 +4393,26 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblAlmoxarife.getTableHeader().setReorderingAllowed(false);
-        jScrollPane13.setViewportView(tblAlmoxarife);
-
-        ops3.setBackground(new java.awt.Color(223, 223, 223));
-        ops3.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        ops3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        ops3.setSelectionColor(new java.awt.Color(26, 131, 43));
-        ops3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ops3ActionPerformed(evt);
+        tblPainelAdmin.getTableHeader().setReorderingAllowed(false);
+        tblPainelAdmin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblPainelAdminKeyReleased(evt);
             }
         });
-        ops3.addKeyListener(new java.awt.event.KeyAdapter() {
+        jScrollPane13.setViewportView(tblPainelAdmin);
+
+        txtPainelAdmin.setBackground(new java.awt.Color(223, 223, 223));
+        txtPainelAdmin.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        txtPainelAdmin.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
+        txtPainelAdmin.setSelectionColor(new java.awt.Color(26, 131, 43));
+        txtPainelAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPainelAdminActionPerformed(evt);
+            }
+        });
+        txtPainelAdmin.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                ops3KeyReleased(evt);
+                txtPainelAdminKeyReleased(evt);
             }
         });
 
@@ -4543,7 +4433,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
-        ops2.setText("Nova Categoria");
+        ops2.setText("Alterar");
         ops2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         ops2.setkAllowGradient(false);
         ops2.setkBackGroundColor(new java.awt.Color(26, 131, 43));
@@ -4570,6 +4460,97 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
+        ops4.setBackground(new java.awt.Color(223, 223, 223));
+        ops4.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        ops4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
+        ops4.setSelectionColor(new java.awt.Color(26, 131, 43));
+        ops4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ops4ActionPerformed(evt);
+            }
+        });
+        ops4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ops4KeyReleased(evt);
+            }
+        });
+
+        jLabel68.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        jLabel68.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel68.setText("ID");
+
+        cBoxTipoAlmox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tipo", "Item 2", "Item 3", "Item 4" }));
+
+        ops6.setBackground(new java.awt.Color(223, 223, 223));
+        ops6.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        ops6.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
+        ops6.setSelectionColor(new java.awt.Color(26, 131, 43));
+        ops6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ops6ActionPerformed(evt);
+            }
+        });
+        ops6.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ops6KeyReleased(evt);
+            }
+        });
+
+        jLabel69.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        jLabel69.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel69.setText("Nome");
+
+        ops7.setBackground(new java.awt.Color(223, 223, 223));
+        ops7.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        ops7.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
+        ops7.setSelectionColor(new java.awt.Color(26, 131, 43));
+        ops7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ops7ActionPerformed(evt);
+            }
+        });
+        ops7.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ops7KeyReleased(evt);
+            }
+        });
+
+        jLabel70.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        jLabel70.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel70.setText("Login");
+
+        ops8.setBackground(new java.awt.Color(223, 223, 223));
+        ops8.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        ops8.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
+        ops8.setSelectionColor(new java.awt.Color(26, 131, 43));
+        ops8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ops8ActionPerformed(evt);
+            }
+        });
+        ops8.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ops8KeyReleased(evt);
+            }
+        });
+
+        jLabel71.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        jLabel71.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel71.setText("Senha");
+
+        ops9.setText("Excluir");
+        ops9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        ops9.setkAllowGradient(false);
+        ops9.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        ops9.setkBorderRadius(20);
+        ops9.setkHoverColor(new java.awt.Color(52, 153, 68));
+        ops9.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        ops9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ops9ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelAdminLayout = new javax.swing.GroupLayout(painelAdmin);
         painelAdmin.setLayout(painelAdminLayout);
         painelAdminLayout.setHorizontalGroup(
@@ -4591,12 +4572,36 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addGap(20, 20, 20)
                         .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel50)
-                            .addComponent(ops3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtPainelAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(20, 20, 20)
-                        .addComponent(OPS, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49)
-                        .addComponent(ops2, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(OPS, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(15, Short.MAX_VALUE))
+            .addGroup(painelAdminLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(painelAdminLayout.createSequentialGroup()
+                        .addComponent(ops4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cBoxTipoAlmox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel68))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel69)
+                    .addComponent(ops6, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel70)
+                    .addComponent(ops7, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel71)
+                    .addGroup(painelAdminLayout.createSequentialGroup()
+                        .addComponent(ops8, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(ops2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(ops9, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(63, 63, 63))
         );
         painelAdminLayout.setVerticalGroup(
             painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4611,15 +4616,36 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addComponent(jLabel50)
                 .addGap(0, 0, 0)
                 .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(ops3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(OPS, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(ops2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator19, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
-                .addGap(27, 27, 27))
+                    .addGroup(painelAdminLayout.createSequentialGroup()
+                        .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtPainelAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(OPS, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jSeparator19, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)
+                        .addComponent(jLabel68)
+                        .addGap(0, 0, 0)
+                        .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ops4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cBoxTipoAlmox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(painelAdminLayout.createSequentialGroup()
+                        .addComponent(jLabel69)
+                        .addGap(0, 0, 0)
+                        .addComponent(ops6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(painelAdminLayout.createSequentialGroup()
+                        .addComponent(jLabel70)
+                        .addGap(0, 0, 0)
+                        .addComponent(ops7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(painelAdminLayout.createSequentialGroup()
+                        .addComponent(jLabel71)
+                        .addGap(0, 0, 0)
+                        .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ops8, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ops2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ops9, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(32, 32, 32)
+                .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("tab8", painelAdmin);
@@ -5190,12 +5216,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         pesquisar_MovSaidas();
     }//GEN-LAST:event_txtBuscarEmSaidaKeyReleased
 
-    private void cBoxRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cBoxRelatoriosActionPerformed
-        // TODO add your handling code here:
-        String relatorio = (String) cBoxRelatorios.getSelectedItem();
-        gerarRelatorio(relatorio);
-    }//GEN-LAST:event_cBoxRelatoriosActionPerformed
-
     private void btnHome8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome8ActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaInicial);
@@ -5305,11 +5325,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jTabbedPane2.setSelectedComponent(telaInicial);
     }//GEN-LAST:event_btnHome26ActionPerformed
 
-    private void btnHome27ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome27ActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaInicial);
-    }//GEN-LAST:event_btnHome27ActionPerformed
-
     private void btnFechar4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechar4ActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaCadMovimentacoes);
@@ -5361,13 +5376,14 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jTabbedPane2.setSelectedComponent(painelAdmin);
     }//GEN-LAST:event_btnPainelAdminActionPerformed
 
-    private void ops3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops3ActionPerformed
+    private void txtPainelAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPainelAdminActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ops3ActionPerformed
+    }//GEN-LAST:event_txtPainelAdminActionPerformed
 
-    private void ops3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ops3KeyReleased
+    private void txtPainelAdminKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPainelAdminKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_ops3KeyReleased
+        pesquisar_painelAdmin();
+    }//GEN-LAST:event_txtPainelAdminKeyReleased
 
     private void OPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OPSActionPerformed
         // TODO add your handling code here:
@@ -5384,6 +5400,47 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private void btnSairAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairAppActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSairAppActionPerformed
+
+    private void ops4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ops4ActionPerformed
+
+    private void ops4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ops4KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ops4KeyReleased
+
+    private void ops6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ops6ActionPerformed
+
+    private void ops6KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ops6KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ops6KeyReleased
+
+    private void ops7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ops7ActionPerformed
+
+    private void ops7KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ops7KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ops7KeyReleased
+
+    private void ops8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ops8ActionPerformed
+
+    private void ops8KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ops8KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ops8KeyReleased
+
+    private void ops9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ops9ActionPerformed
+
+    private void tblPainelAdminKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblPainelAdminKeyReleased
+        // TODO add your handling code here:
+        pesquisar_painelAdmin();
+    }//GEN-LAST:event_tblPainelAdminKeyReleased
 
     /**
      * @param args the command line arguments
@@ -5463,7 +5520,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JButton btnHome24;
     private javax.swing.JButton btnHome25;
     private javax.swing.JButton btnHome26;
-    private javax.swing.JButton btnHome27;
     private javax.swing.JButton btnHome8;
     private javax.swing.JButton btnHome9;
     private javax.swing.JButton btnLimpar;
@@ -5495,7 +5551,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnVincEmMat;
     private com.k33ptoo.components.KButton btnVincularFM;
     private javax.swing.JComboBox<String> cBoxIdCat;
-    private javax.swing.JComboBox<String> cBoxRelatorios;
+    private javax.swing.JComboBox<String> cBoxTipoAlmox;
     private javax.swing.JComboBox<String> cBoxTipoMov;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -5555,16 +5611,18 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel65;
-    private javax.swing.JLabel jLabel66;
     private javax.swing.JLabel jLabel67;
+    private javax.swing.JLabel jLabel68;
+    private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel70;
+    private javax.swing.JLabel jLabel71;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
-    private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane13;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
@@ -5580,8 +5638,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator14;
     private javax.swing.JSeparator jSeparator15;
-    private javax.swing.JSeparator jSeparator16;
-    private javax.swing.JSeparator jSeparator17;
     private javax.swing.JSeparator jSeparator18;
     private javax.swing.JSeparator jSeparator19;
     private javax.swing.JSeparator jSeparator2;
@@ -5595,11 +5651,14 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JPanel menuLateral;
     private com.k33ptoo.components.KButton ops2;
-    private javax.swing.JTextField ops3;
+    private javax.swing.JTextField ops4;
     private javax.swing.JButton ops5;
+    private javax.swing.JTextField ops6;
+    private javax.swing.JTextField ops7;
+    private javax.swing.JTextField ops8;
+    private com.k33ptoo.components.KButton ops9;
     private javax.swing.JPanel painelAdmin;
     private javax.swing.JTable tabelaSaidas;
-    private javax.swing.JTable tblAlmoxarife;
     private javax.swing.JTable tblCategoria2;
     private javax.swing.JTable tblCategoriasEmCat;
     private javax.swing.JTable tblEntrada;
@@ -5608,7 +5667,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTable tblMateriaisEmMat;
     private javax.swing.JTable tblMaterial;
     private javax.swing.JTable tblMovimentacoes;
-    private javax.swing.JTable tblRelatorios;
+    private javax.swing.JTable tblPainelAdmin;
     private javax.swing.JTable tblVincularMaterial;
     private javax.swing.JPanel telaAjuda;
     private javax.swing.JPanel telaAjuda1;
@@ -5626,7 +5685,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JPanel telaInicial;
     private javax.swing.JPanel telaMateriais;
     private javax.swing.JPanel telaMenuMovimentacoes;
-    private javax.swing.JPanel telaRelatorios;
     private javax.swing.JPanel telaSaidaMov;
     private javax.swing.JPanel telaSobre;
     private javax.swing.JTextField txtBuscarCatEmCat;
@@ -5656,6 +5714,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTextField txtIdVincVM;
     private javax.swing.JTextField txtNomeCat;
     private javax.swing.JTextField txtNomeMat;
+    private javax.swing.JTextField txtPainelAdmin;
     private javax.swing.JTextField txtSaidaIdMat;
     private javax.swing.JTextField txtSaidaQnt;
     // End of variables declaration//GEN-END:variables
