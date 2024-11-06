@@ -38,15 +38,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
     public testeMenuNovo() {
         initComponents();
         conn = Conexao.getConexao();
-        //Estiliza os botões com imagens do menu cadastro
-        estilizarBotao(btnCadFornecedor, "FORNECEDOR", "/br/com/teste/icones/iconeCaminhao.png");
-        estilizarBotao(btnCadCategoria, "CATEGORIA", "/br/com/teste/icones/iconeCategoria.png");
-        estilizarBotao(btnCadMaterial, "MATERIAL", "/br/com/teste/icones/iconeMaterial.png");
-        estilizarBotao(btnMovEntrada, "ENTRADA", "/br/com/teste/icones/iconeEntrada.png");
-        estilizarBotao(btnMovSaida, "SAÍDA", "/br/com/teste/icones/IconeSaida.png");
 
-        //atualizar as tabelas
+        // atualizar as tabelas e comboboxes
         atualizarTabelas();
+        atualizarComboBoxes();
 
         // Adicionando o listener para o botão de logout
         btnSairApp.addActionListener(e -> logout());
@@ -62,6 +57,13 @@ public class testeMenuNovo extends javax.swing.JFrame {
         definirIconeJanela();
         btnEdit();
 
+        //Estiliza os botões com imagens do menu cadastro
+        estilizarBotao(btnCadFornecedor, "FORNECEDOR", "/br/com/teste/icones/iconeCaminhao.png");
+        estilizarBotao(btnCadCategoria, "CATEGORIA", "/br/com/teste/icones/iconeCategoria.png");
+        estilizarBotao(btnCadMaterial, "MATERIAL", "/br/com/teste/icones/iconeMaterial.png");
+        estilizarBotao(btnMovEntrada, "ENTRADA", "/br/com/teste/icones/iconeEntrada.png");
+        estilizarBotao(btnMovSaida, "SAÍDA", "/br/com/teste/icones/IconeSaida.png");
+
         // Estiliza os botões do menu lateral com icones
         estilizarBotaoLateral(btnMateriais, "Materiais", "/br/com/teste/icones/IconeCadastro.png");
         estilizarBotaoLateral(btnMovimentacoes, "Movimentações", "/br/com/teste/icones/IconeCadastro.png");
@@ -74,7 +76,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         // Estiliza uma tabela
         estilizarTabela(tblMateriaisEmMat);
+        estilizarTabela(tblFornecedores);
+        estilizarTabela(tblFornecedoresEmForn);
 
+        // Estiliza as comboBox
+        estilizarComboBox(cBoxIdCat);
     }
 
     // Classe para esconder/mostrar botão de acordo com a hierarquia
@@ -111,64 +117,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // Configura o popup e exibe
         popupSair.setLocationRelativeTo(null);
         popupSair.setVisible(true);
-    }
-
-    // ================================================================
-    // Nova função para estilizar o botão com ícone à esquerda e texto ao lado, alinhados à esquerda
-    private void estilizarBotaoLateral(KButton btn, String nome, String caminhoImagem) {
-        btn.setPreferredSize(new Dimension(200, 75)); // Ajusta o tamanho para o novo estilo
-        btn.setLayout(new BorderLayout()); // Usar BorderLayout para posicionar o ícone e o texto
-
-        // Carrega a imagem como recurso
-        URL iconeURL = getClass().getResource(caminhoImagem);
-        if (iconeURL != null) {
-            ImageIcon icon = new ImageIcon(iconeURL);
-            Image image = icon.getImage();
-            Image newImage = image.getScaledInstance(25, 25, Image.SCALE_SMOOTH); // Redimensiona o ícone
-            ImageIcon newIcon = new ImageIcon(newImage);
-
-            // Define o ícone e o texto
-            JLabel labelIcon = new JLabel(newIcon);
-            JLabel textLabel = new JLabel(nome);
-            textLabel.setForeground(Color.WHITE); // Define a cor do texto como branco
-
-            // Adiciona o ícone e o texto ao botão
-            JPanel panel = new JPanel(); // Usar um JPanel para alinhar o ícone e o texto
-            panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS)); // Usar BoxLayout para alinhar horizontalmente
-            panel.setOpaque(false); // Para manter a transparência
-
-            // Ajusta o alinhamento vertical do ícone e do texto
-            labelIcon.setAlignmentY(JLabel.CENTER_ALIGNMENT); // Centraliza verticalmente o ícone
-            textLabel.setAlignmentY(JLabel.CENTER_ALIGNMENT); // Centraliza verticalmente o texto
-
-            panel.add(labelIcon);
-            panel.add(Box.createRigidArea(new Dimension(5, 0))); // Espaço entre o ícone e o texto
-            panel.add(textLabel);
-
-            btn.add(panel, BorderLayout.WEST); // Adiciona o painel ao lado esquerdo do botão
-
-            // Configurações de estilo
-            btn.setBackground(new Color(24, 140, 91)); // Cor de fundo
-            btn.setForeground(Color.WHITE);
-            btn.setBorderPainted(false);
-            textLabel.setFont(new Font("Roboto", Font.BOLD, 16));
-            btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-            // Efeito de hover (muda a cor ao passar o mouse)
-            btn.addMouseListener(new java.awt.event.MouseAdapter() {
-                @Override
-                public void mouseEntered(java.awt.event.MouseEvent evt) {
-                    btn.setBackground(new Color(7, 108, 65)); // Cor ao passar o mouse
-                }
-
-                @Override
-                public void mouseExited(java.awt.event.MouseEvent evt) {
-                    btn.setBackground(new Color(24, 140, 91)); // Cor padrão ao sair
-                }
-            });
-        } else {
-            System.err.println("Ícone não encontrado: " + caminhoImagem);
-        }
     }
 
     //=============================================================================================
@@ -325,11 +273,34 @@ public class testeMenuNovo extends javax.swing.JFrame {
         try {
             pst = conn.prepareStatement(sql);
 
-            pst.setString(1, txtIdCat.getText());
+            // Obter o nome da categoria selecionada
+            String nomeCategoriaSelecionada = (String) cBoxIdCat.getSelectedItem();
+
+            if (nomeCategoriaSelecionada == null || nomeCategoriaSelecionada.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Selecione uma categoria.");
+                return;
+            }
+
+            // Agora temos que pegar o id associado ao nome da categoria
+            String sqlId = "SELECT id_categoria FROM categoria WHERE nome_categoria = ?";
+            pst = conn.prepareStatement(sqlId);
+            pst.setString(1, nomeCategoriaSelecionada);
+            rs = pst.executeQuery();
+
+            int idCategoria = 0;
+            if (rs.next()) {
+                idCategoria = rs.getInt("id_categoria");
+            }
+
+            // Inserir os dados do material no banco com o idCategoria encontrado
+            String sqlInsert = "INSERT INTO material(id_categoria, nome_material, descricao) VALUES(?, ?, ?)";
+            pst = conn.prepareStatement(sqlInsert);
+            pst.setInt(1, idCategoria);  // Agora usamos o id encontrado
             pst.setString(2, txtNomeMat.getText());
             pst.setString(3, txtDescMat.getText());
 
-            if (txtIdCat.getText().isEmpty() || txtNomeMat.getText().isEmpty()) {
+            // Verifica se os campos obrigatórios estão preenchidos
+            if (txtNomeMat.getText().isEmpty() || txtDescMat.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Preencha os Campos Obrigatórios.");
             } else {
                 int adicionado = pst.executeUpdate();
@@ -337,17 +308,15 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 if (adicionado > 0) {
                     JOptionPane.showMessageDialog(null, "Material cadastrado com sucesso.");
 
-                    limpar(); // chamando a função de limpar os campos
-                    //atualizar as tabelas
+                    limpar(); // Chamando a função de limpar os campos
+                    // Atualizar as tabelas
                     atualizarTabelas();
                 }
             }
-        } catch (MysqlDataTruncation e) {
-            JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro no banco de dados.");
+            JOptionPane.showMessageDialog(null, "Erro no banco de dados: " + e.getMessage());
         } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica.");
+            JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica: " + e.getMessage());
         }
     }
 
@@ -386,14 +355,50 @@ public class testeMenuNovo extends javax.swing.JFrame {
         }
     }
 
-    //metodo para setar os campos do formulário com o conteúdo da tabela material
+    // Método para setar os campos do formulário com o conteúdo da tabela material
     public void setar_camposMaterial() {
         int setar = tblMaterial.getSelectedRow();
-        txtIdMat.setText(tblMaterial.getModel().getValueAt(setar, 0).toString());
-        txtIdCat.setText(tblMaterial.getModel().getValueAt(setar, 1).toString());
-        txtNomeMat.setText(tblMaterial.getModel().getValueAt(setar, 2).toString());
 
-        txtDescMat.setText(tblMaterial.getModel().getValueAt(setar, 4).toString());
+        // Definindo o id do material
+        txtIdMat.setText(tblMaterial.getModel().getValueAt(setar, 0).toString());
+
+        // Recuperando o idCategoria da tabela (supomos que está na coluna 1)
+        String idCategoria = tblMaterial.getModel().getValueAt(setar, 1).toString();
+
+        // Agora, é necessário buscar o nome da categoria correspondente ao idCategoria
+        try {
+            conn = Conexao.getConexao();
+            String sql = "SELECT nome_categoria FROM categoria WHERE id_categoria = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, idCategoria);
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                String nomeCategoria = rs.getString("nome_categoria");
+                // Agora configuramos a combobox para exibir o nome da categoria
+                cBoxIdCat.setSelectedItem(nomeCategoria);  // Define o nome da categoria
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao buscar nome da categoria: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao fechar a conexão: " + ex.getMessage());
+            }
+        }
+
+        // Preenchendo os outros campos
+        txtNomeMat.setText(tblMaterial.getModel().getValueAt(setar, 2).toString());
+        txtDescMat.setText(tblMaterial.getModel().getValueAt(setar, 3).toString());  // Ajuste no índice da coluna de descrição
 
         // Desabilitar o botão de adicionar para evitar dados duplicados
         btnCadastrarMat.setEnabled(false);
@@ -408,28 +413,34 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         try {
             pst = conn.prepareStatement(sql);
+
+            // Obter o valor selecionado na combobox cBoxIdCat
+            String idCategoriaSelecionada = (String) cBoxIdCat.getSelectedItem();
+
             // Verificar se o campo id_categoria está vazio
-            if (txtIdCat.getText().isEmpty()) {
+            if (idCategoriaSelecionada == null || idCategoriaSelecionada.isEmpty()) {
                 pst.setNull(1, java.sql.Types.INTEGER);
             } else {
-                pst.setInt(1, Integer.parseInt(txtIdCat.getText()));
+                pst.setInt(1, Integer.parseInt(idCategoriaSelecionada));
             }
-            pst.setString(2, txtNomeMat.getText());
-            pst.setString(4, txtDescMat.getText());
-            pst.setString(5, txtIdMat.getText());
 
+            pst.setString(2, txtNomeMat.getText());
+            pst.setString(3, txtDescMat.getText());
+            pst.setString(4, txtIdMat.getText());
+
+            // Verifica se o campo nome do material está vazio
             if (txtNomeMat.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Preencha os Campos Obrigatórios.");
             } else {
-
                 int adicionado = pst.executeUpdate();
 
                 if (adicionado > 0) {
                     JOptionPane.showMessageDialog(null, "Cadastro do Material Alterado com Sucesso.");
 
-                    limpar(); //chamando a função de limpar os campos
-                    //atualizar as tabelas
-                    atualizarTabelas();
+                    limpar(); // Chamando a função de limpar os campos
+                    atualizarTabelas(); // Atualizando as tabelas
+
+                    // Habilitar o botão de adicionar
                     btnCadastrarMat.setEnabled(true);
                     btnCadastrarMat.setkBackGroundColor(new Color(26, 131, 43));
                     btnCadastrarMat.setkHoverColor(new Color(52, 153, 68));
@@ -472,6 +483,46 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 }
             } catch (HeadlessException | SQLException e) {
                 // Lidar com a exceção aqui
+            }
+        }
+    }
+
+    private void preencherComboBoxCategorias() {
+        conn = Conexao.getConexao();
+        String sql = "SELECT nome_categoria FROM categoria"; // Consulta para buscar todos os nomes das categorias
+
+        try {
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+
+            // Cria um DefaultComboBoxModel para adicionar os nomes das categorias
+            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+
+            // Adiciona um item padrão (opcional), como "Selecione uma categoria"
+            model.addElement("Selecione uma categoria");
+
+            while (rs.next()) {
+                // Adiciona cada nome de categoria ao modelo
+                model.addElement(rs.getString("nome_categoria"));
+            }
+
+            // Define o modelo na ComboBox
+            cBoxIdCat.setModel(model);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao preencher a ComboBox de categorias: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao fechar a conexão: " + ex.getMessage());
             }
         }
     }
@@ -1072,6 +1123,69 @@ public class testeMenuNovo extends javax.swing.JFrame {
         pesquisar_CategoriaEmCat();
     }
 
+    // Método para atualizar as comboboxes
+    private void atualizarComboBoxes() {
+        preencherComboBoxCategorias(); // Atualiza a ComboBox de categorias no cadastro
+    }
+
+    // Nova função para estilizar o botão com ícone à esquerda e texto ao lado, alinhados à esquerda
+    private void estilizarBotaoLateral(KButton btn, String nome, String caminhoImagem) {
+        btn.setPreferredSize(new Dimension(200, 75)); // Ajusta o tamanho para o novo estilo
+        btn.setLayout(new BorderLayout()); // Usar BorderLayout para posicionar o ícone e o texto
+
+        // Carrega a imagem como recurso
+        URL iconeURL = getClass().getResource(caminhoImagem);
+        if (iconeURL != null) {
+            ImageIcon icon = new ImageIcon(iconeURL);
+            Image image = icon.getImage();
+            Image newImage = image.getScaledInstance(25, 25, Image.SCALE_SMOOTH); // Redimensiona o ícone
+            ImageIcon newIcon = new ImageIcon(newImage);
+
+            // Define o ícone e o texto
+            JLabel labelIcon = new JLabel(newIcon);
+            JLabel textLabel = new JLabel(nome);
+            textLabel.setForeground(Color.WHITE); // Define a cor do texto como branco
+
+            // Adiciona o ícone e o texto ao botão
+            JPanel panel = new JPanel(); // Usar um JPanel para alinhar o ícone e o texto
+            panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS)); // Usar BoxLayout para alinhar horizontalmente
+            panel.setOpaque(false); // Para manter a transparência
+
+            // Ajusta o alinhamento vertical do ícone e do texto
+            labelIcon.setAlignmentY(JLabel.CENTER_ALIGNMENT); // Centraliza verticalmente o ícone
+            textLabel.setAlignmentY(JLabel.CENTER_ALIGNMENT); // Centraliza verticalmente o texto
+
+            panel.add(labelIcon);
+            panel.add(Box.createRigidArea(new Dimension(5, 0))); // Espaço entre o ícone e o texto
+            panel.add(textLabel);
+
+            btn.add(panel, BorderLayout.WEST); // Adiciona o painel ao lado esquerdo do botão
+
+            // Configurações de estilo
+            btn.setBackground(new Color(24, 140, 91)); // Cor de fundo
+            btn.setForeground(Color.WHITE);
+            btn.setBorderPainted(false);
+            textLabel.setFont(new Font("Roboto", Font.BOLD, 16));
+            btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+            // Efeito de hover (muda a cor ao passar o mouse)
+            btn.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    btn.setBackground(new Color(7, 108, 65)); // Cor ao passar o mouse
+                }
+
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    btn.setBackground(new Color(24, 140, 91)); // Cor padrão ao sair
+                }
+            });
+        } else {
+            System.err.println("Ícone não encontrado: " + caminhoImagem);
+        }
+    }
+
+    // função de estilo das tabelas
     private void estilizarTabela(JTable tabela) {
         // Estilização do cabeçalho da tabela
         JTableHeader header = tabela.getTableHeader();
@@ -1102,6 +1216,35 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 return c;
             }
         });
+    }
+
+    // função de estilo para a combobox
+    public void estilizarComboBox(JComboBox<String> comboBox) {
+        // Remove a borda
+        comboBox.setBorder(BorderFactory.createEmptyBorder());
+
+        // Altera a cor do popup da JComboBox
+        comboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (isSelected) {
+                    c.setBackground(new Color(26, 131, 43)); // Cor de fundo da seleção
+                    c.setForeground(Color.WHITE); // Cor do texto da seleção
+                } else {
+                    c.setBackground(Color.WHITE); // Cor de fundo normal
+                    c.setForeground(Color.BLACK); // Cor do texto normal
+                }
+                return c;
+            }
+        });
+
+        comboBox.setFont(new Font("Arial", Font.PLAIN, 14)); // Fonte
+        comboBox.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Cursor ao passar o mouse
+
+        // Personalizar as cores de fundo e texto
+        comboBox.setBackground(new Color(240, 240, 240)); // Cor de fundo padrão
+        comboBox.setForeground(Color.BLACK); // Cor do texto padrão
     }
 
     //setar o icone mão nos botões
@@ -1188,7 +1331,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         //tela material
         txtIdMat.setText(null);
-        txtIdCat.setText(null);
+        cBoxIdCat.setSelectedIndex(1);
         txtNomeMat.setText(null);
         txtDescMat.setText(null);
         txtMatBuscarCat.setText(null);
@@ -1378,7 +1521,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtIdMat = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        txtIdCat = new javax.swing.JTextField();
         txtNomeMat = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
         txtDescMat = new javax.swing.JTextField();
@@ -1393,6 +1535,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel25 = new javax.swing.JLabel();
         btnHome16 = new javax.swing.JButton();
         jLabel44 = new javax.swing.JLabel();
+        cBoxIdCat = new javax.swing.JComboBox<>();
         telaCadMovimentacoes = new javax.swing.JPanel();
         btnMovSaida = new com.k33ptoo.components.KButton();
         btnMovEntrada = new com.k33ptoo.components.KButton();
@@ -2567,16 +2710,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel18.setForeground(new java.awt.Color(26, 131, 43));
         jLabel18.setText("ID Categoria *");
 
-        txtIdCat.setBackground(new java.awt.Color(223, 223, 223));
-        txtIdCat.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        txtIdCat.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        txtIdCat.setSelectionColor(new java.awt.Color(26, 131, 43));
-        txtIdCat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdCatActionPerformed(evt);
-            }
-        });
-
         txtNomeMat.setBackground(new java.awt.Color(223, 223, 223));
         txtNomeMat.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
         txtNomeMat.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
@@ -2707,6 +2840,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel44.setForeground(new java.awt.Color(26, 131, 43));
         jLabel44.setText("* Campos Obrigatórios");
 
+        cBoxIdCat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout telaCadMaterialLayout = new javax.swing.GroupLayout(telaCadMaterial);
         telaCadMaterial.setLayout(telaCadMaterialLayout);
         telaCadMaterialLayout.setHorizontalGroup(
@@ -2750,10 +2885,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                             .addComponent(txtIdMat, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel17))
                                         .addGap(101, 101, 101)
-                                        .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtIdCat, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel18))
-                                        .addGap(106, 106, 106)
+                                        .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(cBoxIdCat, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(151, 151, 151)
                                         .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel19)
                                             .addComponent(txtNomeMat, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -2783,11 +2918,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, telaCadMaterialLayout.createSequentialGroup()
                         .addComponent(jLabel17)
                         .addGap(0, 0, 0)
-                        .addComponent(txtIdMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtIdMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cBoxIdCat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(telaCadMaterialLayout.createSequentialGroup()
                         .addComponent(jLabel18)
-                        .addGap(0, 0, 0)
-                        .addComponent(txtIdCat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30))
                     .addGroup(telaCadMaterialLayout.createSequentialGroup()
                         .addComponent(jLabel19)
                         .addGap(0, 0, 0)
@@ -3649,7 +3785,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jLabel63)))
                     .addGroup(telaMateriaisLayout.createSequentialGroup()
-                        .addGap(166, 166, 166)
+                        .addGap(20, 20, 20)
                         .addGroup(telaMateriaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel47)
                             .addGroup(telaMateriaisLayout.createSequentialGroup()
@@ -3803,7 +3939,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jLabel64)))
                     .addGroup(telaFornecedoresLayout.createSequentialGroup()
-                        .addGap(237, 237, 237)
+                        .addGap(20, 20, 20)
                         .addGroup(telaFornecedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel48)
                             .addGroup(telaFornecedoresLayout.createSequentialGroup()
@@ -3941,7 +4077,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jLabel65)))
                     .addGroup(telaCategoriasLayout.createSequentialGroup()
-                        .addGap(301, 301, 301)
+                        .addGap(20, 20, 20)
                         .addGroup(telaCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel49)
                             .addGroup(telaCategoriasLayout.createSequentialGroup()
@@ -4747,20 +4883,24 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
         // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaCadastros);
+        jTabbedPane2.setSelectedComponent(telaFornecedores);
         limpar();
+        atualizarTabelas();
     }//GEN-LAST:event_btnFecharActionPerformed
 
     private void btnFechar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechar2ActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaCadastros);
         limpar();
+        atualizarTabelas();
     }//GEN-LAST:event_btnFechar2ActionPerformed
 
     private void btnFechar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechar3ActionPerformed
         // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaCadastros);
+        jTabbedPane2.setSelectedComponent(telaMateriais);
         limpar();
+        atualizarTabelas();
+        atualizarComboBoxes();
     }//GEN-LAST:event_btnFechar3ActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
@@ -4801,10 +4941,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdMatActionPerformed
 
-    private void txtIdCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdCatActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdCatActionPerformed
-
     private void txtNomeMatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeMatActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNomeMatActionPerformed
@@ -4844,6 +4980,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnCadastrarMat.setkHoverColor(new Color(52, 153, 68));
         //atualizar as tabelas
         atualizarTabelas();
+        atualizarComboBoxes();
     }//GEN-LAST:event_btnLimparMatActionPerformed
 
     private void txtBuscarMatKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarMatKeyReleased
@@ -5319,7 +5456,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void btnSairAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairAppActionPerformed
         // TODO add your handling code here:
-        // btnSairApp.addActionListener(e -> logout());
     }//GEN-LAST:event_btnSairAppActionPerformed
 
     /**
@@ -5431,6 +5567,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnVincEmForn;
     private com.k33ptoo.components.KButton btnVincEmMat;
     private com.k33ptoo.components.KButton btnVincularFM;
+    private javax.swing.JComboBox<String> cBoxIdCat;
     private javax.swing.JComboBox<String> cBoxRelatorios;
     private javax.swing.JComboBox<String> cBoxTipoMov;
     private javax.swing.JLabel jLabel1;
@@ -5588,7 +5725,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTextField txtFornNome;
     private javax.swing.JTextField txtFornPesquisar;
     private javax.swing.JTextField txtFornSite;
-    private javax.swing.JTextField txtIdCat;
     private javax.swing.JTextField txtIdCatEmCat;
     private javax.swing.JTextField txtIdFornVM;
     private javax.swing.JTextField txtIdMat;
