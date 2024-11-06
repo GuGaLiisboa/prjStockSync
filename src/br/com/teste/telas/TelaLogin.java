@@ -47,6 +47,9 @@ public class TelaLogin extends javax.swing.JFrame {
         estilizarBotaoCadastrar(btnLogin);
 
         verificarUsuarios();
+        
+        getRootPane().setDefaultButton(btnLogin);
+
 
     }
 

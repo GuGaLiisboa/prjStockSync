@@ -1060,6 +1060,91 @@ public class testeMenuNovo extends javax.swing.JFrame {
         }
     }
 
+    //metodo para alterar dados dos materiais
+    private void alterar_almoxarife() {
+        conn = Conexao.getConexao();
+        String sql = "UPDATE almoxarife SET tipo_almoxarife=?, nome=?, login=?, senha=? WHERE id_almoxarife=?";
+
+        try {
+            pst = conn.prepareStatement(sql);
+
+            // Obter o tipo de almoxarife selecionado na combobox
+            String tipoSelecionado = (String) cBoxTipoAlmox.getSelectedItem();
+
+            // Verificar se o tipo de almoxarife está selecionado
+            if (tipoSelecionado == null || tipoSelecionado.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Selecione o Tipo de Almoxarife.");
+                return; // Interrompe a função se o tipo não estiver selecionado
+            }
+
+            // Verificar se os campos obrigatórios estão preenchidos
+            if (txtNomePainel.getText().isEmpty() || txtLoginPainel.getText().isEmpty() || txtSenhaPainel.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Preencha todos os Campos.");
+                return; // Interrompe a função se algum campo obrigatório estiver vazio
+            }
+
+            // Define o tipo, nome, login e senha do almoxarife
+            pst.setString(1, tipoSelecionado);
+            pst.setString(2, txtNomePainel.getText());
+            pst.setString(3, txtLoginPainel.getText());
+            pst.setString(4, txtSenhaPainel.getText());
+            pst.setString(5, txtIdPainel.getText()); // ID do almoxarife para identificar o registro a ser alterado
+
+            int atualizado = pst.executeUpdate();
+
+            if (atualizado > 0) {
+                JOptionPane.showMessageDialog(null, "Cadastro do Almoxarife Alterado com Sucesso.");
+
+                limpar(); // Chamando a função de limpar os campos
+                atualizarTabelas(); // Atualizando a tabela de almoxarifes
+                atualizarComboBoxes(); // Atualizando os ComboBoxes, se necessário
+            }
+
+        } catch (MysqlDataTruncation e) {
+            JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro no banco de dados.");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Erro inesperado na interface gráfica.");
+        }
+    }
+
+    // Método para setar os campos do formulário com o conteúdo da tabela almoxarife
+    public void setar_camposAlmoxarife() {
+        int setar = tblPainelAdmin.getSelectedRow();
+
+        // Definindo o id do cadastro
+        txtIdPainel.setText(tblPainelAdmin.getModel().getValueAt(setar, 0).toString());
+
+        // Recuperando o cargo da coluna 'tipo' (índice 1)
+        String tipoAlmoxarife = tblPainelAdmin.getModel().getValueAt(setar, 1).toString();
+
+        // Definindo o nome da categoria na ComboBox
+        cBoxTipoAlmox.setSelectedItem(tipoAlmoxarife);  // Define o item na combobox baseado no cargo
+
+        // Preenchendo os outros campos
+        txtNomePainel.setText(tblPainelAdmin.getModel().getValueAt(setar, 2).toString()); // Nome do usuário
+        txtLoginPainel.setText(tblPainelAdmin.getModel().getValueAt(setar, 3).toString()); // Login
+        txtSenhaPainel.setText(tblPainelAdmin.getModel().getValueAt(setar, 4).toString()); // Senha
+    }
+
+    // Função para preencher o combobox trazendo do banco de dados
+    private void preencherComboBoxTipos() {
+        // Cria um DefaultComboBoxModel para adicionar os tipos de almoxarife
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+
+        // Adiciona um item padrão
+        model.addElement("Selecione");
+
+        // Adiciona os tipos disponíveis
+        model.addElement("adm");
+        model.addElement("almoxarife");
+        model.addElement("compras");
+
+        // Define o modelo na ComboBox
+        cBoxTipoAlmox.setModel(model);
+    }
+
     //=============================================================================================
     //outros métodos
     //Método para atualizar tabelas
@@ -1079,7 +1164,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     // Método para atualizar as comboboxes
     private void atualizarComboBoxes() {
-        preencherComboBoxCategorias(); // Atualiza a ComboBox de categorias no cadastro
+        preencherComboBoxCategorias();
+        preencherComboBoxTipos();
     }
 
     // Nova função para estilizar o botão com ícone à esquerda e texto ao lado, alinhados à esquerda
@@ -1261,7 +1347,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         //PAINEL ADMIN
         cBoxTipoAlmox.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
+        btnLimparPainel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAlterarPainel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExcluirPainel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        
         //AJUDA
         ajudaCad.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         ajudaMov.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1606,20 +1696,21 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jSeparator19 = new javax.swing.JSeparator();
         txtPainelAdmin = new javax.swing.JTextField();
         jLabel50 = new javax.swing.JLabel();
-        OPS = new com.k33ptoo.components.KButton();
-        ops2 = new com.k33ptoo.components.KButton();
+        btnLimparPainel = new com.k33ptoo.components.KButton();
+        btnAlterarPainel = new com.k33ptoo.components.KButton();
         jLabel67 = new javax.swing.JLabel();
         ops5 = new javax.swing.JButton();
-        ops4 = new javax.swing.JTextField();
+        txtIdPainel = new javax.swing.JTextField();
         jLabel68 = new javax.swing.JLabel();
         cBoxTipoAlmox = new javax.swing.JComboBox<>();
-        ops6 = new javax.swing.JTextField();
+        txtNomePainel = new javax.swing.JTextField();
         jLabel69 = new javax.swing.JLabel();
-        ops7 = new javax.swing.JTextField();
+        txtLoginPainel = new javax.swing.JTextField();
         jLabel70 = new javax.swing.JLabel();
-        ops8 = new javax.swing.JTextField();
+        txtSenhaPainel = new javax.swing.JTextField();
         jLabel71 = new javax.swing.JLabel();
-        ops9 = new com.k33ptoo.components.KButton();
+        btnExcluirPainel = new com.k33ptoo.components.KButton();
+        jLabel72 = new javax.swing.JLabel();
         menuLateral = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -4394,6 +4485,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         ));
         tblPainelAdmin.getTableHeader().setReorderingAllowed(false);
+        tblPainelAdmin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPainelAdminMouseClicked(evt);
+            }
+        });
         tblPainelAdmin.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tblPainelAdminKeyReleased(evt);
@@ -4420,29 +4516,29 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel50.setForeground(new java.awt.Color(26, 131, 43));
         jLabel50.setText("Buscar");
 
-        OPS.setText("Limpar");
-        OPS.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        OPS.setkAllowGradient(false);
-        OPS.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        OPS.setkBorderRadius(20);
-        OPS.setkHoverColor(new java.awt.Color(52, 153, 68));
-        OPS.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        OPS.addActionListener(new java.awt.event.ActionListener() {
+        btnLimparPainel.setText("Limpar");
+        btnLimparPainel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnLimparPainel.setkAllowGradient(false);
+        btnLimparPainel.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnLimparPainel.setkBorderRadius(20);
+        btnLimparPainel.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnLimparPainel.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnLimparPainel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                OPSActionPerformed(evt);
+                btnLimparPainelActionPerformed(evt);
             }
         });
 
-        ops2.setText("Alterar");
-        ops2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        ops2.setkAllowGradient(false);
-        ops2.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        ops2.setkBorderRadius(20);
-        ops2.setkHoverColor(new java.awt.Color(52, 153, 68));
-        ops2.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        ops2.addActionListener(new java.awt.event.ActionListener() {
+        btnAlterarPainel.setText("Alterar");
+        btnAlterarPainel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnAlterarPainel.setkAllowGradient(false);
+        btnAlterarPainel.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnAlterarPainel.setkBorderRadius(20);
+        btnAlterarPainel.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnAlterarPainel.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnAlterarPainel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ops2ActionPerformed(evt);
+                btnAlterarPainelActionPerformed(evt);
             }
         });
 
@@ -4460,18 +4556,18 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
-        ops4.setBackground(new java.awt.Color(223, 223, 223));
-        ops4.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        ops4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        ops4.setSelectionColor(new java.awt.Color(26, 131, 43));
-        ops4.addActionListener(new java.awt.event.ActionListener() {
+        txtIdPainel.setBackground(new java.awt.Color(223, 223, 223));
+        txtIdPainel.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        txtIdPainel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
+        txtIdPainel.setSelectionColor(new java.awt.Color(26, 131, 43));
+        txtIdPainel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ops4ActionPerformed(evt);
+                txtIdPainelActionPerformed(evt);
             }
         });
-        ops4.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtIdPainel.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                ops4KeyReleased(evt);
+                txtIdPainelKeyReleased(evt);
             }
         });
 
@@ -4481,18 +4577,18 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         cBoxTipoAlmox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tipo", "Item 2", "Item 3", "Item 4" }));
 
-        ops6.setBackground(new java.awt.Color(223, 223, 223));
-        ops6.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        ops6.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        ops6.setSelectionColor(new java.awt.Color(26, 131, 43));
-        ops6.addActionListener(new java.awt.event.ActionListener() {
+        txtNomePainel.setBackground(new java.awt.Color(223, 223, 223));
+        txtNomePainel.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        txtNomePainel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
+        txtNomePainel.setSelectionColor(new java.awt.Color(26, 131, 43));
+        txtNomePainel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ops6ActionPerformed(evt);
+                txtNomePainelActionPerformed(evt);
             }
         });
-        ops6.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNomePainel.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                ops6KeyReleased(evt);
+                txtNomePainelKeyReleased(evt);
             }
         });
 
@@ -4500,18 +4596,18 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel69.setForeground(new java.awt.Color(26, 131, 43));
         jLabel69.setText("Nome");
 
-        ops7.setBackground(new java.awt.Color(223, 223, 223));
-        ops7.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        ops7.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        ops7.setSelectionColor(new java.awt.Color(26, 131, 43));
-        ops7.addActionListener(new java.awt.event.ActionListener() {
+        txtLoginPainel.setBackground(new java.awt.Color(223, 223, 223));
+        txtLoginPainel.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        txtLoginPainel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
+        txtLoginPainel.setSelectionColor(new java.awt.Color(26, 131, 43));
+        txtLoginPainel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ops7ActionPerformed(evt);
+                txtLoginPainelActionPerformed(evt);
             }
         });
-        ops7.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtLoginPainel.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                ops7KeyReleased(evt);
+                txtLoginPainelKeyReleased(evt);
             }
         });
 
@@ -4519,18 +4615,18 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel70.setForeground(new java.awt.Color(26, 131, 43));
         jLabel70.setText("Login");
 
-        ops8.setBackground(new java.awt.Color(223, 223, 223));
-        ops8.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        ops8.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        ops8.setSelectionColor(new java.awt.Color(26, 131, 43));
-        ops8.addActionListener(new java.awt.event.ActionListener() {
+        txtSenhaPainel.setBackground(new java.awt.Color(223, 223, 223));
+        txtSenhaPainel.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        txtSenhaPainel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
+        txtSenhaPainel.setSelectionColor(new java.awt.Color(26, 131, 43));
+        txtSenhaPainel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ops8ActionPerformed(evt);
+                txtSenhaPainelActionPerformed(evt);
             }
         });
-        ops8.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtSenhaPainel.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                ops8KeyReleased(evt);
+                txtSenhaPainelKeyReleased(evt);
             }
         });
 
@@ -4538,18 +4634,22 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel71.setForeground(new java.awt.Color(26, 131, 43));
         jLabel71.setText("Senha");
 
-        ops9.setText("Excluir");
-        ops9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        ops9.setkAllowGradient(false);
-        ops9.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        ops9.setkBorderRadius(20);
-        ops9.setkHoverColor(new java.awt.Color(52, 153, 68));
-        ops9.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        ops9.addActionListener(new java.awt.event.ActionListener() {
+        btnExcluirPainel.setText("Excluir");
+        btnExcluirPainel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnExcluirPainel.setkAllowGradient(false);
+        btnExcluirPainel.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnExcluirPainel.setkBorderRadius(20);
+        btnExcluirPainel.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnExcluirPainel.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnExcluirPainel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ops9ActionPerformed(evt);
+                btnExcluirPainelActionPerformed(evt);
             }
         });
+
+        jLabel72.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        jLabel72.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel72.setText("Tipo");
 
         javax.swing.GroupLayout painelAdminLayout = new javax.swing.GroupLayout(painelAdmin);
         painelAdmin.setLayout(painelAdminLayout);
@@ -4574,33 +4674,34 @@ public class testeMenuNovo extends javax.swing.JFrame {
                             .addComponent(jLabel50)
                             .addComponent(txtPainelAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(20, 20, 20)
-                        .addComponent(OPS, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnLimparPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(15, Short.MAX_VALUE))
             .addGroup(painelAdminLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(painelAdminLayout.createSequentialGroup()
-                        .addComponent(ops4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cBoxTipoAlmox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtIdPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel68))
+                .addGap(18, 18, 18)
+                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel72)
+                    .addComponent(cBoxTipoAlmox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel69)
-                    .addComponent(ops6, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNomePainel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel70)
-                    .addComponent(ops7, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtLoginPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel71)
                     .addGroup(painelAdminLayout.createSequentialGroup()
-                        .addComponent(ops8, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtSenhaPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(ops2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAlterarPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(ops9, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnExcluirPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(63, 63, 63))
         );
         painelAdminLayout.setVerticalGroup(
@@ -4619,33 +4720,35 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addGroup(painelAdminLayout.createSequentialGroup()
                         .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtPainelAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(OPS, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnLimparPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jSeparator19, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(24, 24, 24)
                         .addComponent(jLabel68)
                         .addGap(0, 0, 0)
                         .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ops4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtIdPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cBoxTipoAlmox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(painelAdminLayout.createSequentialGroup()
-                        .addComponent(jLabel69)
+                        .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel69)
+                            .addComponent(jLabel72))
                         .addGap(0, 0, 0)
-                        .addComponent(ops6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtNomePainel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(painelAdminLayout.createSequentialGroup()
                         .addComponent(jLabel70)
                         .addGap(0, 0, 0)
-                        .addComponent(ops7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtLoginPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(painelAdminLayout.createSequentialGroup()
                         .addComponent(jLabel71)
                         .addGap(0, 0, 0)
                         .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ops8, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ops2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ops9, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtSenhaPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAlterarPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnExcluirPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(32, 32, 32)
                 .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("tab8", painelAdmin);
@@ -5385,13 +5488,14 @@ public class testeMenuNovo extends javax.swing.JFrame {
         pesquisar_painelAdmin();
     }//GEN-LAST:event_txtPainelAdminKeyReleased
 
-    private void OPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OPSActionPerformed
+    private void btnLimparPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparPainelActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_OPSActionPerformed
+    }//GEN-LAST:event_btnLimparPainelActionPerformed
 
-    private void ops2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops2ActionPerformed
+    private void btnAlterarPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarPainelActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ops2ActionPerformed
+        alterar_almoxarife();
+    }//GEN-LAST:event_btnAlterarPainelActionPerformed
 
     private void ops5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops5ActionPerformed
         // TODO add your handling code here:
@@ -5401,46 +5505,51 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSairAppActionPerformed
 
-    private void ops4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops4ActionPerformed
+    private void txtIdPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdPainelActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ops4ActionPerformed
+    }//GEN-LAST:event_txtIdPainelActionPerformed
 
-    private void ops4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ops4KeyReleased
+    private void txtIdPainelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdPainelKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_ops4KeyReleased
+    }//GEN-LAST:event_txtIdPainelKeyReleased
 
-    private void ops6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops6ActionPerformed
+    private void txtNomePainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomePainelActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ops6ActionPerformed
+    }//GEN-LAST:event_txtNomePainelActionPerformed
 
-    private void ops6KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ops6KeyReleased
+    private void txtNomePainelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomePainelKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_ops6KeyReleased
+    }//GEN-LAST:event_txtNomePainelKeyReleased
 
-    private void ops7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops7ActionPerformed
+    private void txtLoginPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoginPainelActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ops7ActionPerformed
+    }//GEN-LAST:event_txtLoginPainelActionPerformed
 
-    private void ops7KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ops7KeyReleased
+    private void txtLoginPainelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLoginPainelKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_ops7KeyReleased
+    }//GEN-LAST:event_txtLoginPainelKeyReleased
 
-    private void ops8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops8ActionPerformed
+    private void txtSenhaPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaPainelActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ops8ActionPerformed
+    }//GEN-LAST:event_txtSenhaPainelActionPerformed
 
-    private void ops8KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ops8KeyReleased
+    private void txtSenhaPainelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSenhaPainelKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_ops8KeyReleased
+    }//GEN-LAST:event_txtSenhaPainelKeyReleased
 
-    private void ops9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops9ActionPerformed
+    private void btnExcluirPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirPainelActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ops9ActionPerformed
+    }//GEN-LAST:event_btnExcluirPainelActionPerformed
 
     private void tblPainelAdminKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblPainelAdminKeyReleased
         // TODO add your handling code here:
         pesquisar_painelAdmin();
     }//GEN-LAST:event_tblPainelAdminKeyReleased
+
+    private void tblPainelAdminMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPainelAdminMouseClicked
+        // TODO add your handling code here:
+        setar_camposAlmoxarife();
+    }//GEN-LAST:event_tblPainelAdminMouseClicked
 
     /**
      * @param args the command line arguments
@@ -5479,7 +5588,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.k33ptoo.components.KButton OPS;
     private com.k33ptoo.components.KButton ajudaCad;
     private com.k33ptoo.components.KButton ajudaMov;
     private com.k33ptoo.components.KButton ajudaRelat;
@@ -5489,6 +5597,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnAlterar;
     private com.k33ptoo.components.KButton btnAlterarCat;
     private com.k33ptoo.components.KButton btnAlterarMat;
+    private com.k33ptoo.components.KButton btnAlterarPainel;
     private com.k33ptoo.components.KButton btnCadCategoria;
     private com.k33ptoo.components.KButton btnCadFornecedor;
     private com.k33ptoo.components.KButton btnCadMaterial;
@@ -5499,6 +5608,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnExcluir;
     private com.k33ptoo.components.KButton btnExcluirCat;
     private com.k33ptoo.components.KButton btnExcluirMat;
+    private com.k33ptoo.components.KButton btnExcluirPainel;
     private javax.swing.JButton btnFechar;
     private javax.swing.JButton btnFechar2;
     private javax.swing.JButton btnFechar3;
@@ -5530,6 +5640,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnLimparEntradas;
     private javax.swing.JButton btnLimparMat;
     private com.k33ptoo.components.KButton btnLimparMovimentacoes;
+    private com.k33ptoo.components.KButton btnLimparPainel;
     private com.k33ptoo.components.KButton btnLimparSaidas;
     private com.k33ptoo.components.KButton btnMateriais;
     private com.k33ptoo.components.KButton btnMateriais2;
@@ -5617,6 +5728,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel70;
     private javax.swing.JLabel jLabel71;
+    private javax.swing.JLabel jLabel72;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLayeredPane jLayeredPane1;
@@ -5650,13 +5762,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JPanel menuLateral;
-    private com.k33ptoo.components.KButton ops2;
-    private javax.swing.JTextField ops4;
     private javax.swing.JButton ops5;
-    private javax.swing.JTextField ops6;
-    private javax.swing.JTextField ops7;
-    private javax.swing.JTextField ops8;
-    private com.k33ptoo.components.KButton ops9;
     private javax.swing.JPanel painelAdmin;
     private javax.swing.JTable tabelaSaidas;
     private javax.swing.JTable tblCategoria2;
@@ -5711,11 +5817,15 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTextField txtIdFornVM;
     private javax.swing.JTextField txtIdMat;
     private javax.swing.JTextField txtIdMatVM;
+    private javax.swing.JTextField txtIdPainel;
     private javax.swing.JTextField txtIdVincVM;
+    private javax.swing.JTextField txtLoginPainel;
     private javax.swing.JTextField txtNomeCat;
     private javax.swing.JTextField txtNomeMat;
+    private javax.swing.JTextField txtNomePainel;
     private javax.swing.JTextField txtPainelAdmin;
     private javax.swing.JTextField txtSaidaIdMat;
     private javax.swing.JTextField txtSaidaQnt;
+    private javax.swing.JTextField txtSenhaPainel;
     // End of variables declaration//GEN-END:variables
 }
