@@ -87,23 +87,25 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     // Função sair do programa
     public void logout() {
-        PopupSair popupSair = new PopupSair();
-        popupSair.setLocationRelativeTo(null);
-        popupSair.setVisible(true); // Exibe o popup e aguarda a resposta
+        // Passa o comportamento de resposta para o PopupSair usando um listener
+        PopupSair popupSair = new PopupSair(sairSelecionado -> {
+            if (sairSelecionado) {
+                // Se o usuário escolheu "Sair", exibe a tela de login
+                TelaLogin telaLogin = new TelaLogin();
+                telaLogin.setVisible(true);
 
-        // Verifica a escolha do usuário
-        if (popupSair.isSairSelecionado()) {
-            // Usuário escolheu "Sair", então vá para a tela de login
-            TelaLogin telaLogin = new TelaLogin();
-            telaLogin.setVisible(true);
-
-            // Fecha a tela atual (menu principal)
-            if (this instanceof JFrame) {
-                ((JFrame) this).dispose();
+                // Fecha o menu principal
+                if (this instanceof JFrame) {
+                    ((JFrame) this).dispose();
+                }
+            } else {
+                System.out.println("Usuário escolheu 'Voltar', permanece na aplicação.");
             }
-        } else {
-            System.out.println("Usuário escolheu 'Voltar', permanece na aplicação.");
-        }
+        });
+
+        // Configura o popup e exibe
+        popupSair.setLocationRelativeTo(null);
+        popupSair.setVisible(true);
     }
 
     // ================================================================
@@ -1511,7 +1513,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel56 = new javax.swing.JLabel();
         painelAdmin = new javax.swing.JPanel();
         jScrollPane13 = new javax.swing.JScrollPane();
-        ops4 = new javax.swing.JTable();
+        tblAlmoxarife = new javax.swing.JTable();
         jSeparator18 = new javax.swing.JSeparator();
         jSeparator19 = new javax.swing.JSeparator();
         ops3 = new javax.swing.JTextField();
@@ -4421,7 +4423,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 return false;
             }
         };
-        ops4.setModel(new javax.swing.table.DefaultTableModel(
+        tblAlmoxarife.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -4432,8 +4434,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        ops4.getTableHeader().setReorderingAllowed(false);
-        jScrollPane13.setViewportView(ops4);
+        tblAlmoxarife.getTableHeader().setReorderingAllowed(false);
+        jScrollPane13.setViewportView(tblAlmoxarife);
 
         ops3.setBackground(new java.awt.Color(223, 223, 223));
         ops3.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
@@ -4512,13 +4514,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jLabel67)))
                     .addGroup(painelAdminLayout.createSequentialGroup()
-                        .addGap(301, 301, 301)
+                        .addGap(20, 20, 20)
                         .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel50)
-                            .addGroup(painelAdminLayout.createSequentialGroup()
-                                .addComponent(ops3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(OPS, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(ops3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addComponent(OPS, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(49, 49, 49)
                         .addComponent(ops2, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(15, Short.MAX_VALUE))
@@ -5528,10 +5529,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JPanel menuLateral;
     private com.k33ptoo.components.KButton ops2;
     private javax.swing.JTextField ops3;
-    private javax.swing.JTable ops4;
     private javax.swing.JButton ops5;
     private javax.swing.JPanel painelAdmin;
     private javax.swing.JTable tabelaSaidas;
+    private javax.swing.JTable tblAlmoxarife;
     private javax.swing.JTable tblCategoria;
     private javax.swing.JTable tblCategoria2;
     private javax.swing.JTable tblCategoriasEmCat;
