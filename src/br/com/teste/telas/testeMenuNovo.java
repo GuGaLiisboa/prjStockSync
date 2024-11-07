@@ -1145,6 +1145,46 @@ public class testeMenuNovo extends javax.swing.JFrame {
         cBoxTipoAlmox.setModel(model);
     }
 
+    private void remover_almoxarife() {
+        conn = Conexao.getConexao();
+
+        // Verifica se os campos obrigatórios estão vazios
+        if (txtNomePainel.getText().isEmpty() || cBoxTipoAlmox.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(null, "Preencha todos os Campos Obrigatórios.");
+            return; // Encerra a execução da função se algum campo obrigatório estiver vazio
+        }
+
+        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover este usuário?", "Atenção", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            String sql = "DELETE FROM almoxarife WHERE id_almoxarife = ?";
+            try {
+                pst = conn.prepareStatement(sql);
+                pst.setString(1, txtIdPainel.getText()); // Define o ID do usuário a ser removido
+                int apagado = pst.executeUpdate();
+
+                if (apagado > 0) {
+                    JOptionPane.showMessageDialog(null, "Usuário removido com sucesso!");
+                    limpar(); // Chamando a função de limpar os campos
+                    atualizarTabelas(); // Atualizando as tabelas
+                    preencherComboBoxTipos(); // Atualizando a ComboBox
+                }
+            } catch (HeadlessException | SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao remover o usuário: " + e.getMessage());
+            } finally {
+                try {
+                    if (pst != null) {
+                        pst.close();
+                    }
+                    if (conn != null) {
+                        conn.close();
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao fechar a conexão: " + ex.getMessage());
+                }
+            }
+        }
+    }
+
     //=============================================================================================
     //outros métodos
     //Método para atualizar tabelas
@@ -1350,8 +1390,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnLimparPainel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAlterarPainel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExcluirPainel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        
-        
+
         //AJUDA
         ajudaCad.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         ajudaMov.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1420,6 +1459,15 @@ public class testeMenuNovo extends javax.swing.JFrame {
         //Tela Categorias
         txtBuscarCategoria.setText(null);
         ((DefaultTableModel) tblCategoriasEmCat.getModel()).setRowCount(0);
+        
+        //Painel Admin
+        txtPainelAdmin.setText(null);
+        txtIdPainel.setText(null);
+        cBoxTipoAlmox.setSelectedIndex(1);
+        txtNomePainel.setText(null);
+        txtLoginPainel.setText(null);
+        txtSenhaPainel.setText(null);
+        ((DefaultTableModel) tblPainelAdmin.getModel()).setRowCount(0);
     }
 
     // Método para estilizar um botão com um nome e uma imagem específicos
@@ -2760,7 +2808,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel20.setForeground(new java.awt.Color(26, 131, 43));
         jLabel20.setText("Descrição");
 
-        btnCadastrarMat.setText("Cadastrar");
+        btnCadastrarMat.setText("Salvar");
         btnCadastrarMat.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnCadastrarMat.setkAllowGradient(false);
         btnCadastrarMat.setkBackGroundColor(new java.awt.Color(26, 131, 43));
@@ -5490,6 +5538,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void btnLimparPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparPainelActionPerformed
         // TODO add your handling code here:
+        limpar();
+        atualizarComboBoxes();
+        atualizarTabelas();
     }//GEN-LAST:event_btnLimparPainelActionPerformed
 
     private void btnAlterarPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarPainelActionPerformed
@@ -5539,6 +5590,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void btnExcluirPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirPainelActionPerformed
         // TODO add your handling code here:
+        remover_almoxarife();
     }//GEN-LAST:event_btnExcluirPainelActionPerformed
 
     private void tblPainelAdminKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblPainelAdminKeyReleased
