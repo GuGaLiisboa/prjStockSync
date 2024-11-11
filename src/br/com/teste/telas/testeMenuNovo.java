@@ -69,12 +69,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         // Estiliza os botões do menu lateral com icones
         estilizarBotaoLateral(btnMateriais, "Materiais", "/br/com/teste/icones/iconMenuMateriais.png");
-        estilizarBotaoLateral(btnFornecedores, "Fornecedores", "/br/com/teste/icones/IconeCadastro.png");
-        estilizarBotaoLateral(btnCategorias, "Categorias", "/br/com/teste/icones/IconeCadastro.png");
-        estilizarBotaoLateral(btnMovimentacoes, "Movimentações", "/br/com/teste/icones/IconeCadastro.png");
+        estilizarBotaoLateral(btnFornecedores, "Fornecedores", "/br/com/teste/icones/iconMenuFornecedores.png");
+        estilizarBotaoLateral(btnCategorias, "Categorias", "/br/com/teste/icones/iconMenuCategorias.png");
+        estilizarBotaoLateral(btnMovimentacoes, "Movimentações", "/br/com/teste/icones/iconMenuMovimentacoes.png");
         estilizarBotaoLateral(btnCategorias3, "Categorias", "/br/com/teste/icones/IconeCadastro.png");
-        estilizarBotaoLateral(btnAjuda, "Ajuda", "/br/com/teste/icones/IconeCadastro.png");
-        estilizarBotaoLateral(btnPainelAdmin, "Painel Admin", "/br/com/teste/icones/IconeCadastro.png");
+        estilizarBotaoLateral(btnAjuda, "Ajuda", "/br/com/teste/icones/iconMenuAjuda.png");
+        estilizarBotaoLateral(btnPainelAdmin, "Painel Admin", "/br/com/teste/icones/iconMenuPainelAdmin.png");
         estilizarBotaoLateral(btnSairApp, "Sair", "/br/com/teste/icones/iconeSair.png");
 
         // Estiliza uma tabela
@@ -180,10 +180,14 @@ public class testeMenuNovo extends javax.swing.JFrame {
         }
     }
 
-    //metodo para setar os campos do formulário com o conteúdo da tabela fornecedor
+    // Método para setar os campos do formulário com o conteúdo da tabela fornecedor
     public void setar_campos() {
         int setar = tblFornecedores.getSelectedRow();
-        txtFornId.setText(tblFornecedores.getModel().getValueAt(setar, 0).toString());
+
+        // Armazena o ID do fornecedor selecionado sem exibi-lo na interface
+        idFornecedorSelecionado = Integer.parseInt(tblFornecedores.getModel().getValueAt(setar, 0).toString());
+
+        // Preenche os demais campos do formulário
         txtFornNome.setText(tblFornecedores.getModel().getValueAt(setar, 1).toString());
         txtFornCnpj.setText(tblFornecedores.getModel().getValueAt(setar, 2).toString());
         txtFornEmail.setText(tblFornecedores.getModel().getValueAt(setar, 3).toString());
@@ -191,13 +195,16 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtFornEndereco.setText(tblFornecedores.getModel().getValueAt(setar, 5).toString());
         txtFornSite.setText(tblFornecedores.getModel().getValueAt(setar, 6).toString());
 
-        //a linha abaixo irá desabilitar o botão de adicionar, para evitar dados duplicados.
+        // Desabilita o botão de adicionar para evitar duplicidade
         btnAdicionar.setEnabled(false);
         btnAdicionar.setkBackGroundColor(new Color(128, 128, 128));
         btnAdicionar.setkHoverColor(new Color(128, 128, 128));
     }
 
-    //metodo para alterar dados dos fornecedores
+    // Variável para armazenar o ID do fornecedor selecionado
+    private int idFornecedorSelecionado;
+
+    // Método para alterar dados dos fornecedores
     private void alterar() {
         conn = Conexao.getConexao();
         String sql = "UPDATE fornecedor SET nome_fornecedor=?, cnpj=?, email=?, numero_telefone=?, endereco=?, site=? WHERE id_fornecedor=?";
@@ -210,19 +217,19 @@ public class testeMenuNovo extends javax.swing.JFrame {
             pst.setString(4, txtFornFone.getText());
             pst.setString(5, txtFornEndereco.getText());
             pst.setString(6, txtFornSite.getText());
-            pst.setString(7, txtFornId.getText());
+            pst.setInt(7, idFornecedorSelecionado); // Utilizando a variável idFornecedorSelecionado
 
-            if ((txtFornNome.getText().isEmpty()) || (txtFornEmail.getText().isEmpty()) || (txtFornFone.getText().isEmpty())) {
+            if (txtFornNome.getText().isEmpty() || txtFornEmail.getText().isEmpty() || txtFornFone.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Preencha todos os Campos Obrigatórios.");
             } else {
-
                 int adicionado = pst.executeUpdate();
 
                 if (adicionado > 0) {
                     JOptionPane.showMessageDialog(null, "Dados do Fornecedor Alterados com Sucesso.");
+                    limpar(); // Limpando os campos
+                    atualizarTabelas(); // Atualizando as tabelas
 
-                    limpar(); //chamando a função de limpar os campos
-                    atualizarTabelas();
+                    // Reativando o botão de adicionar
                     btnAdicionar.setEnabled(true);
                     btnAdicionar.setkBackGroundColor(new Color(26, 131, 43));
                     btnAdicionar.setkHoverColor(new Color(52, 153, 68));
@@ -237,7 +244,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         }
     }
 
-    //metodo para excluir cadastro dos fornecedores
+    // Método para excluir cadastro dos fornecedores
     private void remover() {
         conn = Conexao.getConexao();
 
@@ -245,6 +252,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
         if (txtFornNome.getText().isEmpty() || txtFornEmail.getText().isEmpty() || txtFornFone.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Preencha todos os Campos Obrigatórios.");
             return; // Encerra a execução da função se algum campo estiver vazio
+        }
+
+        // Verifica se um fornecedor foi selecionado
+        if (idFornecedorSelecionado == 0) {
+            JOptionPane.showMessageDialog(null, "Nenhum fornecedor selecionado para exclusão.");
+            return; // Encerra a execução da função se nenhum fornecedor foi selecionado
         }
 
         // Cria a instância do ComponentPopup para exibir o pop-up de confirmação
@@ -263,7 +276,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     String sql = "DELETE FROM fornecedor WHERE id_fornecedor=?";
                     try {
                         pst = conn.prepareStatement(sql);
-                        pst.setString(1, txtFornId.getText());
+                        pst.setInt(1, idFornecedorSelecionado);  // Utilizando idFornecedorSelecionado
                         int apagado = pst.executeUpdate();
 
                         if (apagado > 0) {
@@ -364,14 +377,14 @@ public class testeMenuNovo extends javax.swing.JFrame {
     public void setar_camposMaterial() {
         int setar = tblMaterial.getSelectedRow();
 
-        // Definindo o id do material
-        txtIdMat.setText(tblMaterial.getModel().getValueAt(setar, 0).toString());
+        // Definindo o id do material na variável em vez de exibi-lo no campo de texto
+        idMaterialSelecionado = Integer.parseInt(tblMaterial.getModel().getValueAt(setar, 0).toString());
 
         // Recuperando o nome da categoria da coluna 'Categoria' (índice 1)
         String nomeCategoria = tblMaterial.getModel().getValueAt(setar, 1).toString();
 
         // Definindo o nome da categoria na ComboBox
-        cBoxIdCat.setSelectedItem(nomeCategoria);  // Define o item na combobox baseado no nome da categoria
+        cBoxIdCat.setSelectedItem(nomeCategoria);
 
         // Preenchendo os outros campos
         txtNomeMat.setText(tblMaterial.getModel().getValueAt(setar, 2).toString()); // Nome do material
@@ -383,7 +396,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnCadastrarMat.setkHoverColor(new Color(128, 128, 128));
     }
 
-    //metodo para alterar dados dos materiais
+    // Variável para armazenar o ID do material selecionado
+    private int idMaterialSelecionado;
+
+// Método para alterar dados dos materiais
     private void alterar_material() {
         conn = Conexao.getConexao();
         String sql = "UPDATE material SET id_categoria=?, nome_material=?, descricao=? WHERE id_material=?";
@@ -397,7 +413,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
             // Verificar se a categoria está selecionada
             if (nomeCategoriaSelecionada == null || nomeCategoriaSelecionada.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Selecione uma Categoria.");
-                return; // Interrompe a função se a categoria não estiver selecionada
+                return;
             }
 
             // Consultar o id correspondente ao nome da categoria
@@ -408,7 +424,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
             if (rsCategoria.next()) {
                 int idCategoriaSelecionada = rsCategoria.getInt("id_categoria");
-                pst.setInt(1, idCategoriaSelecionada); // Define o id da categoria
+                pst.setInt(1, idCategoriaSelecionada);
             } else {
                 JOptionPane.showMessageDialog(null, "Categoria selecionada não encontrada.");
                 return;
@@ -423,18 +439,15 @@ public class testeMenuNovo extends javax.swing.JFrame {
             // Define o nome e a descrição do material
             pst.setString(2, txtNomeMat.getText());
             pst.setString(3, txtDescMat.getText());
-            pst.setString(4, txtIdMat.getText());
+            pst.setInt(4, idMaterialSelecionado); // Usa o ID armazenado na variável
 
             int adicionado = pst.executeUpdate();
 
             if (adicionado > 0) {
                 JOptionPane.showMessageDialog(null, "Cadastro do Material Alterado com Sucesso.");
-
-                limpar(); // Chamando a função de limpar os campos
-                atualizarTabelas(); // Atualizando as tabelas
-                atualizarComboBoxes(); //Atualizando os Combo box
-
-                // Habilitar o botão de adicionar
+                limpar();
+                atualizarTabelas();
+                atualizarComboBoxes();
                 btnCadastrarMat.setEnabled(true);
                 btnCadastrarMat.setkBackGroundColor(new Color(26, 131, 43));
                 btnCadastrarMat.setkHoverColor(new Color(52, 153, 68));
@@ -452,7 +465,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         }
     }
 
-    //metodo para excluir cadastro dos materiais
+    // Método para excluir cadastro dos materiais
     private void remover_material() {
         conn = Conexao.getConexao();
 
@@ -467,14 +480,16 @@ public class testeMenuNovo extends javax.swing.JFrame {
             String sql = "CALL delete_material(?)";
             try {
                 pst = conn.prepareStatement(sql);
-                pst.setString(1, txtIdMat.getText());
+
+                // Define o ID do material diretamente pela variável idMaterialSelecionado
+                pst.setInt(1, idMaterialSelecionado);
                 int apagado = pst.executeUpdate();
 
                 if (apagado > 0) {
                     JOptionPane.showMessageDialog(null, "Material Removido com Sucesso!");
                     limpar(); // Chamando a função de limpar os campos
                     atualizarTabelas(); // Atualizando as tabelas
-                    atualizarComboBoxes(); //Atualizando os Combo box
+                    atualizarComboBoxes(); // Atualizando os ComboBox
 
                     // Habilitar o botão de adicionar novamente
                     btnCadastrarMat.setEnabled(true);
@@ -1436,7 +1451,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         ((DefaultTableModel) tblFornecedores.getModel()).setRowCount(0);
 
         //tela material
-        txtIdMat.setText(null);
         cBoxIdCat.setSelectedIndex(1);
         txtNomeMat.setText(null);
         txtDescMat.setText(null);
@@ -1629,8 +1643,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnFechar3 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblMaterial = new javax.swing.JTable();
-        txtIdMat = new javax.swing.JTextField();
-        jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         txtNomeMat = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
@@ -1815,7 +1827,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnAjuda = new com.k33ptoo.components.KButton();
         btnPainelAdmin = new com.k33ptoo.components.KButton();
         btnSairApp = new com.k33ptoo.components.KButton();
-        btnTestelol = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("StockSync");
@@ -2267,7 +2278,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
             .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
-                        .addContainerGap(44, Short.MAX_VALUE)
+                        .addContainerGap(49, Short.MAX_VALUE)
                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2276,8 +2287,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addComponent(btnFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 31, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(0, 36, Short.MAX_VALUE)))
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -2329,7 +2339,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addComponent(btnLimpar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("tab2", telaCadFornecedor);
@@ -2797,21 +2807,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tblMaterial);
 
-        txtIdMat.setBackground(new java.awt.Color(223, 223, 223));
-        txtIdMat.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        txtIdMat.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        txtIdMat.setEnabled(false);
-        txtIdMat.setSelectionColor(new java.awt.Color(26, 131, 43));
-        txtIdMat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdMatActionPerformed(evt);
-            }
-        });
-
-        jLabel17.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        jLabel17.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel17.setText("ID Material");
-
         jLabel18.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(26, 131, 43));
         jLabel18.setText("ID Categoria *");
@@ -2935,36 +2930,28 @@ public class testeMenuNovo extends javax.swing.JFrame {
             telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(telaCadMaterialLayout.createSequentialGroup()
                 .addGap(42, 42, 42)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel44)
-                .addGap(84, 84, 84))
-            .addGroup(telaCadMaterialLayout.createSequentialGroup()
                 .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(telaCadMaterialLayout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 699, Short.MAX_VALUE)
+                        .addComponent(jLabel44))
                     .addGroup(telaCadMaterialLayout.createSequentialGroup()
                         .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(telaCadMaterialLayout.createSequentialGroup()
-                                .addGap(153, 153, 153)
-                                .addComponent(btnCadastrarMat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(telaCadMaterialLayout.createSequentialGroup()
-                                .addGap(178, 178, 178)
-                                .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtIdMat, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel17)
-                                    .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(cBoxIdCat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(111, 111, 111)
-                        .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel20)
                                 .addComponent(jLabel19)
-                                .addComponent(txtNomeMat)
-                                .addComponent(txtDescMat, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(telaCadMaterialLayout.createSequentialGroup()
-                                .addComponent(btnAlterarMat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(119, 119, 119)
-                                .addComponent(btnExcluirMat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(txtNomeMat))
+                        .addGap(18, 18, 18)
+                        .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel20)
+                            .addComponent(txtDescMat, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cBoxIdCat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(84, 84, 84))
+            .addGroup(telaCadMaterialLayout.createSequentialGroup()
+                .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(telaCadMaterialLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -2976,8 +2963,15 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                     .addComponent(btnLimparMat))
                                 .addComponent(jLabel24)
                                 .addComponent(btnHome16, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1050, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(10, 10, 10))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1050, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(telaCadMaterialLayout.createSequentialGroup()
+                        .addGap(161, 161, 161)
+                        .addComponent(btnCadastrarMat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(114, 114, 114)
+                        .addComponent(btnAlterarMat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(119, 119, 119)
+                        .addComponent(btnExcluirMat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         telaCadMaterialLayout.setVerticalGroup(
             telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2990,39 +2984,34 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
                         .addComponent(jLabel44))
                     .addComponent(btnHome16, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
-                .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(18, 18, 18)
+                .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(telaCadMaterialLayout.createSequentialGroup()
+                            .addComponent(jLabel19)
+                            .addGap(0, 0, 0)
+                            .addComponent(txtNomeMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(telaCadMaterialLayout.createSequentialGroup()
+                            .addComponent(jLabel20)
+                            .addGap(0, 0, 0)
+                            .addComponent(txtDescMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(telaCadMaterialLayout.createSequentialGroup()
-                        .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(telaCadMaterialLayout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(cBoxIdCat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel18))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel17)
-                        .addGap(0, 0, 0)
-                        .addComponent(txtIdMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(telaCadMaterialLayout.createSequentialGroup()
-                        .addComponent(jLabel19)
-                        .addGap(0, 0, 0)
-                        .addComponent(txtNomeMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel20)
-                        .addGap(0, 0, 0)
-                        .addComponent(txtDescMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(47, 47, 47)
+                        .addComponent(cBoxIdCat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel18))
+                .addGap(45, 45, 45)
                 .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCadastrarMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAlterarMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluirMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addGap(26, 26, 26)
                 .addComponent(jLabel24)
                 .addGap(0, 0, 0)
                 .addGroup(telaCadMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtBuscarMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimparMat))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
                 .addGap(26, 26, 26))
         );
 
@@ -3850,15 +3839,15 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addComponent(jSeparator10, javax.swing.GroupLayout.DEFAULT_SIZE, 1095, Short.MAX_VALUE)
                         .addComponent(jSeparator11)
                         .addGroup(telaMateriaisLayout.createSequentialGroup()
-                            .addContainerGap()
+                            .addGap(10, 10, 10)
                             .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 1067, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(telaMateriaisLayout.createSequentialGroup()
-                            .addGap(18, 18, 18)
+                            .addGap(10, 10, 10)
                             .addComponent(btnHome24, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jLabel63)))
                     .addGroup(telaMateriaisLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
+                        .addGap(10, 10, 10)
                         .addGroup(telaMateriaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel47)
                             .addGroup(telaMateriaisLayout.createSequentialGroup()
@@ -5238,13 +5227,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
-        btnTestelol.setText("btnTeste");
-        btnTestelol.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTestelolActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout menuLateralLayout = new javax.swing.GroupLayout(menuLateral);
         menuLateral.setLayout(menuLateralLayout);
         menuLateralLayout.setHorizontalGroup(
@@ -5258,15 +5240,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
             .addComponent(btnPainelAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
             .addComponent(btnSairApp, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(menuLateralLayout.createSequentialGroup()
-                .addGroup(menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(menuLateralLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(menuLateralLayout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addComponent(btnTestelol)))
+                .addGap(12, 12, 12)
+                .addGroup(menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         menuLateralLayout.setVerticalGroup(
@@ -5290,9 +5267,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addComponent(btnAjuda, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(btnPainelAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(100, 100, 100)
-                .addComponent(btnTestelol)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 303, Short.MAX_VALUE)
                 .addComponent(btnSairApp, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27))
         );
@@ -5382,10 +5357,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnAdicionar.setkHoverColor(new Color(52, 153, 68));
         pesquisar_fornecedor();
     }//GEN-LAST:event_btnLimparActionPerformed
-
-    private void txtIdMatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdMatActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdMatActionPerformed
 
     private void txtNomeMatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeMatActionPerformed
         // TODO add your handling code here:
@@ -6000,12 +5971,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_oah8ActionPerformed
 
-    private void btnTestelolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestelolActionPerformed
-        // TODO add your handling code here:
-        ComponentPopup popUp = new ComponentPopup();
-        popUp.setVisible(true);
-    }//GEN-LAST:event_btnTestelolActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -6112,7 +6077,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnSalvarEntrada;
     private com.k33ptoo.components.KButton btnSalvarSaida;
     private com.k33ptoo.components.KButton btnSubstituirCat;
-    private javax.swing.JButton btnTestelol;
     private com.k33ptoo.components.KButton btnVerTabelas;
     private com.k33ptoo.components.KButton btnVincEmForn;
     private com.k33ptoo.components.KButton btnVincEmMat;
@@ -6128,7 +6092,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
@@ -6293,7 +6256,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTextField txtFornSite;
     private javax.swing.JTextField txtIdCatEmCat;
     private javax.swing.JTextField txtIdFornVM;
-    private javax.swing.JTextField txtIdMat;
     private javax.swing.JTextField txtIdMatVM;
     private javax.swing.JTextField txtIdPainel;
     private javax.swing.JTextField txtIdVincVM;
