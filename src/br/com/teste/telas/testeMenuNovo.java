@@ -854,7 +854,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    
+
     //metodo para buscar uma categoria no MENU CATEGORIA
     private void pesquisar_categoria() {
         conn = Conexao.getConexao();
@@ -1129,7 +1129,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
         }
     }
 
-    //metodo para alterar dados dos materiais
+    // Variável para armazenar o ID do almoxarife selecionado
+    private int idAlmoxarifeSelecionado;
+
+// Método para alterar dados dos almoxarifes
     private void alterar_almoxarife() {
         conn = Conexao.getConexao();
         String sql = "UPDATE almoxarife SET tipo_almoxarife=?, nome=?, login=?, senha=? WHERE id_almoxarife=?";
@@ -1152,12 +1155,20 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 return; // Interrompe a função se algum campo obrigatório estiver vazio
             }
 
-            // Define o tipo, nome, login e senha do almoxarife
+            // Define o tipo, nome, login e senha do almoxarife no PreparedStatement
             pst.setString(1, tipoSelecionado);
             pst.setString(2, txtNomePainel.getText());
             pst.setString(3, txtLoginPainel.getText());
             pst.setString(4, txtSenhaPainel.getText());
-            pst.setString(5, txtIdPainel.getText()); // ID do almoxarife para identificar o registro a ser alterado
+
+            // Verifica se há um ID de almoxarife selecionado
+            if (idAlmoxarifeSelecionado == 0) {
+                JOptionPane.showMessageDialog(null, "Selecione um almoxarife válido.");
+                return;
+            }
+
+            // Define o ID do almoxarife no PreparedStatement
+            pst.setInt(5, idAlmoxarifeSelecionado);
 
             int atualizado = pst.executeUpdate();
 
@@ -1182,14 +1193,14 @@ public class testeMenuNovo extends javax.swing.JFrame {
     public void setar_camposAlmoxarife() {
         int setar = tblPainelAdmin.getSelectedRow();
 
-        // Definindo o id do cadastro
-        txtIdPainel.setText(tblPainelAdmin.getModel().getValueAt(setar, 0).toString());
+        // Definindo o id do cadastro na variável de instância em vez de exibi-lo no campo de texto
+        idAlmoxarifeSelecionado = Integer.parseInt(tblPainelAdmin.getModel().getValueAt(setar, 0).toString());
 
         // Recuperando o cargo da coluna 'tipo' (índice 1)
         String tipoAlmoxarife = tblPainelAdmin.getModel().getValueAt(setar, 1).toString();
 
-        // Definindo o nome da categoria na ComboBox
-        cBoxTipoAlmox.setSelectedItem(tipoAlmoxarife);  // Define o item na combobox baseado no cargo
+        // Definindo o tipo de almoxarife na ComboBox
+        cBoxTipoAlmox.setSelectedItem(tipoAlmoxarife);
 
         // Preenchendo os outros campos
         txtNomePainel.setText(tblPainelAdmin.getModel().getValueAt(setar, 2).toString()); // Nome do usuário
@@ -1226,17 +1237,29 @@ public class testeMenuNovo extends javax.swing.JFrame {
         int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover este usuário?", "Atenção", JOptionPane.YES_NO_OPTION);
         if (confirma == JOptionPane.YES_OPTION) {
             String sql = "DELETE FROM almoxarife WHERE id_almoxarife = ?";
+
             try {
                 pst = conn.prepareStatement(sql);
-                pst.setString(1, txtIdPainel.getText()); // Define o ID do usuário a ser removido
+
+                // Verifica se há um ID do almoxarife selecionado
+                if (idAlmoxarifeSelecionado == 0) {
+                    JOptionPane.showMessageDialog(null, "Selecione um almoxarife válido.");
+                    return; // Encerra a função se o ID não estiver definido
+                }
+
+                // Define o ID do almoxarife a ser removido no PreparedStatement
+                pst.setInt(1, idAlmoxarifeSelecionado);
+
                 int apagado = pst.executeUpdate();
 
                 if (apagado > 0) {
                     JOptionPane.showMessageDialog(null, "Usuário removido com sucesso!");
+
                     limpar(); // Chamando a função de limpar os campos
                     atualizarTabelas(); // Atualizando as tabelas
-                    preencherComboBoxTipos(); // Atualizando a ComboBox
+                    preencherComboBoxTipos(); // Atualizando a ComboBox, se necessário
                 }
+
             } catch (HeadlessException | SQLException e) {
                 JOptionPane.showMessageDialog(null, "Erro ao remover o usuário: " + e.getMessage());
             } finally {
@@ -1537,7 +1560,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         //Painel Admin
         txtPainelAdmin.setText(null);
-        txtIdPainel.setText(null);
         cBoxTipoAlmox.setSelectedIndex(1);
         txtNomePainel.setText(null);
         txtLoginPainel.setText(null);
@@ -1804,8 +1826,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnAlterarPainel = new com.k33ptoo.components.KButton();
         jLabel67 = new javax.swing.JLabel();
         ops5 = new javax.swing.JButton();
-        txtIdPainel = new javax.swing.JTextField();
-        jLabel68 = new javax.swing.JLabel();
         cBoxTipoAlmox = new javax.swing.JComboBox<>();
         txtNomePainel = new javax.swing.JTextField();
         jLabel69 = new javax.swing.JLabel();
@@ -1816,6 +1836,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnExcluirPainel = new com.k33ptoo.components.KButton();
         jLabel72 = new javax.swing.JLabel();
         btnLimparPainel = new javax.swing.JButton();
+        btnUsuarioPainel = new com.k33ptoo.components.KButton();
         telaCadCategorias = new javax.swing.JPanel();
         jScrollPane14 = new javax.swing.JScrollPane();
         tblNovaCad = new javax.swing.JTable();
@@ -4390,25 +4411,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
-        txtIdPainel.setBackground(new java.awt.Color(223, 223, 223));
-        txtIdPainel.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        txtIdPainel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        txtIdPainel.setSelectionColor(new java.awt.Color(26, 131, 43));
-        txtIdPainel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdPainelActionPerformed(evt);
-            }
-        });
-        txtIdPainel.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtIdPainelKeyReleased(evt);
-            }
-        });
-
-        jLabel68.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        jLabel68.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel68.setText("ID");
-
         cBoxTipoAlmox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tipo", "Item 2", "Item 3", "Item 4" }));
 
         txtNomePainel.setBackground(new java.awt.Color(223, 223, 223));
@@ -4496,6 +4498,19 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
+        btnUsuarioPainel.setText("Novo Usuário");
+        btnUsuarioPainel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnUsuarioPainel.setkAllowGradient(false);
+        btnUsuarioPainel.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnUsuarioPainel.setkBorderRadius(20);
+        btnUsuarioPainel.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnUsuarioPainel.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnUsuarioPainel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuarioPainelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelAdminLayout = new javax.swing.GroupLayout(painelAdmin);
         painelAdmin.setLayout(painelAdminLayout);
         painelAdminLayout.setHorizontalGroup(
@@ -4516,38 +4531,35 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addGroup(painelAdminLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel50)
-                            .addComponent(txtPainelAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, 0)
-                        .addComponent(btnLimparPainel)))
+                            .addGroup(painelAdminLayout.createSequentialGroup()
+                                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel69)
+                                    .addComponent(txtNomePainel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel70)
+                                    .addComponent(txtLoginPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel71)
+                                    .addComponent(txtSenhaPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel72)
+                                    .addComponent(cBoxTipoAlmox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(40, 40, 40)
+                                .addComponent(btnAlterarPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnExcluirPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnUsuarioPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(painelAdminLayout.createSequentialGroup()
+                                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel50)
+                                    .addComponent(txtPainelAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, 0)
+                                .addComponent(btnLimparPainel)))))
                 .addContainerGap(15, Short.MAX_VALUE))
-            .addGroup(painelAdminLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtIdPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel68))
-                .addGap(18, 18, 18)
-                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel72)
-                    .addComponent(cBoxTipoAlmox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel69)
-                    .addComponent(txtNomePainel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel70)
-                    .addComponent(txtLoginPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel71)
-                    .addGroup(painelAdminLayout.createSequentialGroup()
-                        .addComponent(txtSenhaPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAlterarPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnExcluirPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(73, Short.MAX_VALUE))
         );
         painelAdminLayout.setVerticalGroup(
             painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4559,25 +4571,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator18, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel50)
-                .addGap(0, 0, 0)
                 .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(painelAdminLayout.createSequentialGroup()
-                        .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtPainelAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnLimparPainel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jSeparator19, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel68)
-                        .addGap(0, 0, 0)
-                        .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtIdPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cBoxTipoAlmox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(painelAdminLayout.createSequentialGroup()
-                        .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel69)
-                            .addComponent(jLabel72))
+                        .addComponent(jLabel69)
                         .addGap(0, 0, 0)
                         .addComponent(txtNomePainel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(painelAdminLayout.createSequentialGroup()
@@ -4590,9 +4586,25 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtSenhaPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAlterarPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnExcluirPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnExcluirPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUsuarioPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(painelAdminLayout.createSequentialGroup()
+                        .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtPainelAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnLimparPainel)
+                            .addGroup(painelAdminLayout.createSequentialGroup()
+                                .addComponent(jLabel50)
+                                .addGap(30, 30, 30)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jSeparator19, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(17, 17, 17)
+                        .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cBoxTipoAlmox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(painelAdminLayout.createSequentialGroup()
+                                .addComponent(jLabel72)
+                                .addGap(30, 30, 30)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25))
         );
 
@@ -5585,14 +5597,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNomePainelActionPerformed
 
-    private void txtIdPainelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdPainelKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdPainelKeyReleased
-
-    private void txtIdPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdPainelActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdPainelActionPerformed
-
     private void ops5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ops5ActionPerformed
@@ -5664,6 +5668,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private void txtBuscarCategoriaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarCategoriaKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBuscarCategoriaKeyPressed
+
+    private void btnUsuarioPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioPainelActionPerformed
+        // TODO add your handling code here:
+        telaCadastro popUpCad = new telaCadastro();
+        popUpCad.setVisible(true);
+    }//GEN-LAST:event_btnUsuarioPainelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -5771,6 +5781,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnSalvarEntrada;
     private com.k33ptoo.components.KButton btnSalvarSaida;
     private com.k33ptoo.components.KButton btnSubstituirCat;
+    private com.k33ptoo.components.KButton btnUsuarioPainel;
     private com.k33ptoo.components.KButton btnVerTabelas;
     private com.k33ptoo.components.KButton btnVincEmForn;
     private com.k33ptoo.components.KButton btnVincularFM;
@@ -5831,7 +5842,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel66;
     private javax.swing.JLabel jLabel67;
-    private javax.swing.JLabel jLabel68;
     private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel70;
@@ -5928,7 +5938,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTextField txtIdCatEmCat;
     private javax.swing.JTextField txtIdFornVM;
     private javax.swing.JTextField txtIdMatVM;
-    private javax.swing.JTextField txtIdPainel;
     private javax.swing.JTextField txtIdVincVM;
     private javax.swing.JTextField txtLoginPainel;
     private javax.swing.JTextField txtNomeCat;
