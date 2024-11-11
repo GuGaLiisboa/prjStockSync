@@ -68,7 +68,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         estilizarBotao(btnMovSaida, "SAÍDA", "/br/com/teste/icones/IconeSaida.png");
 
         // Estiliza os botões do menu lateral com icones
-        estilizarBotaoLateral(btnMateriais, "Materiais", "/br/com/teste/icones/IconeCadastro.png");
+        estilizarBotaoLateral(btnMateriais, "Materiais", "/br/com/teste/icones/iconMenuMateriais.png");
         estilizarBotaoLateral(btnFornecedores, "Fornecedores", "/br/com/teste/icones/IconeCadastro.png");
         estilizarBotaoLateral(btnCategorias, "Categorias", "/br/com/teste/icones/IconeCadastro.png");
         estilizarBotaoLateral(btnMovimentacoes, "Movimentações", "/br/com/teste/icones/IconeCadastro.png");
