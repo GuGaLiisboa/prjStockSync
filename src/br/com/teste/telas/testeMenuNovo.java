@@ -81,6 +81,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // Estiliza as comboBox
         estilizarComboBox(cBoxIdCat);
         estilizarComboBox(cBoxTipoAlmox);
+        estilizarComboBox(cBoxTipoMov);
     }
 
     // Classe para esconder/mostrar botão de acordo com a hierarquia
@@ -329,7 +330,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
             pst.setString(3, txtDescMat.getText());
 
             // Verifica se os campos obrigatórios estão preenchidos
-            if (txtNomeMat.getText().isEmpty() || txtDescMat.getText().isEmpty()) {
+            if (txtNomeMat.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Preencha os Campos Obrigatórios.");
             } else {
                 int adicionado = pst.executeUpdate();
@@ -2125,14 +2126,14 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(114, 114, 114)
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
         telaCadFornecedorLayout.setVerticalGroup(
             telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
-                        .addContainerGap(49, Short.MAX_VALUE)
+                        .addContainerGap(50, Short.MAX_VALUE)
                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2141,7 +2142,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addComponent(btnFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 36, Short.MAX_VALUE)))
+                        .addGap(0, 37, Short.MAX_VALUE)))
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -2752,6 +2753,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         ));
         tblMaterial.getTableHeader().setReorderingAllowed(false);
+        tblMaterial.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblMaterialMouseClicked(evt);
+            }
+        });
         jScrollPane12.setViewportView(tblMaterial);
 
         txtBuscarMat.setBackground(new java.awt.Color(223, 223, 223));
@@ -3964,7 +3970,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                 .addComponent(txtBuscarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnLimparCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(30, 30, 30)
+                        .addGap(49, 49, 49)
                         .addComponent(btnNovaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
@@ -4792,7 +4798,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                     .addComponent(jLabel73)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(btnFechar1)
-                                    .addGap(34, 34, 34))))))
+                                    .addGap(41, 41, 41))))))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         telaCadCategoriasLayout.setVerticalGroup(
@@ -5623,6 +5629,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void btnNovaCatSubstituirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaCatSubstituirActionPerformed
         // TODO add your handling code here:
+        substituir_categoria();
     }//GEN-LAST:event_btnNovaCatSubstituirActionPerformed
 
     private void btnFechar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechar1ActionPerformed
@@ -5649,6 +5656,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // TODO add your handling code here:
         pesquisar_categoriaEmCat();
     }//GEN-LAST:event_txtBuscarMatKeyReleased
+
+    private void tblMaterialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMaterialMouseClicked
+        // TODO add your handling code here:
+        setar_camposMaterial();
+    }//GEN-LAST:event_tblMaterialMouseClicked
 
     /**
      * @param args the command line arguments
