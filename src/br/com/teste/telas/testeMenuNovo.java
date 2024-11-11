@@ -838,7 +838,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnNovaCatSalvar.setkHoverColor(new Color(128, 128, 128));
     }
 
-    //metodo para buscar uma categoria no menu Categorias
+    //metodo para buscar uma categoria na tela NOVA CATEGORIA
     private void pesquisar_categoriaEmCat() {
         conn = Conexao.getConexao();
         String sql = "select id_categoria AS 'COD Categoria', nome_categoria AS 'Nome da Categoria' FROM categoria where nome_categoria like ?";
@@ -849,6 +849,23 @@ public class testeMenuNovo extends javax.swing.JFrame {
             rs = pst.executeQuery();
             //a linha abaixo usa a biblioteca rs2xml.jar
             tblNovaCad.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
+    //metodo para buscar uma categoria no MENU CATEGORIA
+    private void pesquisar_categoria() {
+        conn = Conexao.getConexao();
+        String sql = "select id_categoria AS 'COD Categoria', nome_categoria AS 'Nome da Categoria' FROM categoria where nome_categoria like ?";
+        try {
+            pst = conn.prepareStatement(sql);
+            //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
+            pst.setString(1, "%" + txtBuscarCategoria.getText() + "%");
+            rs = pst.executeQuery();
+            //a linha abaixo usa a biblioteca rs2xml.jar
+            tblCategoriasEmCat.setModel(DbUtils.resultSetToTableModel(rs));
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
@@ -1089,24 +1106,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         }
     }
 
-    //Método para exibir os dados na tabela Fornecedores
-    private void pesquisar_CategoriaEmCat() {
-        conn = Conexao.getConexao();
-        String sql = "SELECT id_categoria AS 'ID Categoria', nome_categoria AS 'Nome da Categoria' FROM categoria WHERE nome_categoria LIKE ?";
-
-        try {
-            pst = conn.prepareStatement(sql);
-            //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
-            pst.setString(1, "%" + txtBuscarCategoria.getText() + "%");
-            rs = pst.executeQuery();
-            //a linha abaixo usa a biblioteca rs2xml.jar
-            tblCategoriasEmCat.setModel(DbUtils.resultSetToTableModel(rs));
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }
-
     //=============================================================================================
     //Métodos do Painel Admin
     //Método para buscar dados na tabela
@@ -1268,7 +1267,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         pesquisar_MovSaidas();
         pesquisar_MateriaisEmMat();
         pesquisar_FornecedoresEmForn();
-        pesquisar_CategoriaEmCat();
+        pesquisar_categoria();
         pesquisar_painelAdmin();
     }
 
@@ -2142,7 +2141,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addComponent(btnFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 37, Short.MAX_VALUE)))
+                        .addGap(0, 36, Short.MAX_VALUE)))
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -3896,6 +3895,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
         txtBuscarCategoria.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBuscarCategoriaKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtBuscarCategoriaKeyReleased(evt);
             }
@@ -5117,7 +5119,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void txtBuscarCatEmCatKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarCatEmCatKeyReleased
         // TODO add your handling code here:
-        pesquisar_categoriaEmCat();
     }//GEN-LAST:event_txtBuscarCatEmCatKeyReleased
 
     private void tblCategoria2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCategoria2MouseClicked
@@ -5302,7 +5303,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void txtBuscarCategoriaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarCategoriaKeyReleased
         // TODO add your handling code here:
-        pesquisar_CategoriaEmCat();
+        pesquisar_categoria();
     }//GEN-LAST:event_txtBuscarCategoriaKeyReleased
 
     private void btnLimparCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparCategoriaActionPerformed
@@ -5461,8 +5462,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void btnCategorias3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCategorias3ActionPerformed
         // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaCategorias);
-        atualizarTabelas();
     }//GEN-LAST:event_btnCategorias3ActionPerformed
 
     private void btnAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjudaActionPerformed
@@ -5654,13 +5653,17 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void txtBuscarMatKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarMatKeyReleased
         // TODO add your handling code here:
-        pesquisar_categoriaEmCat();
+        pesquisar_material();
     }//GEN-LAST:event_txtBuscarMatKeyReleased
 
     private void tblMaterialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMaterialMouseClicked
         // TODO add your handling code here:
         setar_camposMaterial();
     }//GEN-LAST:event_tblMaterialMouseClicked
+
+    private void txtBuscarCategoriaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarCategoriaKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarCategoriaKeyPressed
 
     /**
      * @param args the command line arguments
