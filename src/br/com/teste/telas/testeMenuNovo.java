@@ -81,8 +81,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
         estilizarTabela(tblMateriaisEmMat);
         estilizarTabela(tblFornecedores);
         estilizarTabela(tblFornecedoresEmForn);
-        estilizarTabela(tblMaterial);
+        estilizarTabela(tblMaterialNova);
         estilizarTabela(tblPainelAdmin);
+        estilizarTabela(tblNovaCad);
 
         // Estiliza as comboBox
         estilizarComboBox(cBoxIdCat);
@@ -366,7 +367,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
             pst.setString(1, "%" + txtBuscarMat.getText() + "%");
             rs = pst.executeQuery();
             //a linha abaixo usa a biblioteca rs2xml.jar
-            tblMaterial.setModel(DbUtils.resultSetToTableModel(rs));
+            tblMaterialNova.setModel(DbUtils.resultSetToTableModel(rs));
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
@@ -375,20 +376,20 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     // Método para setar os campos do formulário com o conteúdo da tabela material
     public void setar_camposMaterial() {
-        int setar = tblMaterial.getSelectedRow();
+        int setar = tblMaterialNova.getSelectedRow();
 
         // Definindo o id do material na variável em vez de exibi-lo no campo de texto
-        idMaterialSelecionado = Integer.parseInt(tblMaterial.getModel().getValueAt(setar, 0).toString());
+        idMaterialSelecionado = Integer.parseInt(tblMaterialNova.getModel().getValueAt(setar, 0).toString());
 
         // Recuperando o nome da categoria da coluna 'Categoria' (índice 1)
-        String nomeCategoria = tblMaterial.getModel().getValueAt(setar, 1).toString();
+        String nomeCategoria = tblMaterialNova.getModel().getValueAt(setar, 1).toString();
 
         // Definindo o nome da categoria na ComboBox
         cBoxIdCat.setSelectedItem(nomeCategoria);
 
         // Preenchendo os outros campos
-        txtNomeMat.setText(tblMaterial.getModel().getValueAt(setar, 2).toString()); // Nome do material
-        txtDescMat.setText(tblMaterial.getModel().getValueAt(setar, 3).toString()); // Descrição
+        txtNomeMat.setText(tblMaterialNova.getModel().getValueAt(setar, 2).toString()); // Nome do material
+        txtDescMat.setText(tblMaterialNova.getModel().getValueAt(setar, 3).toString()); // Descrição
 
         // Desabilitar o botão de adicionar para evitar dados duplicados
         btnCadastrarMat.setEnabled(false);
@@ -399,7 +400,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     // Variável para armazenar o ID do material selecionado
     private int idMaterialSelecionado;
 
-// Método para alterar dados dos materiais
+    // Método para alterar dados dos materiais
     private void alterar_material() {
         conn = Conexao.getConexao();
         String sql = "UPDATE material SET id_categoria=?, nome_material=?, descricao=? WHERE id_material=?";
@@ -563,9 +564,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
         try {
             pst = conn.prepareStatement(sql);
 
-            pst.setString(1, txtNomeCat.getText());
+            pst.setString(1, txtNovaCatNome.getText());
 
-            if ((txtNomeCat.getText().isEmpty())) {
+            if ((txtNovaCatNome.getText().isEmpty())) {
                 JOptionPane.showMessageDialog(null, "Preencha o Campos Nome.");
             } else {
 
@@ -587,32 +588,50 @@ public class testeMenuNovo extends javax.swing.JFrame {
         }
     }
 
-    //metodo para alterar dados dos fornecedores
+    // Variável para armazenar o ID da categoria selecionada
+    private int idCategoriaSelecionada;
+
+// Método para alterar dados das categorias
     private void alterarCategoria() {
         conn = Conexao.getConexao();
         String sql = "UPDATE categoria SET nome_categoria=? WHERE id_categoria=?";
 
         try {
             pst = conn.prepareStatement(sql);
-            pst.setString(1, txtNomeCat.getText());
-            pst.setString(2, txtIdCatEmCat.getText());
 
-            if ((txtNomeCat.getText().isEmpty())) {
+            // Verifica se o campo de nome da categoria está preenchido
+            String nomeCategoria = txtNovaCatNome.getText();
+            if (nomeCategoria == null || nomeCategoria.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Preencha o Campo com o Nome da Categoria.");
-            } else {
-
-                int adicionado = pst.executeUpdate();
-
-                if (adicionado > 0) {
-                    JOptionPane.showMessageDialog(null, "Categoria Alterada com Sucesso.");
-
-                    limpar(); //chamando a função de limpar os campos
-                    atualizarTabelas(); //atualizar a tabela
-                    btnCadastrarCat.setEnabled(true);
-                    btnCadastrarCat.setkBackGroundColor(new Color(26, 131, 43));
-                    btnCadastrarCat.setkHoverColor(new Color(52, 153, 68));
-                }
+                return;
             }
+
+            // Define o nome da categoria no PreparedStatement
+            pst.setString(1, nomeCategoria);
+
+            // Verifica se há um ID da categoria selecionado
+            if (idCategoriaSelecionada == 0) {
+                JOptionPane.showMessageDialog(null, "Selecione uma categoria válida.");
+                return;
+            }
+
+            // Define o ID da categoria no PreparedStatement
+            pst.setInt(2, idCategoriaSelecionada);
+
+            int adicionado = pst.executeUpdate();
+
+            if (adicionado > 0) {
+                JOptionPane.showMessageDialog(null, "Categoria Alterada com Sucesso.");
+
+                limpar(); // Chamando a função de limpar os campos
+                atualizarTabelas(); // Atualizar a tabela
+
+                // Habilitar e redefinir o botão de salvar
+                btnNovaCatSalvar.setEnabled(true);
+                btnNovaCatSalvar.setkBackGroundColor(new Color(26, 131, 43));
+                btnNovaCatSalvar.setkHoverColor(new Color(52, 153, 68));
+            }
+
         } catch (MysqlDataTruncation e) {
             JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
         } catch (SQLException e) {
@@ -622,47 +641,59 @@ public class testeMenuNovo extends javax.swing.JFrame {
         }
     }
 
-    //metodo para excluir cadastro de categoria
+    // Método para excluir cadastro de categoria
     private void remover_categoria() {
         conn = Conexao.getConexao();
 
-        // Verifica se os campos obrigatórios estão vazios
-        if (txtNomeCat.getText().isEmpty()) {
+        // Verifica se a categoria foi selecionada
+        if (idCategoriaSelecionada == 0) {
             JOptionPane.showMessageDialog(null, "Selecione a categoria na Tabela.");
-            return; // Encerra a execução da função se algum campo estiver vazio
+            return; // Encerra a execução da função se nenhuma categoria foi selecionada
         }
 
-        // Verificar se a categoria existe
-        if (!categoriaExiste(txtIdCatEmCat.getText())) {
-            JOptionPane.showMessageDialog(null, "A categoria não existe!");
-            return;
-        }
+        // Cria a instância do ComponentPopup para exibir o pop-up de confirmação
+        ComponentPopup popup = new ComponentPopup();
+        popup.setLabelText("Tem certeza que deseja excluir esta Categoria?"); // Define o texto da label
+        popup.setButton1Text("Sim");
+        popup.setButton2Text("Não");
 
-        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover esta Categoria?", "Atenção", JOptionPane.YES_NO_OPTION);
-        if (confirma == JOptionPane.YES_OPTION) {
-            String sql = "CALL delete_categoria(?)";
-            try {
-                pst = conn.prepareStatement(sql);
-                pst.setString(1, txtIdCatEmCat.getText());
-                pst.execute();
-                JOptionPane.showMessageDialog(null, "Categoria Removida com Sucesso!");
-                limpar(); // Chamando a função de limpar os campos
-                // Atualizar as tabelas
-                atualizarTabelas();
-                btnCadastrarCat.setEnabled(true);
-                btnCadastrarCat.setkBackGroundColor(new Color(26, 131, 43));
-                btnCadastrarCat.setkHoverColor(new Color(52, 153, 68));
-            } catch (SQLException e) {
-                // Verificar a mensagem de erro específica e exibir uma mensagem apropriada
-                if (e.getMessage().contains("Existem materiais vinculados a esta categoria. Exclusão não permitida.")) {
-                    JOptionPane.showMessageDialog(null, "Existem materiais vinculados a esta categoria. Exclusão não permitida.");
-                    substituir_categoria(); // Chamar a função de substituição de categoria
-                } else {
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Erro ao excluir a categoria.");
+        // Adiciona o ActionListener aos botões antes de exibir o pop-up
+        popup.addButtonActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String comando = e.getActionCommand();
+
+                if ("Sim".equals(comando)) {
+                    String sql = "CALL delete_categoria(?)";
+                    try {
+                        pst = conn.prepareStatement(sql);
+                        pst.setInt(1, idCategoriaSelecionada);  // Usando idCategoriaSelecionada
+                        pst.execute();
+                        JOptionPane.showMessageDialog(null, "Categoria Removida com Sucesso!");
+                        limpar(); // Chamando a função de limpar os campos
+                        // Atualizar as tabelas
+                        atualizarTabelas();
+                        btnNovaCatSalvar.setEnabled(true);
+                        btnNovaCatSalvar.setkBackGroundColor(new Color(26, 131, 43));
+                        btnNovaCatSalvar.setkHoverColor(new Color(52, 153, 68));
+                    } catch (SQLException ex) {
+                        // Verificar a mensagem de erro específica e exibir uma mensagem apropriada
+                        if (ex.getMessage().contains("Existem materiais vinculados a esta categoria. Exclusão não permitida.")) {
+                            JOptionPane.showMessageDialog(null, "Existem materiais vinculados a esta categoria. Exclusão não permitida.");
+                            substituir_categoria(); // Chama a função de substituição de categoria
+                        } else {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Erro ao excluir a categoria.");
+                        }
+                    }
                 }
+                // Fecha o pop-up ao concluir a ação
+                popup.dispose();
             }
-        }
+        });
+
+        // Exibe o pop-up após definir o ActionListener
+        popup.setVisible(true);
     }
 
     // Função para verificar se a categoria existe durante o processo de remover
@@ -794,29 +825,36 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnVincularFM.setkHoverColor(new Color(128, 128, 128));
     }
 
-    //metodo para setar os campos do formulário com o conteúdo da tabela categoria
+    // Método para setar os campos do formulário com o conteúdo da tabela categoria
     public void setar_camposCategoria() {
-        int setar = tblCategoria2.getSelectedRow();
-        txtIdCatEmCat.setText(tblCategoria2.getModel().getValueAt(setar, 0).toString());
-        txtNomeCat.setText(tblCategoria2.getModel().getValueAt(setar, 1).toString());
+        int setar = tblNovaCad.getSelectedRow();
 
-        //a linha abaixo irá desabilitar o botão de adicionar, para evitar dados duplicados.
-        btnCadastrarCat.setEnabled(false);
-        btnCadastrarCat.setkBackGroundColor(new Color(128, 128, 128));
-        btnCadastrarCat.setkHoverColor(new Color(128, 128, 128));
+        // Definindo o id da categoria na variável em vez de exibi-lo no campo de texto
+        idCategoriaSelecionada = Integer.parseInt(tblNovaCad.getModel().getValueAt(setar, 0).toString());
+
+        // Recuperando o nome da categoria da coluna correspondente (índice 1)
+        String nomeCategoria = tblNovaCad.getModel().getValueAt(setar, 1).toString();
+
+        // Definindo o nome da categoria no campo txtNovaCatNome
+        txtNovaCatNome.setText(nomeCategoria);
+
+        // Desabilitar o botão de adicionar para evitar dados duplicados
+        btnNovaCatSalvar.setEnabled(false);
+        btnNovaCatSalvar.setkBackGroundColor(new Color(128, 128, 128));
+        btnNovaCatSalvar.setkHoverColor(new Color(128, 128, 128));
     }
 
     //metodo para buscar uma categoria no menu Categorias
     private void pesquisar_categoriaEmCat() {
         conn = Conexao.getConexao();
-        String sql = "select id_categoria AS 'ID Categoria', nome_categoria AS 'Nome da Categoria' FROM categoria where nome_categoria like ?";
+        String sql = "select id_categoria AS 'COD Categoria', nome_categoria AS 'Nome da Categoria' FROM categoria where nome_categoria like ?";
         try {
             pst = conn.prepareStatement(sql);
             //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
-            pst.setString(1, "%" + txtBuscarCatEmCat.getText() + "%");
+            pst.setString(1, "%" + txtNovaCatBuscar.getText() + "%");
             rs = pst.executeQuery();
             //a linha abaixo usa a biblioteca rs2xml.jar
-            tblCategoria2.setModel(DbUtils.resultSetToTableModel(rs));
+            tblNovaCad.setModel(DbUtils.resultSetToTableModel(rs));
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
@@ -1391,6 +1429,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnVerTabelas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnLimparEmCat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
+        btnNovaCatSalvar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNovaCatAlterar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNovaCatExcluir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNovaCatSubstituir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
         //MATERIAL
         btnCadastrarMat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAlterarMat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1413,8 +1456,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         //TELA MATERIAIS | FORNECEDORES | CATEGORIAS
         btnLimparEmMat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNovoMaterialEmMat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNovaMovEmMat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnVincEmMat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         btnLimparEmForn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNovoFornecedorEmForn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1440,7 +1481,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     //método para limpar os campos
     private void limpar() {
         //tela fornecedor
-        txtFornId.setText(null);
         txtFornNome.setText(null);
         txtFornCnpj.setText(null);
         txtFornEmail.setText(null);
@@ -1455,7 +1495,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtNomeMat.setText(null);
         txtDescMat.setText(null);
         txtBuscarMat.setText(null);
-        ((DefaultTableModel) tblMaterial.getModel()).setRowCount(0);
+        ((DefaultTableModel) tblMaterialNova.getModel()).setRowCount(0);
 
         //tela categoria
         txtIdCatEmCat.setText(null);
@@ -1467,6 +1507,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtIdMatVM.setText(null);
         ((DefaultTableModel) tblCategoria2.getModel()).setRowCount(0);
         ((DefaultTableModel) tblVincularMaterial.getModel()).setRowCount(0);
+
+        //tela Nova Categoria
+        txtNovaCatNome.setText(null);
+        txtNovaCatBuscar.setText(null);
+        ((DefaultTableModel) tblNovaCad.getModel()).setRowCount(0);
 
         //tela Movimentações
         txtBuscarMov.setText(null);
@@ -1601,8 +1646,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         tblFornecedores = new javax.swing.JTable();
         txtFornPesquisar = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
-        txtFornId = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
         btnLimpar = new javax.swing.JButton();
         jLabel51 = new javax.swing.JLabel();
         btnHome14 = new javax.swing.JButton();
@@ -1642,7 +1685,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         btnFechar3 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblMaterial = new javax.swing.JTable();
+        tblMaterialNova = new javax.swing.JTable();
         jLabel18 = new javax.swing.JLabel();
         txtNomeMat = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
@@ -1717,8 +1760,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel47 = new javax.swing.JLabel();
         btnLimparEmMat = new com.k33ptoo.components.KButton();
         btnNovoMaterialEmMat = new com.k33ptoo.components.KButton();
-        btnNovaMovEmMat = new com.k33ptoo.components.KButton();
-        btnVincEmMat = new com.k33ptoo.components.KButton();
         jLabel63 = new javax.swing.JLabel();
         btnHome24 = new javax.swing.JButton();
         telaFornecedores = new javax.swing.JPanel();
@@ -1744,10 +1785,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnNovaCategoria = new com.k33ptoo.components.KButton();
         jLabel65 = new javax.swing.JLabel();
         btnHome26 = new javax.swing.JButton();
-        telaSobre = new javax.swing.JPanel();
-        jLabel54 = new javax.swing.JLabel();
-        jLabel55 = new javax.swing.JLabel();
-        btnHome9 = new javax.swing.JButton();
         telaAjuda = new javax.swing.JPanel();
         jLabel52 = new javax.swing.JLabel();
         btnHome8 = new javax.swing.JButton();
@@ -1779,7 +1816,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jSeparator19 = new javax.swing.JSeparator();
         txtPainelAdmin = new javax.swing.JTextField();
         jLabel50 = new javax.swing.JLabel();
-        btnLimparPainel = new com.k33ptoo.components.KButton();
         btnAlterarPainel = new com.k33ptoo.components.KButton();
         jLabel67 = new javax.swing.JLabel();
         ops5 = new javax.swing.JButton();
@@ -1794,28 +1830,39 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel71 = new javax.swing.JLabel();
         btnExcluirPainel = new com.k33ptoo.components.KButton();
         jLabel72 = new javax.swing.JLabel();
-        telaVincular = new javax.swing.JPanel();
+        btnLimparPainel = new javax.swing.JButton();
+        telaCadCategorias = new javax.swing.JPanel();
         jScrollPane14 = new javax.swing.JScrollPane();
-        oah9 = new javax.swing.JTable();
+        tblNovaCad = new javax.swing.JTable();
         jSeparator20 = new javax.swing.JSeparator();
         jSeparator21 = new javax.swing.JSeparator();
-        oah = new javax.swing.JTextField();
+        txtNovaCatBuscar = new javax.swing.JTextField();
         jLabel66 = new javax.swing.JLabel();
-        oah2 = new com.k33ptoo.components.KButton();
-        oah7 = new com.k33ptoo.components.KButton();
+        btnNovaCatSalvar = new com.k33ptoo.components.KButton();
         jLabel73 = new javax.swing.JLabel();
         ops6 = new javax.swing.JButton();
-        oah3 = new javax.swing.JTextField();
-        jLabel74 = new javax.swing.JLabel();
-        oa = new javax.swing.JComboBox<>();
-        oah4 = new javax.swing.JTextField();
+        txtNovaCatNome = new javax.swing.JTextField();
         jLabel75 = new javax.swing.JLabel();
-        oah5 = new javax.swing.JTextField();
-        jLabel76 = new javax.swing.JLabel();
-        oah6 = new javax.swing.JTextField();
-        jLabel77 = new javax.swing.JLabel();
-        oah8 = new com.k33ptoo.components.KButton();
-        jLabel78 = new javax.swing.JLabel();
+        btnNovaCatAlterar = new com.k33ptoo.components.KButton();
+        btnNovaCatExcluir = new com.k33ptoo.components.KButton();
+        btnNovaCatSubstituir = new com.k33ptoo.components.KButton();
+        btnFechar1 = new javax.swing.JButton();
+        btnLimparNovaCat = new javax.swing.JButton();
+        telaCadMaterial1 = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        btnFechar6 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        v = new javax.swing.JTable();
+        txtNomeMat1 = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        a = new com.k33ptoo.components.KButton();
+        b = new com.k33ptoo.components.KButton();
+        c = new com.k33ptoo.components.KButton();
+        d = new javax.swing.JTextField();
+        f = new javax.swing.JButton();
+        jLabel46 = new javax.swing.JLabel();
+        btnHome27 = new javax.swing.JButton();
+        jLabel54 = new javax.swing.JLabel();
         menuLateral = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -2175,16 +2222,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel15.setForeground(new java.awt.Color(26, 131, 43));
         jLabel15.setText("Buscar");
 
-        txtFornId.setBackground(new java.awt.Color(223, 223, 223));
-        txtFornId.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        txtFornId.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        txtFornId.setEnabled(false);
-        txtFornId.setSelectionColor(new java.awt.Color(26, 131, 43));
-
-        jLabel16.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        jLabel16.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel16.setText("ID Fornecedor");
-
         btnLimpar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnLimpar.setForeground(new java.awt.Color(26, 131, 43));
         btnLimpar.setText("Limpar");
@@ -2233,9 +2270,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                                 .addComponent(txtFornEndereco, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
                                                 .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addComponent(txtFornNome, javax.swing.GroupLayout.Alignment.LEADING))
-                                            .addComponent(jLabel12)
-                                            .addComponent(txtFornId, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel16))
+                                            .addComponent(jLabel12))
                                         .addGap(18, 18, 18)
                                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -2261,15 +2296,15 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                         .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(txtFornPesquisar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGap(0, 0, 0)
                                         .addComponent(btnLimpar))
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1050, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(telaCadFornecedorLayout.createSequentialGroup()
-                        .addGap(227, 227, 227)
+                        .addGap(146, 146, 146)
                         .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(50, 50, 50)
+                        .addGap(114, 114, 114)
                         .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(50, 50, 50)
+                        .addGap(114, 114, 114)
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
@@ -2322,23 +2357,19 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addComponent(jLabel13)
                         .addGap(0, 0, 0)
                         .addComponent(txtFornEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel16)
-                .addGap(0, 0, 0)
-                .addComponent(txtFornId, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
+                .addGap(29, 29, 29)
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel15)
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 2, Short.MAX_VALUE)
                 .addGroup(telaCadFornecedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtFornPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -2783,12 +2814,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
-        tblMaterial = new javax.swing.JTable(){
+        tblMaterialNova = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex){
                 return false;
             }
         };
-        tblMaterial.setModel(new javax.swing.table.DefaultTableModel(
+        tblMaterialNova.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -2799,13 +2830,13 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblMaterial.getTableHeader().setReorderingAllowed(false);
-        tblMaterial.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblMaterialNova.getTableHeader().setReorderingAllowed(false);
+        tblMaterialNova.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblMaterialMouseClicked(evt);
+                tblMaterialNovaMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(tblMaterial);
+        jScrollPane2.setViewportView(tblMaterialNova);
 
         jLabel18.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(26, 131, 43));
@@ -3235,33 +3266,29 @@ public class testeMenuNovo extends javax.swing.JFrame {
             .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 1088, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 22, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, telaMenuMovimentacoesLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cBoxTipoMov, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel34))
-                .addGap(50, 50, 50)
-                .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
-                        .addComponent(txtBuscarMov, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnLimparMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel35))
-                .addGap(197, 197, 197))
             .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
                 .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, telaMenuMovimentacoesLayout.createSequentialGroup()
+                        .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel35)
+                            .addComponent(txtBuscarMov, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(btnNovaMovimentacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cBoxTipoMov, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel34))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLimparMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(204, 204, 204))
                     .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 1065, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(btnHome21, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel33)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnNovaMovimentacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 1065, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
+                                .addComponent(btnHome21, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel33)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         telaMenuMovimentacoesLayout.setVerticalGroup(
             telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3273,16 +3300,23 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addGap(11, 11, 11)
                         .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
-                .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel34)
-                    .addComponent(jLabel35))
-                .addGap(0, 1, Short.MAX_VALUE)
                 .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cBoxTipoMov, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBuscarMov, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLimparMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
+                        .addGap(2, 21, Short.MAX_VALUE)
+                        .addComponent(btnLimparMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14))
+                    .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(telaMenuMovimentacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
+                                .addComponent(jLabel34)
+                                .addGap(0, 0, 0)
+                                .addComponent(cBoxTipoMov, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(telaMenuMovimentacoesLayout.createSequentialGroup()
+                                .addComponent(jLabel35)
+                                .addGap(0, 3, Short.MAX_VALUE)
+                                .addComponent(txtBuscarMov, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNovaMovimentacao, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3789,32 +3823,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
-        btnNovaMovEmMat.setText("Nova Movimentação");
-        btnNovaMovEmMat.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnNovaMovEmMat.setkAllowGradient(false);
-        btnNovaMovEmMat.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        btnNovaMovEmMat.setkBorderRadius(20);
-        btnNovaMovEmMat.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnNovaMovEmMat.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnNovaMovEmMat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNovaMovEmMatActionPerformed(evt);
-            }
-        });
-
-        btnVincEmMat.setText("Vincular");
-        btnVincEmMat.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnVincEmMat.setkAllowGradient(false);
-        btnVincEmMat.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        btnVincEmMat.setkBorderRadius(20);
-        btnVincEmMat.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnVincEmMat.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnVincEmMat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVincEmMatActionPerformed(evt);
-            }
-        });
-
         jLabel63.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
         jLabel63.setForeground(new java.awt.Color(26, 131, 43));
         jLabel63.setText("> MATERIAIS");
@@ -3840,12 +3848,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addComponent(jSeparator11)
                         .addGroup(telaMateriaisLayout.createSequentialGroup()
                             .addGap(10, 10, 10)
-                            .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 1067, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(telaMateriaisLayout.createSequentialGroup()
-                            .addGap(10, 10, 10)
-                            .addComponent(btnHome24, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel63)))
+                            .addGroup(telaMateriaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 1067, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(telaMateriaisLayout.createSequentialGroup()
+                                    .addComponent(btnHome24, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel63)))))
                     .addGroup(telaMateriaisLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(telaMateriaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3855,11 +3863,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnLimparEmMat, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(49, 49, 49)
-                        .addComponent(btnNovoMaterialEmMat, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnNovaMovEmMat, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnVincEmMat, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnNovoMaterialEmMat, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         telaMateriaisLayout.setVerticalGroup(
@@ -3878,9 +3882,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addComponent(txtBuscarEmMat, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(telaMateriaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnLimparEmMat, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnNovoMaterialEmMat, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnNovaMovEmMat, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnVincEmMat, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnNovoMaterialEmMat, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -3993,15 +3995,15 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addComponent(jSeparator12, javax.swing.GroupLayout.DEFAULT_SIZE, 1095, Short.MAX_VALUE)
                         .addComponent(jSeparator13)
                         .addGroup(telaFornecedoresLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 1067, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(telaFornecedoresLayout.createSequentialGroup()
-                            .addGap(18, 18, 18)
-                            .addComponent(btnHome25, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel64)))
+                            .addGap(10, 10, 10)
+                            .addGroup(telaFornecedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 1044, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(telaFornecedoresLayout.createSequentialGroup()
+                                    .addComponent(btnHome25, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel64)))))
                     .addGroup(telaFornecedoresLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
+                        .addGap(10, 10, 10)
                         .addGroup(telaFornecedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel48)
                             .addGroup(telaFornecedoresLayout.createSequentialGroup()
@@ -4131,22 +4133,22 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addComponent(jSeparator14, javax.swing.GroupLayout.DEFAULT_SIZE, 1095, Short.MAX_VALUE)
                         .addComponent(jSeparator15)
                         .addGroup(telaCategoriasLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 1067, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(telaCategoriasLayout.createSequentialGroup()
-                            .addGap(18, 18, 18)
-                            .addComponent(btnHome26, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel65)))
+                            .addGap(10, 10, 10)
+                            .addGroup(telaCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 1067, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(telaCategoriasLayout.createSequentialGroup()
+                                    .addComponent(btnHome26, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel65)))))
                     .addGroup(telaCategoriasLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
+                        .addGap(10, 10, 10)
                         .addGroup(telaCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel49)
                             .addGroup(telaCategoriasLayout.createSequentialGroup()
                                 .addComponent(txtBuscarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnLimparCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(49, 49, 49)
+                        .addGap(30, 30, 30)
                         .addComponent(btnNovaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
@@ -4175,54 +4177,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         );
 
         jTabbedPane2.addTab("tab8", telaCategorias);
-
-        telaSobre.setBackground(new java.awt.Color(217, 217, 217));
-
-        jLabel54.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/txtStockSync.png"))); // NOI18N
-
-        jLabel55.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
-        jLabel55.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel55.setText("> SOBRE");
-
-        btnHome9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/btnHome.png"))); // NOI18N
-        btnHome9.setBorderPainted(false);
-        btnHome9.setContentAreaFilled(false);
-        btnHome9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnHome9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHome9ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout telaSobreLayout = new javax.swing.GroupLayout(telaSobre);
-        telaSobre.setLayout(telaSobreLayout);
-        telaSobreLayout.setHorizontalGroup(
-            telaSobreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(telaSobreLayout.createSequentialGroup()
-                .addGroup(telaSobreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(telaSobreLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(btnHome9, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel55))
-                    .addGroup(telaSobreLayout.createSequentialGroup()
-                        .addGap(98, 98, 98)
-                        .addComponent(jLabel54)))
-                .addContainerGap(112, Short.MAX_VALUE))
-        );
-        telaSobreLayout.setVerticalGroup(
-            telaSobreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(telaSobreLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addGroup(telaSobreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnHome9, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel54)
-                .addContainerGap(23, Short.MAX_VALUE))
-        );
-
-        jTabbedPane2.addTab("tab15", telaSobre);
 
         telaAjuda.setBackground(new java.awt.Color(217, 217, 217));
 
@@ -4585,19 +4539,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel50.setForeground(new java.awt.Color(26, 131, 43));
         jLabel50.setText("Buscar");
 
-        btnLimparPainel.setText("Limpar");
-        btnLimparPainel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnLimparPainel.setkAllowGradient(false);
-        btnLimparPainel.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        btnLimparPainel.setkBorderRadius(20);
-        btnLimparPainel.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnLimparPainel.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnLimparPainel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimparPainelActionPerformed(evt);
-            }
-        });
-
         btnAlterarPainel.setText("Alterar");
         btnAlterarPainel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnAlterarPainel.setkAllowGradient(false);
@@ -4720,6 +4661,17 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel72.setForeground(new java.awt.Color(26, 131, 43));
         jLabel72.setText("Tipo");
 
+        btnLimparPainel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnLimparPainel.setForeground(new java.awt.Color(26, 131, 43));
+        btnLimparPainel.setText("Limpar");
+        btnLimparPainel.setContentAreaFilled(false);
+        btnLimparPainel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnLimparPainel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparPainelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelAdminLayout = new javax.swing.GroupLayout(painelAdmin);
         painelAdmin.setLayout(painelAdminLayout);
         painelAdminLayout.setHorizontalGroup(
@@ -4742,9 +4694,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel50)
                             .addComponent(txtPainelAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)
-                        .addComponent(btnLimparPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, 0)
+                        .addComponent(btnLimparPainel)))
+                .addContainerGap(15, Short.MAX_VALUE))
             .addGroup(painelAdminLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4789,7 +4741,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addGroup(painelAdminLayout.createSequentialGroup()
                         .addGroup(painelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtPainelAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnLimparPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnLimparPainel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jSeparator19, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(24, 24, 24)
@@ -4815,21 +4767,21 @@ public class testeMenuNovo extends javax.swing.JFrame {
                             .addComponent(txtSenhaPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAlterarPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnExcluirPainel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25))
         );
 
         jTabbedPane2.addTab("tab8", painelAdmin);
 
-        telaVincular.setBackground(new java.awt.Color(217, 217, 217));
+        telaCadCategorias.setBackground(new java.awt.Color(217, 217, 217));
 
         tblCategoriasEmCat = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex){
                 return false;
             }
         };
-        oah9.setModel(new javax.swing.table.DefaultTableModel(
+        tblNovaCad.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -4840,31 +4792,31 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        oah9.getTableHeader().setReorderingAllowed(false);
-        oah9.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblNovaCad.getTableHeader().setReorderingAllowed(false);
+        tblNovaCad.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                oah9MouseClicked(evt);
+                tblNovaCadMouseClicked(evt);
             }
         });
-        oah9.addKeyListener(new java.awt.event.KeyAdapter() {
+        tblNovaCad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                oah9KeyReleased(evt);
+                tblNovaCadKeyReleased(evt);
             }
         });
-        jScrollPane14.setViewportView(oah9);
+        jScrollPane14.setViewportView(tblNovaCad);
 
-        oah.setBackground(new java.awt.Color(223, 223, 223));
-        oah.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        oah.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        oah.setSelectionColor(new java.awt.Color(26, 131, 43));
-        oah.addActionListener(new java.awt.event.ActionListener() {
+        txtNovaCatBuscar.setBackground(new java.awt.Color(223, 223, 223));
+        txtNovaCatBuscar.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        txtNovaCatBuscar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
+        txtNovaCatBuscar.setSelectionColor(new java.awt.Color(26, 131, 43));
+        txtNovaCatBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                oahActionPerformed(evt);
+                txtNovaCatBuscarActionPerformed(evt);
             }
         });
-        oah.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNovaCatBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                oahKeyReleased(evt);
+                txtNovaCatBuscarKeyReleased(evt);
             }
         });
 
@@ -4872,35 +4824,22 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel66.setForeground(new java.awt.Color(26, 131, 43));
         jLabel66.setText("Buscar");
 
-        oah2.setText("Limpar");
-        oah2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        oah2.setkAllowGradient(false);
-        oah2.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        oah2.setkBorderRadius(20);
-        oah2.setkHoverColor(new java.awt.Color(52, 153, 68));
-        oah2.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        oah2.addActionListener(new java.awt.event.ActionListener() {
+        btnNovaCatSalvar.setText("Salvar");
+        btnNovaCatSalvar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnNovaCatSalvar.setkAllowGradient(false);
+        btnNovaCatSalvar.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnNovaCatSalvar.setkBorderRadius(20);
+        btnNovaCatSalvar.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnNovaCatSalvar.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnNovaCatSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                oah2ActionPerformed(evt);
-            }
-        });
-
-        oah7.setText("Alterar");
-        oah7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        oah7.setkAllowGradient(false);
-        oah7.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        oah7.setkBorderRadius(20);
-        oah7.setkHoverColor(new java.awt.Color(52, 153, 68));
-        oah7.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        oah7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                oah7ActionPerformed(evt);
+                btnNovaCatSalvarActionPerformed(evt);
             }
         });
 
         jLabel73.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
         jLabel73.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel73.setText("> PAINEL ADMIN");
+        jLabel73.setText("> NOVA CATEGORIA");
 
         ops6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/btnHome.png"))); // NOI18N
         ops6.setBorderPainted(false);
@@ -4912,202 +4851,380 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
-        oah3.setBackground(new java.awt.Color(223, 223, 223));
-        oah3.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        oah3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        oah3.setSelectionColor(new java.awt.Color(26, 131, 43));
-        oah3.addActionListener(new java.awt.event.ActionListener() {
+        txtNovaCatNome.setBackground(new java.awt.Color(223, 223, 223));
+        txtNovaCatNome.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        txtNovaCatNome.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
+        txtNovaCatNome.setSelectionColor(new java.awt.Color(26, 131, 43));
+        txtNovaCatNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                oah3ActionPerformed(evt);
+                txtNovaCatNomeActionPerformed(evt);
             }
         });
-        oah3.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNovaCatNome.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                oah3KeyReleased(evt);
-            }
-        });
-
-        jLabel74.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        jLabel74.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel74.setText("ID");
-
-        oa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tipo", "Item 2", "Item 3", "Item 4" }));
-
-        oah4.setBackground(new java.awt.Color(223, 223, 223));
-        oah4.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        oah4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        oah4.setSelectionColor(new java.awt.Color(26, 131, 43));
-        oah4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                oah4ActionPerformed(evt);
-            }
-        });
-        oah4.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                oah4KeyReleased(evt);
+                txtNovaCatNomeKeyReleased(evt);
             }
         });
 
         jLabel75.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel75.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel75.setText("Nome");
+        jLabel75.setText("Nome da Categoria*");
 
-        oah5.setBackground(new java.awt.Color(223, 223, 223));
-        oah5.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        oah5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        oah5.setSelectionColor(new java.awt.Color(26, 131, 43));
-        oah5.addActionListener(new java.awt.event.ActionListener() {
+        btnNovaCatAlterar.setText("Alterar");
+        btnNovaCatAlterar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnNovaCatAlterar.setkAllowGradient(false);
+        btnNovaCatAlterar.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnNovaCatAlterar.setkBorderRadius(20);
+        btnNovaCatAlterar.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnNovaCatAlterar.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnNovaCatAlterar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                oah5ActionPerformed(evt);
-            }
-        });
-        oah5.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                oah5KeyReleased(evt);
+                btnNovaCatAlterarActionPerformed(evt);
             }
         });
 
-        jLabel76.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        jLabel76.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel76.setText("Login");
-
-        oah6.setBackground(new java.awt.Color(223, 223, 223));
-        oah6.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
-        oah6.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
-        oah6.setSelectionColor(new java.awt.Color(26, 131, 43));
-        oah6.addActionListener(new java.awt.event.ActionListener() {
+        btnNovaCatExcluir.setText("Excluir");
+        btnNovaCatExcluir.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnNovaCatExcluir.setkAllowGradient(false);
+        btnNovaCatExcluir.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnNovaCatExcluir.setkBorderRadius(20);
+        btnNovaCatExcluir.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnNovaCatExcluir.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnNovaCatExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                oah6ActionPerformed(evt);
-            }
-        });
-        oah6.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                oah6KeyReleased(evt);
+                btnNovaCatExcluirActionPerformed(evt);
             }
         });
 
-        jLabel77.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        jLabel77.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel77.setText("Senha");
-
-        oah8.setText("Excluir");
-        oah8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        oah8.setkAllowGradient(false);
-        oah8.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        oah8.setkBorderRadius(20);
-        oah8.setkHoverColor(new java.awt.Color(52, 153, 68));
-        oah8.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        oah8.addActionListener(new java.awt.event.ActionListener() {
+        btnNovaCatSubstituir.setText("Substituir");
+        btnNovaCatSubstituir.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnNovaCatSubstituir.setkAllowGradient(false);
+        btnNovaCatSubstituir.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        btnNovaCatSubstituir.setkBorderRadius(20);
+        btnNovaCatSubstituir.setkHoverColor(new java.awt.Color(52, 153, 68));
+        btnNovaCatSubstituir.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnNovaCatSubstituir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                oah8ActionPerformed(evt);
+                btnNovaCatSubstituirActionPerformed(evt);
             }
         });
 
-        jLabel78.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        jLabel78.setForeground(new java.awt.Color(26, 131, 43));
-        jLabel78.setText("Tipo");
+        btnFechar1.setBackground(new java.awt.Color(217, 217, 217));
+        btnFechar1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        btnFechar1.setForeground(new java.awt.Color(26, 131, 43));
+        btnFechar1.setText("X");
+        btnFechar1.setBorder(null);
+        btnFechar1.setBorderPainted(false);
+        btnFechar1.setContentAreaFilled(false);
+        btnFechar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFechar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFechar1ActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout telaVincularLayout = new javax.swing.GroupLayout(telaVincular);
-        telaVincular.setLayout(telaVincularLayout);
-        telaVincularLayout.setHorizontalGroup(
-            telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(telaVincularLayout.createSequentialGroup()
-                .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+        btnLimparNovaCat.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnLimparNovaCat.setForeground(new java.awt.Color(26, 131, 43));
+        btnLimparNovaCat.setText("Limpar");
+        btnLimparNovaCat.setContentAreaFilled(false);
+        btnLimparNovaCat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnLimparNovaCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparNovaCatActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout telaCadCategoriasLayout = new javax.swing.GroupLayout(telaCadCategorias);
+        telaCadCategorias.setLayout(telaCadCategoriasLayout);
+        telaCadCategoriasLayout.setHorizontalGroup(
+            telaCadCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaCadCategoriasLayout.createSequentialGroup()
+                .addGroup(telaCadCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(telaCadCategoriasLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(telaCadCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel66)
+                            .addGroup(telaCadCategoriasLayout.createSequentialGroup()
+                                .addComponent(txtNovaCatBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(btnLimparNovaCat))))
+                    .addGroup(telaCadCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jSeparator20, javax.swing.GroupLayout.DEFAULT_SIZE, 1095, Short.MAX_VALUE)
                         .addComponent(jSeparator21)
-                        .addGroup(telaVincularLayout.createSequentialGroup()
+                        .addGroup(telaCadCategoriasLayout.createSequentialGroup()
                             .addGap(10, 10, 10)
-                            .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(telaVincularLayout.createSequentialGroup()
+                            .addGroup(telaCadCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(telaCadCategoriasLayout.createSequentialGroup()
+                                    .addGroup(telaCadCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 1044, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(telaCadCategoriasLayout.createSequentialGroup()
+                                            .addGroup(telaCadCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel75)
+                                                .addComponent(txtNovaCatNome, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(40, 40, 40)
+                                            .addComponent(btnNovaCatSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(30, 30, 30)
+                                            .addComponent(btnNovaCatAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(30, 30, 30)
+                                            .addComponent(btnNovaCatExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(30, 30, 30)
+                                            .addComponent(btnNovaCatSubstituir, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE))
+                                .addGroup(telaCadCategoriasLayout.createSequentialGroup()
                                     .addComponent(ops6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel73))
-                                .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 1047, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(telaVincularLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel66)
-                            .addComponent(oah, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)
-                        .addComponent(oah2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(telaVincularLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(oah3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel74))
-                .addGap(18, 18, 18)
-                .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel78)
-                    .addComponent(oa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel75)
-                    .addComponent(oah4, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel76)
-                    .addComponent(oah5, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel77)
-                    .addGroup(telaVincularLayout.createSequentialGroup()
-                        .addComponent(oah6, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(oah7, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(oah8, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(73, Short.MAX_VALUE))
+                                    .addComponent(jLabel73)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnFechar1)
+                                    .addGap(34, 34, 34))))))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
-        telaVincularLayout.setVerticalGroup(
-            telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(telaVincularLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel73, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ops6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        telaCadCategoriasLayout.setVerticalGroup(
+            telaCadCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaCadCategoriasLayout.createSequentialGroup()
+                .addGroup(telaCadCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(telaCadCategoriasLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addGroup(telaCadCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel73, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ops6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(telaCadCategoriasLayout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(btnFechar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addComponent(jSeparator20, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel66)
+                .addGap(0, 4, Short.MAX_VALUE)
+                .addGroup(telaCadCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNovaCatBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLimparNovaCat))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator21, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel75)
                 .addGap(0, 0, 0)
-                .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(telaVincularLayout.createSequentialGroup()
-                        .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(oah, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(oah2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jSeparator21, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel74)
-                        .addGap(0, 0, 0)
-                        .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(oah3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(oa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(telaVincularLayout.createSequentialGroup()
-                        .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel75)
-                            .addComponent(jLabel78))
-                        .addGap(0, 0, 0)
-                        .addComponent(oah4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(telaVincularLayout.createSequentialGroup()
-                        .addComponent(jLabel76)
-                        .addGap(0, 0, 0)
-                        .addComponent(oah5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(telaVincularLayout.createSequentialGroup()
-                        .addComponent(jLabel77)
-                        .addGap(0, 0, 0)
-                        .addGroup(telaVincularLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(oah6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(oah7, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(oah8, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
+                .addGroup(telaCadCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNovaCatNome, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNovaCatSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNovaCatAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNovaCatExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNovaCatSubstituir, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
         );
 
-        jTabbedPane2.addTab("tab8", telaVincular);
+        jTabbedPane2.addTab("tab8", telaCadCategorias);
+
+        telaCadMaterial1.setBackground(new java.awt.Color(217, 217, 217));
+        telaCadMaterial1.setPreferredSize(new java.awt.Dimension(1110, 695));
+
+        jLabel16.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel16.setText("> NOVA CATEGORIA");
+
+        btnFechar6.setBackground(new java.awt.Color(217, 217, 217));
+        btnFechar6.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        btnFechar6.setForeground(new java.awt.Color(26, 131, 43));
+        btnFechar6.setText("X");
+        btnFechar6.setBorder(null);
+        btnFechar6.setBorderPainted(false);
+        btnFechar6.setContentAreaFilled(false);
+        btnFechar6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFechar6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFechar6ActionPerformed(evt);
+            }
+        });
+
+        tblMaterialNova = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        v.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        v.getTableHeader().setReorderingAllowed(false);
+        v.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                vMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(v);
+
+        txtNomeMat1.setBackground(new java.awt.Color(223, 223, 223));
+        txtNomeMat1.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        txtNomeMat1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
+        txtNomeMat1.setSelectionColor(new java.awt.Color(26, 131, 43));
+        txtNomeMat1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNomeMat1ActionPerformed(evt);
+            }
+        });
+
+        jLabel25.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel25.setText("Nome da Categoria *");
+
+        a.setText("Salvar");
+        a.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        a.setkAllowGradient(false);
+        a.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        a.setkBorderRadius(20);
+        a.setkHoverColor(new java.awt.Color(52, 153, 68));
+        a.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        a.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aActionPerformed(evt);
+            }
+        });
+
+        b.setText("Alterar");
+        b.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        b.setkAllowGradient(false);
+        b.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        b.setkBorderRadius(20);
+        b.setkHoverColor(new java.awt.Color(52, 153, 68));
+        b.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        b.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bActionPerformed(evt);
+            }
+        });
+
+        c.setText("Excluir");
+        c.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        c.setkAllowGradient(false);
+        c.setkBackGroundColor(new java.awt.Color(26, 131, 43));
+        c.setkBorderRadius(20);
+        c.setkHoverColor(new java.awt.Color(52, 153, 68));
+        c.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        c.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cActionPerformed(evt);
+            }
+        });
+
+        d.setBackground(new java.awt.Color(223, 223, 223));
+        d.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        d.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
+        d.setSelectionColor(new java.awt.Color(26, 131, 43));
+        d.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dActionPerformed(evt);
+            }
+        });
+        d.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                dKeyReleased(evt);
+            }
+        });
+
+        f.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        f.setForeground(new java.awt.Color(26, 131, 43));
+        f.setText("Limpar");
+        f.setContentAreaFilled(false);
+        f.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        f.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fActionPerformed(evt);
+            }
+        });
+
+        jLabel46.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        jLabel46.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel46.setText("Buscar Material");
+
+        btnHome27.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/teste/icones/btnHome.png"))); // NOI18N
+        btnHome27.setBorderPainted(false);
+        btnHome27.setContentAreaFilled(false);
+        btnHome27.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnHome27.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHome27ActionPerformed(evt);
+            }
+        });
+
+        jLabel54.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        jLabel54.setForeground(new java.awt.Color(26, 131, 43));
+        jLabel54.setText("* Campos Obrigatórios");
+
+        javax.swing.GroupLayout telaCadMaterial1Layout = new javax.swing.GroupLayout(telaCadMaterial1);
+        telaCadMaterial1.setLayout(telaCadMaterial1Layout);
+        telaCadMaterial1Layout.setHorizontalGroup(
+            telaCadMaterial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(telaCadMaterial1Layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 688, Short.MAX_VALUE)
+                .addComponent(jLabel54)
+                .addGap(84, 84, 84))
+            .addGroup(telaCadMaterial1Layout.createSequentialGroup()
+                .addGroup(telaCadMaterial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(telaCadMaterial1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(telaCadMaterial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnFechar6)
+                            .addGroup(telaCadMaterial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(telaCadMaterial1Layout.createSequentialGroup()
+                                    .addComponent(d, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(f))
+                                .addComponent(jLabel46)
+                                .addComponent(btnHome27, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1050, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel25)
+                                .addComponent(txtNomeMat1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(telaCadMaterial1Layout.createSequentialGroup()
+                        .addGap(161, 161, 161)
+                        .addComponent(a, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(114, 114, 114)
+                        .addComponent(b, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(119, 119, 119)
+                        .addComponent(c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        telaCadMaterial1Layout.setVerticalGroup(
+            telaCadMaterial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, telaCadMaterial1Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(btnFechar6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addGroup(telaCadMaterial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(telaCadMaterial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                        .addComponent(jLabel54))
+                    .addComponent(btnHome27, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel25)
+                .addGap(0, 0, 0)
+                .addComponent(txtNomeMat1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57)
+                .addGroup(telaCadMaterial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(a, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(b, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(c, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addComponent(jLabel46)
+                .addGap(0, 0, 0)
+                .addGroup(telaCadMaterial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(d, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(f))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
+                .addGap(26, 26, 26))
+        );
+
+        jTabbedPane2.addTab("tab2", telaCadMaterial1);
 
         getContentPane().add(jTabbedPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, -50, 1110, 750));
 
@@ -5274,7 +5391,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         getContentPane().add(menuLateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 180, 700));
 
-        setSize(new java.awt.Dimension(1264, 712));
+        setSize(new java.awt.Dimension(1259, 712));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -5401,11 +5518,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         pesquisar_material();
     }//GEN-LAST:event_txtBuscarMatKeyReleased
 
-    private void tblMaterialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMaterialMouseClicked
-        // TODO add your handling code here:
-        setar_camposMaterial();
-    }//GEN-LAST:event_tblMaterialMouseClicked
-
     private void btnCadastrarCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarCatActionPerformed
         // TODO add your handling code here:
         cadastrarCategoria();
@@ -5421,29 +5533,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
         remover_categoria();
     }//GEN-LAST:event_btnExcluirCatActionPerformed
 
-    private void btnVincularFMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVincularFMActionPerformed
-        // TODO add your handling code here:
-        vincularFornecedorMaterial();
-    }//GEN-LAST:event_btnVincularFMActionPerformed
-
-    private void btnDesvincularFMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesvincularFMActionPerformed
-        // TODO add your handling code here:
-        desvincularFornecedorMaterial();
-    }//GEN-LAST:event_btnDesvincularFMActionPerformed
-
-    private void txtIdMatVMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdMatVMActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdMatVMActionPerformed
-
     private void txtBuscarCatEmCatKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarCatEmCatKeyReleased
         // TODO add your handling code here:
         pesquisar_categoriaEmCat();
     }//GEN-LAST:event_txtBuscarCatEmCatKeyReleased
-
-    private void txtBuscarVMKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarVMKeyReleased
-        // TODO add your handling code here:
-        pesquisar_FornecedorMaterial();
-    }//GEN-LAST:event_txtBuscarVMKeyReleased
 
     private void tblCategoria2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCategoria2MouseClicked
         // TODO add your handling code here:
@@ -5471,17 +5564,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         PopupCategoria popup = new PopupCategoria();
         popup.setVisible(true);
     }//GEN-LAST:event_btnSubstituirCatActionPerformed
-
-    private void btnVerTabelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTabelasActionPerformed
-        // TODO add your handling code here:
-        PopupTabelasVM popup2 = new PopupTabelasVM();
-        popup2.setVisible(true);
-    }//GEN-LAST:event_btnVerTabelasActionPerformed
-
-    private void tblVincularMaterialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVincularMaterialMouseClicked
-        // TODO add your handling code here:
-        setar_camposFornecedorMaterial();
-    }//GEN-LAST:event_tblVincularMaterialMouseClicked
 
     private void btnMovSaidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovSaidaActionPerformed
         // TODO add your handling code here:
@@ -5607,16 +5689,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jTabbedPane2.setSelectedComponent(telaCadMaterial);
     }//GEN-LAST:event_btnNovoMaterialEmMatActionPerformed
 
-    private void btnNovaMovEmMatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaMovEmMatActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaCadMovimentacoes);
-    }//GEN-LAST:event_btnNovaMovEmMatActionPerformed
-
-    private void btnVincEmMatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVincEmMatActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaCadCategoria);
-    }//GEN-LAST:event_btnVincEmMatActionPerformed
-
     private void txtBuscarEmFornActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarEmFornActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBuscarEmFornActionPerformed
@@ -5659,7 +5731,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void btnNovaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaCategoriaActionPerformed
         // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaCadCategoria);
+        jTabbedPane2.setSelectedComponent(telaCadCategorias);
     }//GEN-LAST:event_btnNovaCategoriaActionPerformed
 
     private void txtBuscarEmSaidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarEmSaidaActionPerformed
@@ -5675,11 +5747,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaInicial);
     }//GEN-LAST:event_btnHome8ActionPerformed
-
-    private void btnHome9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome9ActionPerformed
-        // TODO add your handling code here:
-        jTabbedPane2.setSelectedComponent(telaInicial);
-    }//GEN-LAST:event_btnHome9ActionPerformed
 
     private void btnHome12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome12ActionPerformed
         // TODO add your handling code here:
@@ -5831,71 +5898,142 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jTabbedPane2.setSelectedComponent(painelAdmin);
     }//GEN-LAST:event_btnPainelAdminActionPerformed
 
-    private void txtPainelAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPainelAdminActionPerformed
+    private void btnSairAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairAppActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtPainelAdminActionPerformed
+    }//GEN-LAST:event_btnSairAppActionPerformed
 
-    private void txtPainelAdminKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPainelAdminKeyReleased
+    private void tblNovaCadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblNovaCadMouseClicked
         // TODO add your handling code here:
-        pesquisar_painelAdmin();
-    }//GEN-LAST:event_txtPainelAdminKeyReleased
+        setar_camposCategoria();
+    }//GEN-LAST:event_tblNovaCadMouseClicked
+
+    private void tblNovaCadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblNovaCadKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblNovaCadKeyReleased
+
+    private void txtNovaCatBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNovaCatBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNovaCatBuscarActionPerformed
+
+    private void txtNovaCatBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNovaCatBuscarKeyReleased
+        // TODO add your handling code here:
+        pesquisar_categoriaEmCat();
+    }//GEN-LAST:event_txtNovaCatBuscarKeyReleased
+
+    private void btnNovaCatSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaCatSalvarActionPerformed
+        // TODO add your handling code here:
+        cadastrarCategoria();
+    }//GEN-LAST:event_btnNovaCatSalvarActionPerformed
+
+    private void ops6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ops6ActionPerformed
+
+    private void txtNovaCatNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNovaCatNomeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNovaCatNomeActionPerformed
+
+    private void txtNovaCatNomeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNovaCatNomeKeyReleased
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_txtNovaCatNomeKeyReleased
+
+    private void btnNovaCatAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaCatAlterarActionPerformed
+        // TODO add your handling code here:
+        alterarCategoria();
+    }//GEN-LAST:event_btnNovaCatAlterarActionPerformed
+
+    private void tblVincularMaterialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVincularMaterialMouseClicked
+        // TODO add your handling code here:
+        setar_camposFornecedorMaterial();
+    }//GEN-LAST:event_tblVincularMaterialMouseClicked
+
+    private void txtBuscarVMKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarVMKeyReleased
+        // TODO add your handling code here:
+        pesquisar_FornecedorMaterial();
+    }//GEN-LAST:event_txtBuscarVMKeyReleased
+
+    private void btnVincularFMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVincularFMActionPerformed
+        // TODO add your handling code here:
+        vincularFornecedorMaterial();
+    }//GEN-LAST:event_btnVincularFMActionPerformed
+
+    private void btnDesvincularFMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesvincularFMActionPerformed
+        // TODO add your handling code here:
+        desvincularFornecedorMaterial();
+    }//GEN-LAST:event_btnDesvincularFMActionPerformed
+
+    private void btnVerTabelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTabelasActionPerformed
+        // TODO add your handling code here:
+        PopupTabelasVM popup2 = new PopupTabelasVM();
+        popup2.setVisible(true);
+    }//GEN-LAST:event_btnVerTabelasActionPerformed
+
+    private void txtIdMatVMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdMatVMActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdMatVMActionPerformed
 
     private void btnLimparPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparPainelActionPerformed
         // TODO add your handling code here:
         limpar();
-        atualizarComboBoxes();
         atualizarTabelas();
+        atualizarComboBoxes();
     }//GEN-LAST:event_btnLimparPainelActionPerformed
+
+    private void btnExcluirPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirPainelActionPerformed
+        // TODO add your handling code here:
+        remover_almoxarife();
+    }//GEN-LAST:event_btnExcluirPainelActionPerformed
+
+    private void txtSenhaPainelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSenhaPainelKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSenhaPainelKeyReleased
+
+    private void txtSenhaPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaPainelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSenhaPainelActionPerformed
+
+    private void txtLoginPainelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLoginPainelKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLoginPainelKeyReleased
+
+    private void txtLoginPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoginPainelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLoginPainelActionPerformed
+
+    private void txtNomePainelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomePainelKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNomePainelKeyReleased
+
+    private void txtNomePainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomePainelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNomePainelActionPerformed
+
+    private void txtIdPainelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdPainelKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdPainelKeyReleased
+
+    private void txtIdPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdPainelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdPainelActionPerformed
+
+    private void ops5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ops5ActionPerformed
 
     private void btnAlterarPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarPainelActionPerformed
         // TODO add your handling code here:
         alterar_almoxarife();
     }//GEN-LAST:event_btnAlterarPainelActionPerformed
 
-    private void ops5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops5ActionPerformed
+    private void txtPainelAdminKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPainelAdminKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_ops5ActionPerformed
+        pesquisar_painelAdmin();
+    }//GEN-LAST:event_txtPainelAdminKeyReleased
 
-    private void btnSairAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairAppActionPerformed
+    private void txtPainelAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPainelAdminActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnSairAppActionPerformed
-
-    private void txtIdPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdPainelActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdPainelActionPerformed
-
-    private void txtIdPainelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdPainelKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdPainelKeyReleased
-
-    private void txtNomePainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomePainelActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNomePainelActionPerformed
-
-    private void txtNomePainelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomePainelKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNomePainelKeyReleased
-
-    private void txtLoginPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoginPainelActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtLoginPainelActionPerformed
-
-    private void txtLoginPainelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLoginPainelKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtLoginPainelKeyReleased
-
-    private void txtSenhaPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaPainelActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSenhaPainelActionPerformed
-
-    private void txtSenhaPainelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSenhaPainelKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSenhaPainelKeyReleased
-
-    private void btnExcluirPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirPainelActionPerformed
-        // TODO add your handling code here:
-        remover_almoxarife();
-    }//GEN-LAST:event_btnExcluirPainelActionPerformed
+    }//GEN-LAST:event_txtPainelAdminActionPerformed
 
     private void tblPainelAdminKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblPainelAdminKeyReleased
         // TODO add your handling code here:
@@ -5907,69 +6045,75 @@ public class testeMenuNovo extends javax.swing.JFrame {
         setar_camposAlmoxarife();
     }//GEN-LAST:event_tblPainelAdminMouseClicked
 
-    private void oah9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_oah9MouseClicked
+    private void btnFechar6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechar6ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_oah9MouseClicked
+    }//GEN-LAST:event_btnFechar6ActionPerformed
 
-    private void oah9KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_oah9KeyReleased
+    private void vMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_vMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_oah9KeyReleased
+    }//GEN-LAST:event_vMouseClicked
 
-    private void oahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oahActionPerformed
+    private void txtNomeMat1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeMat1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_oahActionPerformed
+    }//GEN-LAST:event_txtNomeMat1ActionPerformed
 
-    private void oahKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_oahKeyReleased
+    private void aActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_oahKeyReleased
+    }//GEN-LAST:event_aActionPerformed
 
-    private void oah2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oah2ActionPerformed
+    private void bActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_oah2ActionPerformed
+    }//GEN-LAST:event_bActionPerformed
 
-    private void oah7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oah7ActionPerformed
+    private void cActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_oah7ActionPerformed
+    }//GEN-LAST:event_cActionPerformed
 
-    private void ops6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ops6ActionPerformed
+    private void dActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ops6ActionPerformed
+    }//GEN-LAST:event_dActionPerformed
 
-    private void oah3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oah3ActionPerformed
+    private void dKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_oah3ActionPerformed
+    }//GEN-LAST:event_dKeyReleased
 
-    private void oah3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_oah3KeyReleased
+    private void fActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_oah3KeyReleased
+    }//GEN-LAST:event_fActionPerformed
 
-    private void oah4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oah4ActionPerformed
+    private void btnHome27ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome27ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_oah4ActionPerformed
+    }//GEN-LAST:event_btnHome27ActionPerformed
 
-    private void oah4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_oah4KeyReleased
+    private void btnNovaCatExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaCatExcluirActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_oah4KeyReleased
+        remover_categoria();
+    }//GEN-LAST:event_btnNovaCatExcluirActionPerformed
 
-    private void oah5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oah5ActionPerformed
+    private void btnNovaCatSubstituirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaCatSubstituirActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_oah5ActionPerformed
+    }//GEN-LAST:event_btnNovaCatSubstituirActionPerformed
 
-    private void oah5KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_oah5KeyReleased
+    private void btnFechar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechar1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_oah5KeyReleased
+        jTabbedPane2.setSelectedComponent(telaCategorias);
+        limpar();
+        atualizarTabelas();
+    }//GEN-LAST:event_btnFechar1ActionPerformed
 
-    private void oah6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oah6ActionPerformed
+    private void btnLimparNovaCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparNovaCatActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_oah6ActionPerformed
+        btnNovaCatSalvar.setEnabled(true);
+        btnNovaCatSalvar.setkBackGroundColor(new Color(26, 131, 43));
+        btnNovaCatSalvar.setkHoverColor(new Color(52, 153, 68));
+        limpar();
+        atualizarTabelas();
+    }//GEN-LAST:event_btnLimparNovaCatActionPerformed
 
-    private void oah6KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_oah6KeyReleased
+    private void tblMaterialNovaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMaterialNovaMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_oah6KeyReleased
-
-    private void oah8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oah8ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_oah8ActionPerformed
+        //setar_camposMaterial();
+    }//GEN-LAST:event_tblMaterialNovaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -6008,10 +6152,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.k33ptoo.components.KButton a;
     private com.k33ptoo.components.KButton ajudaCad;
     private com.k33ptoo.components.KButton ajudaMov;
     private com.k33ptoo.components.KButton ajudaRelat;
     private com.k33ptoo.components.KButton ajudaVerCad;
+    private com.k33ptoo.components.KButton b;
     private com.k33ptoo.components.KButton btnAdicionar;
     private com.k33ptoo.components.KButton btnAjuda;
     private com.k33ptoo.components.KButton btnAlterar;
@@ -6031,10 +6177,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnExcluirMat;
     private com.k33ptoo.components.KButton btnExcluirPainel;
     private javax.swing.JButton btnFechar;
+    private javax.swing.JButton btnFechar1;
     private javax.swing.JButton btnFechar2;
     private javax.swing.JButton btnFechar3;
     private javax.swing.JButton btnFechar4;
     private javax.swing.JButton btnFechar5;
+    private javax.swing.JButton btnFechar6;
     private com.k33ptoo.components.KButton btnFornecedores;
     private javax.swing.JButton btnHome12;
     private javax.swing.JButton btnHome13;
@@ -6051,8 +6199,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JButton btnHome24;
     private javax.swing.JButton btnHome25;
     private javax.swing.JButton btnHome26;
+    private javax.swing.JButton btnHome27;
     private javax.swing.JButton btnHome8;
-    private javax.swing.JButton btnHome9;
     private javax.swing.JButton btnLimpar;
     private com.k33ptoo.components.KButton btnLimparCategoria;
     private com.k33ptoo.components.KButton btnLimparEmCat;
@@ -6061,14 +6209,18 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnLimparEntradas;
     private javax.swing.JButton btnLimparMat;
     private com.k33ptoo.components.KButton btnLimparMovimentacoes;
-    private com.k33ptoo.components.KButton btnLimparPainel;
+    private javax.swing.JButton btnLimparNovaCat;
+    private javax.swing.JButton btnLimparPainel;
     private com.k33ptoo.components.KButton btnLimparSaidas;
     private com.k33ptoo.components.KButton btnMateriais;
     private com.k33ptoo.components.KButton btnMovEntrada;
     private com.k33ptoo.components.KButton btnMovSaida;
     private com.k33ptoo.components.KButton btnMovimentacoes;
+    private com.k33ptoo.components.KButton btnNovaCatAlterar;
+    private com.k33ptoo.components.KButton btnNovaCatExcluir;
+    private com.k33ptoo.components.KButton btnNovaCatSalvar;
+    private com.k33ptoo.components.KButton btnNovaCatSubstituir;
     private com.k33ptoo.components.KButton btnNovaCategoria;
-    private com.k33ptoo.components.KButton btnNovaMovEmMat;
     private com.k33ptoo.components.KButton btnNovaMovimentacao;
     private com.k33ptoo.components.KButton btnNovoFornecedorEmForn;
     private com.k33ptoo.components.KButton btnNovoMaterialEmMat;
@@ -6079,11 +6231,13 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnSubstituirCat;
     private com.k33ptoo.components.KButton btnVerTabelas;
     private com.k33ptoo.components.KButton btnVincEmForn;
-    private com.k33ptoo.components.KButton btnVincEmMat;
     private com.k33ptoo.components.KButton btnVincularFM;
+    private com.k33ptoo.components.KButton c;
     private javax.swing.JComboBox<String> cBoxIdCat;
     private javax.swing.JComboBox<String> cBoxTipoAlmox;
     private javax.swing.JComboBox<String> cBoxTipoMov;
+    private javax.swing.JTextField d;
+    private javax.swing.JButton f;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -6099,6 +6253,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
@@ -6120,6 +6275,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
@@ -6129,7 +6285,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
-    private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel56;
     private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel58;
@@ -6150,11 +6305,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel71;
     private javax.swing.JLabel jLabel72;
     private javax.swing.JLabel jLabel73;
-    private javax.swing.JLabel jLabel74;
     private javax.swing.JLabel jLabel75;
-    private javax.swing.JLabel jLabel76;
-    private javax.swing.JLabel jLabel77;
-    private javax.swing.JLabel jLabel78;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLayeredPane jLayeredPane1;
@@ -6164,6 +6315,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane13;
     private javax.swing.JScrollPane jScrollPane14;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
@@ -6191,16 +6343,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JPanel menuLateral;
-    private javax.swing.JComboBox<String> oa;
-    private javax.swing.JTextField oah;
-    private com.k33ptoo.components.KButton oah2;
-    private javax.swing.JTextField oah3;
-    private javax.swing.JTextField oah4;
-    private javax.swing.JTextField oah5;
-    private javax.swing.JTextField oah6;
-    private com.k33ptoo.components.KButton oah7;
-    private com.k33ptoo.components.KButton oah8;
-    private javax.swing.JTable oah9;
     private javax.swing.JButton ops5;
     private javax.swing.JButton ops6;
     private javax.swing.JPanel painelAdmin;
@@ -6211,8 +6353,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTable tblFornecedores;
     private javax.swing.JTable tblFornecedoresEmForn;
     private javax.swing.JTable tblMateriaisEmMat;
-    private javax.swing.JTable tblMaterial;
+    private javax.swing.JTable tblMaterialNova;
     private javax.swing.JTable tblMovimentacoes;
+    private javax.swing.JTable tblNovaCad;
     private javax.swing.JTable tblPainelAdmin;
     private javax.swing.JTable tblVincularMaterial;
     private javax.swing.JPanel telaAjuda;
@@ -6221,8 +6364,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JPanel telaAjuda3;
     private javax.swing.JPanel telaAjuda4;
     private javax.swing.JPanel telaCadCategoria;
+    private javax.swing.JPanel telaCadCategorias;
     private javax.swing.JPanel telaCadFornecedor;
     private javax.swing.JPanel telaCadMaterial;
+    private javax.swing.JPanel telaCadMaterial1;
     private javax.swing.JPanel telaCadMovimentacoes;
     private javax.swing.JPanel telaCadastros;
     private javax.swing.JPanel telaCategorias;
@@ -6232,8 +6377,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JPanel telaMateriais;
     private javax.swing.JPanel telaMenuMovimentacoes;
     private javax.swing.JPanel telaSaidaMov;
-    private javax.swing.JPanel telaSobre;
-    private javax.swing.JPanel telaVincular;
     private javax.swing.JTextField txtBuscarCatEmCat;
     private javax.swing.JTextField txtBuscarCategoria;
     private javax.swing.JTextField txtBuscarEmForn;
@@ -6250,7 +6393,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTextField txtFornEmail;
     private javax.swing.JTextField txtFornEndereco;
     private javax.swing.JTextField txtFornFone;
-    private javax.swing.JTextField txtFornId;
     private javax.swing.JTextField txtFornNome;
     private javax.swing.JTextField txtFornPesquisar;
     private javax.swing.JTextField txtFornSite;
@@ -6262,10 +6404,14 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JTextField txtLoginPainel;
     private javax.swing.JTextField txtNomeCat;
     private javax.swing.JTextField txtNomeMat;
+    private javax.swing.JTextField txtNomeMat1;
     private javax.swing.JTextField txtNomePainel;
+    private javax.swing.JTextField txtNovaCatBuscar;
+    private javax.swing.JTextField txtNovaCatNome;
     private javax.swing.JTextField txtPainelAdmin;
     private javax.swing.JTextField txtSaidaIdMat;
     private javax.swing.JTextField txtSaidaQnt;
     private javax.swing.JTextField txtSenhaPainel;
+    private javax.swing.JTable v;
     // End of variables declaration//GEN-END:variables
 }
