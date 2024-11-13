@@ -782,36 +782,30 @@ public class testeMenuNovo extends javax.swing.JFrame {
     }
 
     //metodo para buscar uma categoria no MENU CATEGORIA
-    private void pesquisar_categoriaNoMenu() {
+    private void pesquisarCategoria(JTextField campoPesquisa, JTable tabelaResultado) {
         conn = Conexao.getConexao();
         String sql = "select id_categoria AS 'COD Categoria', nome_categoria AS 'Nome da Categoria' FROM categoria where nome_categoria like ?";
         try {
             pst = conn.prepareStatement(sql);
-            //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
-            pst.setString(1, "%" + txtBuscarCategoria.getText() + "%");
+            pst.setString(1, "%" + campoPesquisa.getText() + "%");
             rs = pst.executeQuery();
-            //a linha abaixo usa a biblioteca rs2xml.jar
-            tblCategoriasEmCat.setModel(DbUtils.resultSetToTableModel(rs));
-
+            tabelaResultado.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
-        }
-    }
-
-    //metodo para buscar uma categoria na tela NOVA CATEGORIA
-    private void pesquisar_categoriaEmCat() {
-        conn = Conexao.getConexao();
-        String sql = "select id_categoria AS 'COD Categoria', nome_categoria AS 'Nome da Categoria' FROM categoria where nome_categoria like ?";
-        try {
-            pst = conn.prepareStatement(sql);
-            //aqui, iremos passar o que foi digitado na caixa de pesquisa para o ?
-            pst.setString(1, "%" + txtNovaCatBuscar.getText() + "%");
-            rs = pst.executeQuery();
-            //a linha abaixo usa a biblioteca rs2xml.jar
-            tblNovaCad.setModel(DbUtils.resultSetToTableModel(rs));
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao fechar a conexão: " + ex.getMessage());
+            }
         }
     }
 
@@ -1347,14 +1341,15 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private void atualizarTabelas() {
         pesquisar_fornecedor();
         pesquisar_material();
-        pesquisar_categoriaEmCat();
         atualizarTabelaMovimentacoes("Todas");
         pesquisar_MovEntradas();
         pesquisar_MovSaidas();
         pesquisar_MateriaisEmMat();
         pesquisar_FornecedoresEmForn();
-        pesquisar_categoriaNoMenu();
         pesquisar_painelAdmin();
+
+        pesquisarCategoria(txtBuscarCategoria, tblCategoriasEmCat);
+        pesquisarCategoria(txtNovaCatBuscar, tblNovaCad);
     }
 
     // Método para atualizar as comboboxes
@@ -4672,7 +4667,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void txtBuscarCategoriaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarCategoriaKeyReleased
         // TODO add your handling code here:
-        pesquisar_categoriaNoMenu();
+        // No Menu Categoria
+        pesquisarCategoria(txtBuscarCategoria, tblCategoriasEmCat);
     }//GEN-LAST:event_txtBuscarCategoriaKeyReleased
 
     private void btnLimparCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparCategoriaActionPerformed
@@ -4844,7 +4840,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void txtNovaCatBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNovaCatBuscarKeyReleased
         // TODO add your handling code here:
-        pesquisar_categoriaEmCat();
+        // Na Tela Nova Categoria
+        pesquisarCategoria(txtNovaCatBuscar, tblNovaCad);
     }//GEN-LAST:event_txtNovaCatBuscarKeyReleased
 
     private void btnNovaCatSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaCatSalvarActionPerformed
