@@ -82,6 +82,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         estilizarTabela(tblMovimentacoes);
         estilizarTabela(tabelaSaidas);
         estilizarTabela(tblEntrada);
+        estilizarTabela(tabelaMenuCategorias);
 
         // Estiliza as comboBox
         estilizarComboBox(cBoxIdCat);
@@ -1348,7 +1349,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         pesquisar_FornecedoresEmForn();
         pesquisar_painelAdmin();
 
-        pesquisarCategoria(txtBuscarCategoria, tblCategoriasEmCat);
+        pesquisarCategoria(txtBuscarCategoria, tabelaMenuCategorias);
         pesquisarCategoria(txtNovaCatBuscar, tblNovaCad);
     }
 
@@ -1597,7 +1598,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         //Tela Categorias
         txtBuscarCategoria.setText(null);
-        ((DefaultTableModel) tblCategoriasEmCat.getModel()).setRowCount(0);
+        ((DefaultTableModel) tabelaMenuCategorias.getModel()).setRowCount(0);
 
         //Painel Admin
         txtPainelAdmin.setText(null);
@@ -1829,8 +1830,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel64 = new javax.swing.JLabel();
         btnHome25 = new javax.swing.JButton();
         telaCategorias = new javax.swing.JPanel();
-        jScrollPane11 = new javax.swing.JScrollPane();
-        tblCategoriasEmCat = new javax.swing.JTable();
         jSeparator14 = new javax.swing.JSeparator();
         jSeparator15 = new javax.swing.JSeparator();
         txtBuscarCategoria = new javax.swing.JTextField();
@@ -1839,6 +1838,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnNovaCategoria = new com.k33ptoo.components.KButton();
         jLabel65 = new javax.swing.JLabel();
         btnHome26 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tabelaMenuCategorias = new javax.swing.JTable();
         telaAjuda = new javax.swing.JPanel();
         jLabel52 = new javax.swing.JLabel();
         btnHome8 = new javax.swing.JButton();
@@ -3027,7 +3028,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                             .addComponent(jLabel42)
                             .addGroup(telaSaidaMovLayout.createSequentialGroup()
                                 .addComponent(txtSaidaQnt, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addGap(31, 31, 31)
                                 .addComponent(btnSalvarSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(telaSaidaMovLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -3366,25 +3367,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         telaCategorias.setBackground(new java.awt.Color(217, 217, 217));
 
-        tblCategoriasEmCat = new javax.swing.JTable(){
-            public boolean isCellEditable(int rowIndex, int colIndex){
-                return false;
-            }
-        };
-        tblCategoriasEmCat.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tblCategoriasEmCat.getTableHeader().setReorderingAllowed(false);
-        jScrollPane11.setViewportView(tblCategoriasEmCat);
-
         txtBuscarCategoria.setBackground(new java.awt.Color(223, 223, 223));
         txtBuscarCategoria.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
         txtBuscarCategoria.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(176, 176, 176), 1, true));
@@ -3447,6 +3429,24 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
+        tabelaMenuCategorias = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        tabelaMenuCategorias.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tabelaMenuCategorias);
+
         javax.swing.GroupLayout telaCategoriasLayout = new javax.swing.GroupLayout(telaCategorias);
         telaCategorias.setLayout(telaCategoriasLayout);
         telaCategoriasLayout.setHorizontalGroup(
@@ -3458,22 +3458,23 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addComponent(jSeparator15)
                         .addGroup(telaCategoriasLayout.createSequentialGroup()
                             .addGap(10, 10, 10)
-                            .addGroup(telaCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 1067, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(telaCategoriasLayout.createSequentialGroup()
-                                    .addComponent(btnHome26, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel65)))))
+                            .addComponent(btnHome26, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel65)
+                            .addGap(909, 909, 909)))
                     .addGroup(telaCategoriasLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(telaCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel49)
                             .addGroup(telaCategoriasLayout.createSequentialGroup()
-                                .addComponent(txtBuscarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnLimparCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(49, 49, 49)
-                        .addComponent(btnNovaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(telaCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel49)
+                                    .addGroup(telaCategoriasLayout.createSequentialGroup()
+                                        .addComponent(txtBuscarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnLimparCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(49, 49, 49)
+                                .addComponent(btnNovaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         telaCategoriasLayout.setVerticalGroup(
@@ -3496,8 +3497,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator15, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
-                .addGap(27, 27, 27))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("tab8", telaCategorias);
@@ -3815,7 +3816,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         painelAdmin.setBackground(new java.awt.Color(217, 217, 217));
 
-        tblCategoriasEmCat = new javax.swing.JTable(){
+        tblPainelAdmin = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex){
                 return false;
             }
@@ -4091,7 +4092,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
         telaCadCategorias.setBackground(new java.awt.Color(217, 217, 217));
 
-        tblCategoriasEmCat = new javax.swing.JTable(){
+        tblNovaCad = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex){
                 return false;
             }
@@ -4668,7 +4669,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private void txtBuscarCategoriaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarCategoriaKeyReleased
         // TODO add your handling code here:
         // No Menu Categoria
-        pesquisarCategoria(txtBuscarCategoria, tblCategoriasEmCat);
+        pesquisarCategoria(txtBuscarCategoria, tabelaMenuCategorias);
     }//GEN-LAST:event_txtBuscarCategoriaKeyReleased
 
     private void btnLimparCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparCategoriaActionPerformed
@@ -5147,10 +5148,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
-    private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane13;
     private javax.swing.JScrollPane jScrollPane14;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
@@ -5177,8 +5178,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JButton ops5;
     private javax.swing.JButton ops6;
     private javax.swing.JPanel painelAdmin;
+    private javax.swing.JTable tabelaMenuCategorias;
     private javax.swing.JTable tabelaSaidas;
-    private javax.swing.JTable tblCategoriasEmCat;
     private javax.swing.JTable tblEntrada;
     private javax.swing.JTable tblFornecedores;
     private javax.swing.JTable tblFornecedoresEmForn;
