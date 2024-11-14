@@ -165,6 +165,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
                     limpar(); // chamando a função de limpar os campos
                     atualizarTabelas();
+                    jTabbedPane2.setSelectedComponent(telaFornecedores);
                 }
             }
         } catch (MysqlDataTruncation e) {
@@ -363,6 +364,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     limpar(); // Chamando a função de limpar os campos
                     atualizarTabelas(); // Atualizar as tabelas
                     atualizarComboBoxes(); //Atualizando os Combo box
+                    jTabbedPane2.setSelectedComponent(telaMateriais);
                 }
             }
         } catch (SQLException e) {
@@ -1597,6 +1599,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtFornSite.setText(null);
         txtFornPesquisar.setText(null);
         ((DefaultTableModel) tblFornecedores.getModel()).setRowCount(0);
+        configurarEstadoKButton(btnAdicionar, true);
         configurarEstadoKButton(btnAlterar, false);
         configurarEstadoKButton(btnExcluir, false);
 
@@ -1606,6 +1609,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtDescMat.setText(null);
         txtBuscarMat.setText(null);
         ((DefaultTableModel) tblMaterial.getModel()).setRowCount(0);
+        configurarEstadoKButton(btnCadastrarMat, true);
         configurarEstadoKButton(btnAlterarMat, false);
         configurarEstadoKButton(btnExcluirMat, false);
 
@@ -1613,6 +1617,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtNovaCatNome.setText(null);
         txtNovaCatBuscar.setText(null);
         ((DefaultTableModel) tblNovaCad.getModel()).setRowCount(0);
+        configurarEstadoKButton(btnNovaCatSalvar, true);
         configurarEstadoKButton(btnNovaCatAlterar, false);
         configurarEstadoKButton(btnNovaCatExcluir, false);
 
@@ -4662,6 +4667,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private void btnNovoMaterialEmMatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoMaterialEmMatActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaCadMaterial);
+        limpar();
+        atualizarTabelas();
+        atualizarComboBoxes();
     }//GEN-LAST:event_btnNovoMaterialEmMatActionPerformed
 
     private void txtBuscarEmFornActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarEmFornActionPerformed
@@ -4682,6 +4690,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private void btnNovoFornecedorEmFornActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoFornecedorEmFornActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaCadFornecedor);
+        limpar();
+        atualizarTabelas();
+        atualizarComboBoxes();
     }//GEN-LAST:event_btnNovoFornecedorEmFornActionPerformed
 
     private void txtBuscarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarCategoriaActionPerformed
@@ -4703,6 +4714,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private void btnNovaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaCategoriaActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaCadCategorias);
+        limpar();
+        atualizarTabelas();
+        atualizarComboBoxes();
     }//GEN-LAST:event_btnNovaCategoriaActionPerformed
 
     private void txtBuscarEmSaidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarEmSaidaActionPerformed
@@ -4806,42 +4820,51 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaMenuMovimentacoes);
         limpar();
-        atualizarTabelas();
     }//GEN-LAST:event_btnFechar4ActionPerformed
 
     private void btnFechar5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechar5ActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaMenuMovimentacoes);
-        limpar();
-        atualizarTabelas();
     }//GEN-LAST:event_btnFechar5ActionPerformed
 
     private void btnMateriaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMateriaisActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaMateriais);
+        limpar();
+        atualizarTabelas();
+        atualizarComboBoxes();
     }//GEN-LAST:event_btnMateriaisActionPerformed
 
     private void btnFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFornecedoresActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaFornecedores);
+        limpar();
         atualizarTabelas();
+        atualizarComboBoxes();
     }//GEN-LAST:event_btnFornecedoresActionPerformed
 
     private void btnCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCategoriasActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaCategorias);
+        limpar();
         atualizarTabelas();
+        atualizarComboBoxes();
     }//GEN-LAST:event_btnCategoriasActionPerformed
 
     private void btnMovimentacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimentacoesActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaMenuMovimentacoes);
+        limpar();
         atualizarTabelas();
+        atualizarComboBoxes();
     }//GEN-LAST:event_btnMovimentacoesActionPerformed
 
     private void btnPainelAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPainelAdminActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(painelAdmin);
+        limpar();
+        atualizarTabelas();
+        atualizarComboBoxes();
     }//GEN-LAST:event_btnPainelAdminActionPerformed
 
     private void btnSairAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairAppActionPerformed
