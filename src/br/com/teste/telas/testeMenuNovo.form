@@ -3865,7 +3865,7 @@
                       <Component id="jSeparator20" min="-2" pref="10" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel66" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="4" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="txtNovaCatBuscar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           <Component id="btnLimparNovaCat" alignment="3" min="-2" max="-2" attributes="0"/>

@@ -90,6 +90,17 @@ public class testeMenuNovo extends javax.swing.JFrame {
         estilizarComboBox(cBoxTipoMov);
         estilizarComboBox(cBoxMatEntrada);
         estilizarComboBox(cBoxMatSaida);
+
+        //DESATIVANDO OS BOTÕES DAS TELAS DE CADASTRO:
+        //cadastro fornecedor
+        configurarEstadoKButton(btnAlterar, false);
+        configurarEstadoKButton(btnExcluir, false);
+        configurarEstadoKButton(btnAlterarMat, false);
+        configurarEstadoKButton(btnExcluirMat, false);
+        configurarEstadoKButton(btnNovaCatAlterar, false);
+        configurarEstadoKButton(btnNovaCatExcluir, false);
+        configurarEstadoKButton(btnAlterarPainel, false);
+        configurarEstadoKButton(btnExcluirPainel, false);
     }
 
     // Classe para esconder/mostrar botão de acordo com a hierarquia
@@ -168,7 +179,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     //metodo para buscar fornecedores
     private void pesquisar_fornecedor() {
         conn = Conexao.getConexao();
-        String sql = "select id_fornecedor AS ID, nome_fornecedor AS Fornecedor, cnpj AS CNPJ, email AS Email, numero_telefone AS Telefone, endereco AS Endereço,"
+        String sql = "select id_fornecedor AS 'COD Fornecedor', nome_fornecedor AS Fornecedor, cnpj AS CNPJ, email AS Email, numero_telefone AS Telefone, endereco AS Endereço,"
                 + "site AS Site from fornecedor where nome_fornecedor like ?";
         try {
             pst = conn.prepareStatement(sql);
@@ -202,6 +213,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnAdicionar.setEnabled(false);
         btnAdicionar.setkBackGroundColor(new Color(128, 128, 128));
         btnAdicionar.setkHoverColor(new Color(128, 128, 128));
+
+        configurarEstadoKButton(btnAlterar, true);
+        configurarEstadoKButton(btnExcluir, true);
     }
 
     // Variável para armazenar o ID do fornecedor selecionado
@@ -397,6 +411,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnCadastrarMat.setEnabled(false);
         btnCadastrarMat.setkBackGroundColor(new Color(128, 128, 128));
         btnCadastrarMat.setkHoverColor(new Color(128, 128, 128));
+        
+        configurarEstadoKButton(btnAlterarMat, true);
+        configurarEstadoKButton(btnExcluirMat, true);
     }
 
     // Variável para armazenar o ID do material selecionado
@@ -780,6 +797,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnNovaCatSalvar.setEnabled(false);
         btnNovaCatSalvar.setkBackGroundColor(new Color(128, 128, 128));
         btnNovaCatSalvar.setkHoverColor(new Color(128, 128, 128));
+        
+        configurarEstadoKButton(btnNovaCatAlterar, true);
+        configurarEstadoKButton(btnNovaCatExcluir, true);
     }
 
     //metodo para buscar uma categoria no MENU CATEGORIA
@@ -1155,7 +1175,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     //Método para exibir os dados na tabela Fornecedores
     private void pesquisar_FornecedoresEmForn() {
         conn = Conexao.getConexao();
-        String sql = "SELECT id_fornecedor AS COD, nome_fornecedor AS Nome, CNPJ, email AS 'E-Mail', numero_telefone AS Telefone, endereco AS Endereço, Site FROM fornecedor WHERE nome_fornecedor LIKE ?";
+        String sql = "SELECT id_fornecedor AS 'COD Fornecedor', nome_fornecedor AS Nome, CNPJ, email AS 'E-Mail', numero_telefone AS Telefone, endereco AS Endereço, Site FROM fornecedor WHERE nome_fornecedor LIKE ?";
 
         try {
             pst = conn.prepareStatement(sql);
@@ -1270,6 +1290,9 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtNomePainel.setText(tblPainelAdmin.getModel().getValueAt(setar, 2).toString()); // Nome do usuário
         txtLoginPainel.setText(tblPainelAdmin.getModel().getValueAt(setar, 3).toString()); // Login
         txtSenhaPainel.setText(tblPainelAdmin.getModel().getValueAt(setar, 4).toString()); // Senha
+        
+        configurarEstadoKButton(btnAlterarPainel, true);
+        configurarEstadoKButton(btnExcluirPainel, true);
     }
 
     // Função para preencher o combobox trazendo do banco de dados
@@ -1364,6 +1387,19 @@ public class testeMenuNovo extends javax.swing.JFrame {
         preencherComboBoxTipos();
         preencherComboBoxMateriais();
         preencherComboBoxMateriais2();
+    }
+
+    // Função para ativar ou desativar kButtons com cores personalizadas
+    public void configurarEstadoKButton(com.k33ptoo.components.KButton botao, boolean ativo) {
+        botao.setEnabled(ativo);
+        // Define as cores de fundo e de hover com base no estado do botão
+        if (ativo) {
+            botao.setkBackGroundColor(new Color(26, 131, 43)); // Cor ativa (verde)
+            botao.setkHoverColor(new Color(0, 180, 50));       // Cor de hover ativa (verde claro)
+        } else {
+            botao.setkBackGroundColor(new Color(128, 128, 128)); // Cor inativa (cinza)
+            botao.setkHoverColor(new Color(128, 128, 128));      // Cor de hover inativa (cinza)
+        }
     }
 
     // Nova função para estilizar o botão com ícone à esquerda e texto ao lado, alinhados à esquerda
@@ -1561,6 +1597,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtFornSite.setText(null);
         txtFornPesquisar.setText(null);
         ((DefaultTableModel) tblFornecedores.getModel()).setRowCount(0);
+        configurarEstadoKButton(btnAlterar, false);
+        configurarEstadoKButton(btnExcluir, false);
 
         //tela material
         cBoxIdCat.setSelectedIndex(1);
@@ -1568,11 +1606,15 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtDescMat.setText(null);
         txtBuscarMat.setText(null);
         ((DefaultTableModel) tblMaterial.getModel()).setRowCount(0);
+        configurarEstadoKButton(btnAlterarMat, false);
+        configurarEstadoKButton(btnExcluirMat, false);
 
         //tela Nova Categoria
         txtNovaCatNome.setText(null);
         txtNovaCatBuscar.setText(null);
         ((DefaultTableModel) tblNovaCad.getModel()).setRowCount(0);
+        configurarEstadoKButton(btnNovaCatAlterar, false);
+        configurarEstadoKButton(btnNovaCatExcluir, false);
 
         //tela Movimentações
         txtBuscarMov.setText(null);
@@ -1610,6 +1652,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtLoginPainel.setText(null);
         txtSenhaPainel.setText(null);
         ((DefaultTableModel) tblPainelAdmin.getModel()).setRowCount(0);
+        configurarEstadoKButton(btnAlterarPainel, false);
+        configurarEstadoKButton(btnExcluirPainel, false);
     }
 
     // Método para estilizar um botão com um nome e uma imagem específicos
@@ -4292,7 +4336,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addComponent(jSeparator20, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel66)
-                .addGap(0, 4, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
                 .addGroup(telaCadCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNovaCatBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimparNovaCat))
