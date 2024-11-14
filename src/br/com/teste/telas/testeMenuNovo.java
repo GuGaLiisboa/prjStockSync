@@ -598,6 +598,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
                     limpar(); //chamando a função de limpar os campos
                     atualizarTabelas();
+                    jTabbedPane2.setSelectedComponent(telaCategorias);
                 }
             }
         } catch (MysqlDataTruncation e) {
