@@ -101,6 +101,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
         configurarEstadoKButton(btnNovaCatExcluir, false);
         configurarEstadoKButton(btnAlterarPainel, false);
         configurarEstadoKButton(btnExcluirPainel, false);
+
+        aplicarMargin();
     }
 
     public void setIdUsuarioLogado(int idUsuario) {
@@ -1400,6 +1402,50 @@ public class testeMenuNovo extends javax.swing.JFrame {
         preencherComboBoxTipos();
         preencherComboBoxMateriais();
         preencherComboBoxMateriais2();
+    }
+
+    //adicionar um margin nos campos de texto
+    private void adicionarMargemEsquerda(JTextField campoTexto) {
+        campoTexto.setBorder(BorderFactory.createCompoundBorder(
+                campoTexto.getBorder(),
+                BorderFactory.createEmptyBorder(0, 10, 0, 0) // Margem interna de 10 pixels à esquerda
+        ));
+    }
+
+    public void aplicarMargin() {
+        //material
+        adicionarMargemEsquerda(txtBuscarEmMat);
+        adicionarMargemEsquerda(txtNomeMat);
+        adicionarMargemEsquerda(txtDescMat);
+        adicionarMargemEsquerda(txtBuscarMat);
+
+        //fornecedor
+        adicionarMargemEsquerda(txtFornNome);
+        adicionarMargemEsquerda(txtFornCnpj);
+        adicionarMargemEsquerda(txtFornSite);
+        adicionarMargemEsquerda(txtFornEndereco);
+        adicionarMargemEsquerda(txtFornEmail);
+        adicionarMargemEsquerda(txtFornFone);
+        adicionarMargemEsquerda(txtFornPesquisar);
+        adicionarMargemEsquerda(txtBuscarEmForn);
+
+        //movimentações
+        adicionarMargemEsquerda(txtBuscarMov);
+        adicionarMargemEsquerda(txtEntradaBuscar);
+        adicionarMargemEsquerda(txtEntradaQnt);
+        adicionarMargemEsquerda(txtBuscarEmSaida);
+        adicionarMargemEsquerda(txtSaidaQnt);
+        
+        //categoria
+        adicionarMargemEsquerda(txtBuscarCategoria);
+        adicionarMargemEsquerda(txtNovaCatBuscar);
+        adicionarMargemEsquerda(txtNovaCatNome);
+        
+        //painel admin
+        adicionarMargemEsquerda(txtPainelAdmin);
+        adicionarMargemEsquerda(txtNomePainel);
+        adicionarMargemEsquerda(txtLoginPainel);
+        adicionarMargemEsquerda(txtSenhaPainel);
     }
 
     // Função para ativar ou desativar kButtons com cores personalizadas
@@ -3231,7 +3277,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addGroup(telaMateriaisLayout.createSequentialGroup()
                             .addGap(10, 10, 10)
                             .addGroup(telaMateriaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 1067, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 1042, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(telaMateriaisLayout.createSequentialGroup()
                                     .addComponent(btnHome24, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -3509,6 +3555,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addGroup(telaCategoriasLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(telaCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1041, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(telaCategoriasLayout.createSequentialGroup()
                                 .addGroup(telaCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel49)
@@ -3517,8 +3564,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(btnLimparCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(49, 49, 49)
-                                .addComponent(btnNovaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1035, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(btnNovaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         telaCategoriasLayout.setVerticalGroup(
