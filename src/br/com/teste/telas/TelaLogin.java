@@ -47,15 +47,14 @@ public class TelaLogin extends javax.swing.JFrame {
         estilizarBotaoCadastrar(btnLogin);
 
         verificarUsuarios();
-        
-        getRootPane().setDefaultButton(btnLogin);
 
+        getRootPane().setDefaultButton(btnLogin);
 
     }
 
     public void logar() {
         Connection conn = Conexao.getConexao();
-        String sql = "SELECT * FROM almoxarife WHERE login = ? AND senha = ?";
+        String sql = "SELECT id_almoxarife, nome, tipo_almoxarife FROM almoxarife WHERE login = ? AND senha = ?";
 
         try {
             pst = conn.prepareStatement(sql);
@@ -65,15 +64,30 @@ public class TelaLogin extends javax.swing.JFrame {
             rs = pst.executeQuery();
 
             if (rs.next()) {
-                // Aqui você pode obter o tipo de almoxarife do ResultSet
+                // Obter o ID, nome e tipo do usuário logado
+                int idUsuario = rs.getInt("id_almoxarife");
+                String nomeUsuario = rs.getString("nome");
                 String tipoAlmoxarife = rs.getString("tipo_almoxarife");
 
+                // Cria a instância da tela principal
                 testeMenuNovo principal = new testeMenuNovo();
-                principal.configurarVisibilidade(tipoAlmoxarife); // Configura a visibilidade de acordo com o tipo
-                principal.setVisible(true); // Exibe a tela do menu
 
-                this.dispose(); // Fecha a tela de login
+                // Passa o ID do usuário para a tela principal
+                principal.setIdUsuarioLogado(idUsuario);
+
+                // Atualiza a saudação com o nome do usuário na tela principal
+                principal.atualizarLabelUsuario(nomeUsuario);
+
+                // Configura a visibilidade dos componentes com base no tipo de almoxarife
+                principal.configurarVisibilidade(tipoAlmoxarife);
+
+                // Exibe a tela principal
+                principal.setVisible(true);
+
+                // Fecha a tela de login
+                this.dispose();
             } else {
+                // Exibe um aviso caso o login ou senha estejam incorretos
                 TelaAviso aviso = new TelaAviso(this, true);
                 aviso.setVisible(true);
             }

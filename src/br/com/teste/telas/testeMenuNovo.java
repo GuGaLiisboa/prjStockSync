@@ -103,6 +103,16 @@ public class testeMenuNovo extends javax.swing.JFrame {
         configurarEstadoKButton(btnExcluirPainel, false);
     }
 
+    public void setIdUsuarioLogado(int idUsuario) {
+        this.idUsuarioLogado = idUsuario;
+    }
+
+    private int idUsuarioLogado; // Declara a variável para armazenar o ID do usuário logado
+
+    public void atualizarLabelUsuario(String nomeUsuario) {
+        lblUsuario.setText("Olá, " + nomeUsuario);
+    }
+
     // Classe para esconder/mostrar botão de acordo com a hierarquia
     public void configurarVisibilidade(String tipoAlmoxarife) {
         if (tipoAlmoxarife.equals("adm")) {
@@ -413,7 +423,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnCadastrarMat.setEnabled(false);
         btnCadastrarMat.setkBackGroundColor(new Color(128, 128, 128));
         btnCadastrarMat.setkHoverColor(new Color(128, 128, 128));
-        
+
         configurarEstadoKButton(btnAlterarMat, true);
         configurarEstadoKButton(btnExcluirMat, true);
     }
@@ -800,7 +810,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnNovaCatSalvar.setEnabled(false);
         btnNovaCatSalvar.setkBackGroundColor(new Color(128, 128, 128));
         btnNovaCatSalvar.setkHoverColor(new Color(128, 128, 128));
-        
+
         configurarEstadoKButton(btnNovaCatAlterar, true);
         configurarEstadoKButton(btnNovaCatExcluir, true);
     }
@@ -1293,7 +1303,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         txtNomePainel.setText(tblPainelAdmin.getModel().getValueAt(setar, 2).toString()); // Nome do usuário
         txtLoginPainel.setText(tblPainelAdmin.getModel().getValueAt(setar, 3).toString()); // Login
         txtSenhaPainel.setText(tblPainelAdmin.getModel().getValueAt(setar, 4).toString()); // Senha
-        
+
         configurarEstadoKButton(btnAlterarPainel, true);
         configurarEstadoKButton(btnExcluirPainel, true);
     }
@@ -1963,6 +1973,8 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnMovimentacoes = new com.k33ptoo.components.KButton();
         btnPainelAdmin = new com.k33ptoo.components.KButton();
         btnSairApp = new com.k33ptoo.components.KButton();
+        lblUsuario = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("StockSync");
@@ -1994,21 +2006,21 @@ public class testeMenuNovo extends javax.swing.JFrame {
             .addGroup(telaInicialLayout.createSequentialGroup()
                 .addGroup(telaInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(telaInicialLayout.createSequentialGroup()
-                        .addGap(353, 353, 353)
-                        .addComponent(jLabel4))
-                    .addGroup(telaInicialLayout.createSequentialGroup()
                         .addGap(282, 282, 282)
-                        .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(357, 357, 357))
+                        .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(telaInicialLayout.createSequentialGroup()
+                        .addGap(338, 338, 338)
+                        .addComponent(jLabel4)))
+                .addGap(372, 372, 372))
         );
         telaInicialLayout.setVerticalGroup(
             telaInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, telaInicialLayout.createSequentialGroup()
                 .addContainerGap(149, Short.MAX_VALUE)
                 .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(136, 136, 136)
+                .addGap(98, 98, 98)
                 .addComponent(jLabel4)
-                .addGap(290, 290, 290))
+                .addGap(328, 328, 328))
         );
 
         jTabbedPane2.addTab("tab1", telaInicial);
@@ -4454,6 +4466,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
+        lblUsuario.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblUsuario.setForeground(new java.awt.Color(255, 255, 255));
+        lblUsuario.setText("jLabel5");
+
         javax.swing.GroupLayout menuLateralLayout = new javax.swing.GroupLayout(menuLateral);
         menuLateral.setLayout(menuLateralLayout);
         menuLateralLayout.setHorizontalGroup(
@@ -4465,10 +4481,17 @@ public class testeMenuNovo extends javax.swing.JFrame {
             .addComponent(btnPainelAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
             .addComponent(btnSairApp, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(menuLateralLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(menuLateralLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(menuLateralLayout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addGroup(menuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblUsuario))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         menuLateralLayout.setVerticalGroup(
@@ -4488,7 +4511,11 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 .addComponent(btnMovimentacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(btnPainelAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 375, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 334, Short.MAX_VALUE)
+                .addComponent(lblUsuario)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addComponent(btnSairApp, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27))
         );
@@ -4821,11 +4848,16 @@ public class testeMenuNovo extends javax.swing.JFrame {
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaMenuMovimentacoes);
         limpar();
+        atualizarTabelas();
+        atualizarComboBoxes();
     }//GEN-LAST:event_btnFechar4ActionPerformed
 
     private void btnFechar5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechar5ActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaMenuMovimentacoes);
+        limpar();
+        atualizarTabelas();
+        atualizarComboBoxes();
     }//GEN-LAST:event_btnFechar5ActionPerformed
 
     private void btnMateriaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMateriaisActionPerformed
@@ -5211,6 +5243,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator15;
     private javax.swing.JSeparator jSeparator18;
     private javax.swing.JSeparator jSeparator19;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator20;
     private javax.swing.JSeparator jSeparator21;
     private javax.swing.JSeparator jSeparator3;
@@ -5220,6 +5253,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTabbedPane jTabbedPane2;
+    public static javax.swing.JLabel lblUsuario;
     private javax.swing.JPanel menuLateral;
     private javax.swing.JButton ops5;
     private javax.swing.JButton ops6;
