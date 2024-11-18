@@ -110,7 +110,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         removerTooltips(btnMateriais, btnFornecedores, btnCategorias, btnMovimentacoes, btnPainelAdmin, btnSairApp);
 
         //função que configura os atalhos
-        configurarAtalhos();
+        configurarAtalhosTelas();
     }
 
     public void setIdUsuarioLogado(int idUsuario) {
@@ -1389,30 +1389,70 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     //=============================================================================================
     //método dos atalhos para navegação rápida
-    private void configurarAtalhos() {
-        adicionarAtalho(KeyEvent.VK_F, "abrirFornecedor", () -> abrirTela(telaCadFornecedor));
-        adicionarAtalho(KeyEvent.VK_M, "abrirMaterial", () -> abrirTela(telaCadMaterial));
-        adicionarAtalho(KeyEvent.VK_E, "abrirEntradaMov", () -> abrirTela(telaEntradaMov));
-        adicionarAtalho(KeyEvent.VK_S, "abrirSaidaMov", () -> abrirTela(telaSaidaMov));
-        adicionarAtalho(KeyEvent.VK_G, "abrirCategorias", () -> abrirTela(telaCadCategorias));
-    }
-
-    private void adicionarAtalho(int keyEvent, String actionKey, Runnable acao) {
-        KeyStroke keyStroke = KeyStroke.getKeyStroke(keyEvent, KeyEvent.CTRL_DOWN_MASK);
+    private void configurarAtalhosTelas() {
+        // Mapeamento do teclado
         InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getRootPane().getActionMap();
 
-        inputMap.put(keyStroke, actionKey);
-        actionMap.put(actionKey, new AbstractAction() {
+        // Atalho para a tela de Cadastro de Fornecedores (CTRL + F)
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK), "abrirFornecedor");
+        actionMap.put("abrirFornecedor", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                acao.run();
+                jTabbedPane2.setSelectedComponent(telaCadFornecedor);
+                limpar();
+                atualizarTabelas();
+                atualizarComboBoxes();
             }
         });
-    }
 
-    private void abrirTela(JPanel tela) {
-        jTabbedPane2.setSelectedComponent(tela);
+        // Atalho para a tela de Cadastro de Materiais (CTRL + M)
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.CTRL_DOWN_MASK), "abrirMaterial");
+        actionMap.put("abrirMaterial", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jTabbedPane2.setSelectedComponent(telaCadMaterial);
+                limpar();
+                atualizarTabelas();
+                atualizarComboBoxes();
+            }
+        });
+
+        // Atalho para a tela de Entrada de Movimentação (CTRL + E)
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK), "abrirEntrada");
+        actionMap.put("abrirEntrada", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jTabbedPane2.setSelectedComponent(telaEntradaMov);
+                limpar();
+                atualizarTabelas();
+                atualizarComboBoxes();
+            }
+        });
+
+        // Atalho para a tela de Saída de Movimentação (CTRL + S)
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "abrirSaida");
+        actionMap.put("abrirSaida", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jTabbedPane2.setSelectedComponent(telaSaidaMov);
+                limpar();
+                atualizarTabelas();
+                atualizarComboBoxes();
+            }
+        });
+
+        // Atalho para a tela de Cadastro de Categorias (CTRL + C)
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK), "abrirCategorias");
+        actionMap.put("abrirCategorias", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jTabbedPane2.setSelectedComponent(telaCadCategorias);
+                limpar();
+                atualizarTabelas();
+                atualizarComboBoxes();
+            }
+        });
     }
 
     //=============================================================================================
@@ -2959,7 +2999,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                         .addComponent(jSeparator7)
                         .addGroup(telaEntradaMovLayout.createSequentialGroup()
                             .addGap(10, 10, 10)
-                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 1043, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 1041, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(telaEntradaMovLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(telaEntradaMovLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
