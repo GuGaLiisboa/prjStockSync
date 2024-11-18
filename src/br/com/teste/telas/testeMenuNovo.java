@@ -1743,7 +1743,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
         configurarEstadoKButton(btnExcluir, false);
 
         //tela material
-        cBoxIdCat.setSelectedIndex(1);
+        cBoxIdCat.setSelectedIndex(0);
         txtNomeMat.setText(null);
         txtDescMat.setText(null);
         txtBuscarMat.setText(null);
