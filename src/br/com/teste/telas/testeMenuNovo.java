@@ -102,7 +102,10 @@ public class testeMenuNovo extends javax.swing.JFrame {
         configurarEstadoKButton(btnAlterarPainel, false);
         configurarEstadoKButton(btnExcluirPainel, false);
 
-        aplicarMargin();
+        aplicarMargin(); //aplica uma margem nos campos de texto de todo o programa
+        
+        removerTooltips(btnMateriais, btnFornecedores, btnCategorias, btnMovimentacoes, btnPainelAdmin, btnSairApp);
+        
     }
 
     public void setIdUsuarioLogado(int idUsuario) {
@@ -1412,6 +1415,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
         ));
     }
 
+    private void removerTooltips(KButton... botoes) {
+        for (KButton botao : botoes) {
+            botao.setToolTipText(null);
+        }
+    }
+
     public void aplicarMargin() {
         //material
         adicionarMargemEsquerda(txtBuscarEmMat);
@@ -1435,12 +1444,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
         adicionarMargemEsquerda(txtEntradaQnt);
         adicionarMargemEsquerda(txtBuscarEmSaida);
         adicionarMargemEsquerda(txtSaidaQnt);
-        
+
         //categoria
         adicionarMargemEsquerda(txtBuscarCategoria);
         adicionarMargemEsquerda(txtNovaCatBuscar);
         adicionarMargemEsquerda(txtNovaCatNome);
-        
+
         //painel admin
         adicionarMargemEsquerda(txtPainelAdmin);
         adicionarMargemEsquerda(txtNomePainel);
@@ -1598,7 +1607,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         btnNovaCatSalvar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNovaCatAlterar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNovaCatExcluir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNovaCatSubstituir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         //MATERIAL
         btnCadastrarMat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -2007,7 +2015,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         jLabel75 = new javax.swing.JLabel();
         btnNovaCatAlterar = new com.k33ptoo.components.KButton();
         btnNovaCatExcluir = new com.k33ptoo.components.KButton();
-        btnNovaCatSubstituir = new com.k33ptoo.components.KButton();
         btnFechar1 = new javax.swing.JButton();
         btnLimparNovaCat = new javax.swing.JButton();
         menuLateral = new javax.swing.JPanel();
@@ -4302,19 +4309,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
             }
         });
 
-        btnNovaCatSubstituir.setText("Substituir");
-        btnNovaCatSubstituir.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnNovaCatSubstituir.setkAllowGradient(false);
-        btnNovaCatSubstituir.setkBackGroundColor(new java.awt.Color(26, 131, 43));
-        btnNovaCatSubstituir.setkBorderRadius(20);
-        btnNovaCatSubstituir.setkHoverColor(new java.awt.Color(52, 153, 68));
-        btnNovaCatSubstituir.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnNovaCatSubstituir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNovaCatSubstituirActionPerformed(evt);
-            }
-        });
-
         btnFechar1.setBackground(new java.awt.Color(217, 217, 217));
         btnFechar1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         btnFechar1.setForeground(new java.awt.Color(26, 131, 43));
@@ -4366,15 +4360,13 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                         .addGroup(telaCadCategoriasLayout.createSequentialGroup()
                                             .addGroup(telaCadCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addComponent(jLabel75)
-                                                .addComponent(txtNovaCatNome, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGap(40, 40, 40)
+                                                .addComponent(txtNovaCatNome, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(80, 80, 80)
                                             .addComponent(btnNovaCatSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGap(30, 30, 30)
                                             .addComponent(btnNovaCatAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGap(30, 30, 30)
-                                            .addComponent(btnNovaCatExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(30, 30, 30)
-                                            .addComponent(btnNovaCatSubstituir, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(btnNovaCatExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE))
                                 .addGroup(telaCadCategoriasLayout.createSequentialGroup()
                                     .addComponent(ops6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -4413,8 +4405,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     .addComponent(txtNovaCatNome, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnNovaCatSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnNovaCatAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNovaCatExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNovaCatSubstituir, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnNovaCatExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
@@ -5062,11 +5053,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
         remover_categoria();
     }//GEN-LAST:event_btnNovaCatExcluirActionPerformed
 
-    private void btnNovaCatSubstituirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaCatSubstituirActionPerformed
-        // TODO add your handling code here:
-        substituir_categoria();
-    }//GEN-LAST:event_btnNovaCatSubstituirActionPerformed
-
     private void btnFechar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFechar1ActionPerformed
         // TODO add your handling code here:
         jTabbedPane2.setSelectedComponent(telaCategorias);
@@ -5201,7 +5187,6 @@ public class testeMenuNovo extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnNovaCatAlterar;
     private com.k33ptoo.components.KButton btnNovaCatExcluir;
     private com.k33ptoo.components.KButton btnNovaCatSalvar;
-    private com.k33ptoo.components.KButton btnNovaCatSubstituir;
     private com.k33ptoo.components.KButton btnNovaCategoria;
     private com.k33ptoo.components.KButton btnNovoFornecedorEmForn;
     private com.k33ptoo.components.KButton btnNovoMaterialEmMat;
