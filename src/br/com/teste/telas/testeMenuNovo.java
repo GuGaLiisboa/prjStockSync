@@ -19,6 +19,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.net.URL;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -103,9 +105,12 @@ public class testeMenuNovo extends javax.swing.JFrame {
         configurarEstadoKButton(btnExcluirPainel, false);
 
         aplicarMargin(); //aplica uma margem nos campos de texto de todo o programa
-        
+
+        //remover tooltiptext ao colocar o mouse sobre algum item no menu lateral
         removerTooltips(btnMateriais, btnFornecedores, btnCategorias, btnMovimentacoes, btnPainelAdmin, btnSairApp);
-        
+
+        //função que configura os atalhos
+        configurarAtalhos();
     }
 
     public void setIdUsuarioLogado(int idUsuario) {
@@ -1382,6 +1387,35 @@ public class testeMenuNovo extends javax.swing.JFrame {
         }
     }
 
+    //=============================================================================================
+    //método dos atalhos para navegação rápida
+    private void configurarAtalhos() {
+        adicionarAtalho(KeyEvent.VK_F, "abrirFornecedor", () -> abrirTela(telaCadFornecedor));
+        adicionarAtalho(KeyEvent.VK_M, "abrirMaterial", () -> abrirTela(telaCadMaterial));
+        adicionarAtalho(KeyEvent.VK_E, "abrirEntradaMov", () -> abrirTela(telaEntradaMov));
+        adicionarAtalho(KeyEvent.VK_S, "abrirSaidaMov", () -> abrirTela(telaSaidaMov));
+        adicionarAtalho(KeyEvent.VK_G, "abrirCategorias", () -> abrirTela(telaCadCategorias));
+    }
+
+    private void adicionarAtalho(int keyEvent, String actionKey, Runnable acao) {
+        KeyStroke keyStroke = KeyStroke.getKeyStroke(keyEvent, KeyEvent.CTRL_DOWN_MASK);
+        InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = getRootPane().getActionMap();
+
+        inputMap.put(keyStroke, actionKey);
+        actionMap.put(actionKey, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                acao.run();
+            }
+        });
+    }
+
+    private void abrirTela(JPanel tela) {
+        jTabbedPane2.setSelectedComponent(tela);
+    }
+
+    //=============================================================================================
     //=============================================================================================
     //outros métodos
     //Método para atualizar tabelas
@@ -3143,7 +3177,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                                     .addComponent(jLabel42)
                                     .addGroup(telaSaidaMovLayout.createSequentialGroup()
                                         .addComponent(txtSaidaQnt, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(31, 31, 31)
+                                        .addGap(18, 18, 18)
                                         .addComponent(btnSalvarSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 1041, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 15, Short.MAX_VALUE))

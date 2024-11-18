@@ -1812,7 +1812,7 @@
                                           <Component id="jLabel42" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="txtSaidaQnt" min="-2" pref="117" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
                                               <Component id="btnSalvarSaida" min="-2" pref="100" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
