@@ -5161,8 +5161,21 @@ public class testeMenuNovo extends javax.swing.JFrame {
 
     private void btnUsuarioPainelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioPainelActionPerformed
         // TODO add your handling code here:
+        //telaCadastro popUpCad = new telaCadastro();
+        //popUpCad.setVisible(true);
+
         telaCadastro popUpCad = new telaCadastro();
         popUpCad.setVisible(true);
+
+        // Adiciona um listener para atualizar a tabela após o fechamento
+        popUpCad.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                limpar();
+                atualizarComboBoxes();
+                atualizarTabelas(); // Atualiza as tabelas após o popup fechar
+            }
+        });
     }//GEN-LAST:event_btnUsuarioPainelActionPerformed
 
     private void btnEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntradaActionPerformed
