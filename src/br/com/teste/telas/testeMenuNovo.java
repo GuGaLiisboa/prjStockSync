@@ -1012,6 +1012,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                 limpar(); // Chamando a função de limpar os campos
                 atualizarTabelas(); // Atualizar as tabelas
                 atualizarComboBoxes();
+                jTabbedPane2.setSelectedComponent(telaMenuMovimentacoes);
             }
         } catch (MysqlDataTruncation e) {
             JOptionPane.showMessageDialog(null, "Um dos campos excedeu o tamanho permitido.");
@@ -1124,6 +1125,7 @@ public class testeMenuNovo extends javax.swing.JFrame {
                     limpar();  // Chamando a função de limpar os campos
                     atualizarTabelas();  // Atualizando as tabelas
                     atualizarComboBoxes();  // Atualizando os combo boxes
+                    jTabbedPane2.setSelectedComponent(telaMenuMovimentacoes);
                 }
             }
         } catch (SQLException e) {
